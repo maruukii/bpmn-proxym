@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import BpmnViewer from "../../Pages/BPMNviewer/BpmnViewer";
+import BpmnViewer from "../BPMNviewer/bpmnViewer";
 import FileUploadButton from "../../components/Buttons/fileUploadButton";
 import { RootState } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";

@@ -24,7 +24,6 @@ const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename }) => {
     bpmnModeler
       .importXML(xml)
       .then(() => {
-        console.log("BPMN Diagram Loaded Successfully");
         const canvas: any = bpmnModeler.get<"canvas">("canvas");
         canvas.zoom("fit-viewport");
         setModeler(bpmnModeler);

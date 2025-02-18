@@ -13,6 +13,11 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ setXml }) => {
       console.log("File content:", fileContent);
     } catch (error) {
       console.error("Error uploading file:", error);
+
+      // Reset the file input value on error
+      if (input) {
+        input.value = ""; // Clear the file input
+      }
     }
   };
   return (
@@ -30,7 +35,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ setXml }) => {
         id="file-upload"
         type="file"
         onChange={handleFileChange}
-        className="hidden" // Hide the input visually while keeping it accessible
+        className="hidden"
       />
     </div>
   );
