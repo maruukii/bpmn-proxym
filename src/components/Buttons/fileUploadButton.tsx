@@ -16,7 +16,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ setXml }) => {
 
       // Reset the file input value on error
       if (input) {
-        input.value = ""; // Clear the file input
+        input.value = "";
       }
     }
   };

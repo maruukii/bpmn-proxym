@@ -6,13 +6,15 @@ import { exportBPMN } from "../../utils/fileExporter";
 import { addTask } from "../../utils/taskCreation";
 import { useDispatch } from "react-redux";
 import { setFileExportSuccess } from "../../store/bpm/fileSlice";
+import { withTranslation } from "react-i18next";
 
 interface BpmnEditorProps {
   xml: string | null;
   filename: string | null;
+  t: any;
 }
 
-const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename }) => {
+const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename, t }) => {
   const modelerRef = useRef<HTMLDivElement | null>(null);
   const [modeler, setModeler] = useState<BpmnModeler | null>(null);
   const dispatch = useDispatch();
@@ -59,39 +61,39 @@ const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename }) => {
     <div className="flex flex-col gap-4 p-4">
       {/* Toolbar */}
       <div className="flex justify-center gap-4 p-2 bg-gray-800 text-white rounded-lg shadow-md">
-        <button
+        {/* <button
           onClick={() => addTask(modeler)}
           className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
         >
           ➕ Add Task
-        </button>
+        </button> */}
         <button
           onClick={undo}
           className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-md"
         >
-          ↩️ Undo
+          ↩️ {t("Undo")}
         </button>
         <button
           onClick={redo}
           className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md"
         >
-          ↪️ Redo
+          ↪️ {t("Redo")}
         </button>
         <button
           onClick={handleExport}
           className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md"
         >
-          💾 Export
+          💾 {t("Export")}
         </button>
       </div>
 
       {/* BPMN Modeler Container */}
       <div
         ref={modelerRef}
-        className="w-full h-[80vh] border border-gray-300 rounded-lg shadow-md"
+        className="w-full h-[70vh] border border-gray-300 rounded-lg shadow-md"
       />
     </div>
   );
 };
 
-export default BpmnEditor;
+export default withTranslation()(BpmnEditor);

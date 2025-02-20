@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-keycloak/web": "^3.4.0",
     "@reduxjs/toolkit": "^2.5.1",
     "@tanstack/query-sync-storage-persister": "^5.66.4",
     "@tanstack/react-query": "^5.66.6",
@@ -23,9 +22,11 @@
     "camunda-bpmn-moddle": "^7.0.1",
     "diagram-js-minimap": "^5.2.0",
     "esbuild": "^0.25.0",
-    "keycloak-js": "^26.1.2",
+    "i18next": "^24.2.2",
+    "i18next-browser-languagedetector": "^8.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^15.4.1",
     "react-icons": "^5.4.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.5",

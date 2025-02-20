@@ -22,7 +22,7 @@ const App: React.FC = () => {
       client={queryClient}
       persistOptions={{ persister }}
     >
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
       <Routes />
     </PersistQueryClientProvider>
   );

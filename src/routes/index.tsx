@@ -2,13 +2,15 @@ import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 // import PersistLogin from "../components/PersistLogin/PersistLogin.jsx";
 // import RequireAuth from "../hooks/RequireAuth.tsx";
-import routes from "./routes.jsx";
+import routes from "./routes.tsx";
+import Layout from "../layout/layout.tsx";
 
 const Index = () => {
   return (
     <Suspense fallback={<p>HIIIIIIIIIIIIIIIIII</p>}>
       <Routes>
         {routes.map((route, idx) => {
+          const RouteElement = <Layout children={route.element}></Layout>;
           //const RouteElement =
           // route.type === "Admin" ? (
           //   <PersistLogin>
@@ -38,7 +40,7 @@ const Index = () => {
           //   </PersistLogin>
           // );
 
-          return <Route key={idx} path={route.path} element={route.element} />;
+          return <Route key={idx} path={route.path} element={RouteElement} />;
         })}
       </Routes>
     </Suspense>

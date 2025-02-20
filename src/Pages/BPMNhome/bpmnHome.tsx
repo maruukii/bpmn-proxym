@@ -10,7 +10,11 @@ import {
   clearFileExportSuccess,
   clearFileImportSucess,
 } from "../../store/bpm/fileSlice";
-const bpmnHome: React.FC = () => {
+import { withTranslation } from "react-i18next";
+interface Bpmnhome {
+  t: any;
+}
+const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
   const [xml, setXml] = useState<string | null>(null);
   const dispatch = useDispatch();
   const { filename, fileExportSuccess, fileImportSuccess, fileError } =
@@ -35,10 +39,10 @@ const bpmnHome: React.FC = () => {
       {xml ? (
         <BpmnViewer xml={xml} filename={filename} />
       ) : (
-        <p style={{ margin: "1rem" }}>waiting for BPMN diagram...</p>
+        <p style={{ margin: "1rem" }}>{t("BPMNSTATUS")}</p>
       )}
     </div>
   );
 };
 
-export default bpmnHome;
+export default withTranslation()(bpmnHome);
