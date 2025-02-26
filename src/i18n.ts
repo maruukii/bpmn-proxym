@@ -16,7 +16,7 @@ const resources = {
 };
 
 const language = localStorage.getItem("I18N_LANGUAGE");
-if (!language) {
+if (!language||(language!="en_US" && language!="fr_FR")) {
   localStorage.setItem("I18N_LANGUAGE", "en_US");
 }
 

@@ -1,5 +1,5 @@
-import home from "./home"
-import viewer from "./viewer"
+import home from "./elements/home"
+import viewer from "./elements/viewer"
 
 export default{
     ...viewer,
