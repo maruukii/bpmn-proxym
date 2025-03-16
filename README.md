@@ -1,50 +1,44 @@
 # bpmn-proxym
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Technologies and Tools
 
-Currently, two official plugins are available:
+- **React 18**: A JavaScript library for building user interfaces.
+- **Vite 6**: A build tool that aims to provide a faster and leaner development experience for modern web projects.
+- **TypeScript 5**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **Tailwindcss 4**: A utility-first CSS framework that simplifies web design.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Setup
 
-## Expanding the ESLint configuration
+1. **Clone the repository:**
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+   ```bash
+   git clone https://github.com/maruukii/bpmn-proxym.git
+   cd bpmn-proxym
+   ```
 
-- Configure the top-level `parserOptions` property like this:
+2. **Install dependencies:**
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+   ```bash
+   npm install
+   ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+3. **Start the development server:**
 
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
+   ```bash
+   npm run dev
+   ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
-```
+4. **Build for production:**
+
+   ```bash
+   npm run build
+   ```
+
+## Branches
+
+- `main`: The production-ready code.
+- `develop`: The default branch for ongoing development.
+
+## Contributing
+
+Please follow the established coding standards and commit message guidelines.
