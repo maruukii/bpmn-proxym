@@ -1,0 +1,7 @@
+{
+    "taskProperties": [
+      { "id": "priority", "label": "Priority", "type": "string", "default": "" },
+      { "id": "category", "label": "Category", "type": "dropdown", "options": ["HR", "Finance", "IT"], "default": "" }
+    ]
+  }
+  

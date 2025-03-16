@@ -7,7 +7,7 @@ import Layout from "../layout/layout.tsx";
 
 const Index = () => {
   return (
-    <Suspense fallback={<p>HIIIIIIIIIIIIIIIIII</p>}>
+    <Suspense fallback={<p>Loading ....</p>}>
       <Routes>
         {routes.map((route, idx) => {
           const RouteElement = <Layout children={route.element}></Layout>;

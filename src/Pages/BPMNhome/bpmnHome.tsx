@@ -11,14 +11,28 @@ import {
   clearFileImportSucess,
 } from "../../store/bpm/fileSlice";
 import { withTranslation } from "react-i18next";
+import "bpmn-js/dist/assets/diagram-js.css";
+import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
+import { setFileData } from "../../store/bpm/fileSlice";
 interface Bpmnhome {
   t: any;
 }
 const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
-  const [xml, setXml] = useState<string | null>(null);
   const dispatch = useDispatch();
+  const [xml, setXml] = useState<string | null>(null);
   const { filename, fileExportSuccess, fileImportSuccess, fileError } =
     useSelector((state: RootState) => state.file);
+  // Restore the file content and filename from local storage if available
+  // const savedXMLContent = localStorage.getItem("bpmnFileContent");
+  // const savedXMLFileName = localStorage.getItem("bpmnFileName");
+  // savedXMLContent && savedXMLFileName
+  //   ? dispatch(
+  //       setFileData({
+  //         filename: savedXMLFileName,
+  //         fileContent: savedXMLContent,
+  //       })
+  //     )
+  //   : null;
 
   fileError
     ? toast.error(fileError) && dispatch(clearFileError())

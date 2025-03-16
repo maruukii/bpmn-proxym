@@ -8,9 +8,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ setXml }) => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     try {
-      const fileContent = await fileUploader(input, dispatch);
-      setXml(fileContent);
-      console.log("File content:", fileContent);
+      setXml(await fileUploader(input, dispatch));
     } catch (error) {
       console.error("Error uploading file:", error);
 
