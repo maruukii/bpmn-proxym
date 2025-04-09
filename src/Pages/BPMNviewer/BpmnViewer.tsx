@@ -1,58 +1,27 @@
 import { useEffect, useRef, useState } from "react";
-import BpmnModeler from "bpmn-js/lib/Modeler";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
-import { exportBPMN } from "../../utils/fileExporter";
-import { useDispatch } from "react-redux";
-import { setFileExportSuccess } from "../../store/bpm/fileSlice";
-import { withTranslation } from "react-i18next";
-import {
-  BpmnPropertiesPanelModule,
-  BpmnPropertiesProviderModule,
-} from "bpmn-js-properties-panel";
 
+import { exportBPMN } from "../../utils/fileExporter";
+import { useDispatch, useSelector } from "react-redux";
+import { setFileExportSuccess } from "../../store/file/fileSlice";
+import { withTranslation } from "react-i18next";
+
+import { RootState } from "../../store/store";
 interface BpmnEditorProps {
-  xml: string | null;
   filename: string | null;
+  designer: React.RefObject<HTMLDivElement | null>;
+  propertiesRef: React.RefObject<HTMLDivElement | null>;
   t: any;
 }
 
-const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename, t }) => {
-  const modelerRef = useRef<HTMLDivElement | null>(null);
-  const propertiesRef = useRef<HTMLDivElement | null>(null);
-  const [modeler, setModeler] = useState<BpmnModeler | null>(null);
+const BpmnViewer: React.FC<BpmnEditorProps> = ({
+  filename,
+  designer,
+  propertiesRef,
+  t,
+}) => {
+  const { modeler } = useSelector((state: RootState) => state.modeler);
+
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!xml || !modelerRef.current) return;
-
-    const bpmnModeler = new BpmnModeler({
-      container: modelerRef.current,
-      propertiesPanel: {
-        parent: propertiesRef.current,
-      },
-      additionalModules: [
-        BpmnPropertiesPanelModule,
-        BpmnPropertiesProviderModule,
-      ],
-    });
-
-    bpmnModeler
-      .importXML(xml)
-      .then(() => {
-        const canvas: any = bpmnModeler.get<"canvas">("canvas");
-        canvas.zoom("fit-viewport");
-        setModeler(bpmnModeler);
-      })
-      .catch((error) => {
-        console.error("Error loading BPMN:", error);
-      });
-    bpmnModeler.on("commandStack.changed", async () => {
-      const fileContent: any = await bpmnModeler.saveXML({ format: true });
-      handleBPMNChange(fileContent.xml);
-    });
-    return () => bpmnModeler.destroy();
-  }, [xml]);
 
   const undo = () => {
     const commandStack = modeler?.get("commandStack") as { undo: () => void };
@@ -63,7 +32,6 @@ const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename, t }) => {
     const commandStack = modeler?.get("commandStack") as { redo: () => void };
     commandStack?.redo();
   };
-
   const handleExport = () => {
     try {
       if (!modeler || !filename)
@@ -74,17 +42,17 @@ const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename, t }) => {
       console.error("Error exporting BPMN:", error);
     }
   };
-  const saveBPMNFile = (fileContent: any) => {
-    localStorage.setItem("bpmnFileContent", JSON.stringify(fileContent));
-    localStorage.setItem("bpmnFileName", JSON.stringify(filename));
-  };
-  let saveTimeout: any;
-  const handleBPMNChange = (updatedContent: string) => {
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(() => {
-      saveBPMNFile(updatedContent);
-    }, 1500);
-  };
+  // const saveBPMNFile = (fileContent: any) => {
+  //   localStorage.setItem("bpmnFileContent", JSON.stringify(fileContent));
+  //   localStorage.setItem("bpmnFileName", JSON.stringify(filename));
+  // };
+  // let saveTimeout: any;
+  // const handleBPMNChange = (updatedContent: string) => {
+  //   clearTimeout(saveTimeout);
+  //   saveTimeout = setTimeout(() => {
+  //     saveBPMNFile(updatedContent);
+  //   }, 1500);
+  // };
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -113,7 +81,7 @@ const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename, t }) => {
       {/* BPMN Editor Container */}
       <div className="flex flex-row w-full h-[80vh] border border-gray-300 rounded-lg shadow-md">
         {/* BPMN Modeler (Right) */}
-        <div ref={modelerRef} className="w-3/4 h-full" />
+        <div ref={designer} className="w-3/4 h-full" />
         {/* Properties Panel (Left) */}
         <div
           ref={propertiesRef}
@@ -126,4 +94,4 @@ const BpmnEditor: React.FC<BpmnEditorProps> = ({ xml, filename, t }) => {
   );
 };
 
-export default withTranslation()(BpmnEditor);
+export default withTranslation()(BpmnViewer);

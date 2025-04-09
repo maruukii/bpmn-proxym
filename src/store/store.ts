@@ -1,11 +1,13 @@
+import modelerSlice from './modeler/modelerSlice';
 import { configureStore } from "@reduxjs/toolkit";
-import fileReducer from "./bpm/fileSlice";
+import fileReducer from "./file/fileSlice";
 import userReducer from "./user/userSlice";
 
 export const store = configureStore({
   reducer: {
     file: fileReducer,
     user: userReducer,
+    modeler: modelerSlice,
   },
 });
 

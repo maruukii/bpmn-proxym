@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Routes from "./routes/index";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+import ContextMenu from "./components/ContextMenu";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,11 +14,21 @@ const queryClient = new QueryClient({
     },
   },
 });
+
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
 });
 // const queryClient = useQueryClient();
 const App: React.FC = () => {
+  const designer: any | null = document.getElementById("designer");
+  useEffect(() => {
+    if (designer) {
+      designer.addEventListener("contextmenu", function (ev: PointerEvent) {
+        ev.preventDefault();
+      });
+    }
+  }, [designer]);
+
   return (
     <PersistQueryClientProvider
       client={queryClient}
@@ -24,6 +36,7 @@ const App: React.FC = () => {
     >
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
       <Routes />
+      {/* <ContextMenu /> */}
     </PersistQueryClientProvider>
   );
 };

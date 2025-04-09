@@ -1,4 +1,4 @@
-import { setFileError } from "../store/bpm/fileSlice";
+import { setFileError } from "../store/file/fileSlice";
 import { AppDispatch } from "../store/store";
 
 export const exportBPMN = (modeler: any, filename: string, dispatch: AppDispatch): Promise<void> => {

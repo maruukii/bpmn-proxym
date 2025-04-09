@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import BpmnViewer from "../BPMNviewer/bpmnViewer";
 import FileUploadButton from "../../components/Buttons/fileUploadButton";
 import { RootState } from "../../store/store";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,11 +8,10 @@ import {
   clearFileError,
   clearFileExportSuccess,
   clearFileImportSucess,
-} from "../../store/bpm/fileSlice";
+} from "../../store/file/fileSlice";
 import { withTranslation } from "react-i18next";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
-import { setFileData } from "../../store/bpm/fileSlice";
+import Designer from "../../components/Designer";
+
 interface Bpmnhome {
   t: any;
 }
@@ -51,7 +49,8 @@ const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
       <FileUploadButton setXml={setXml} />
 
       {xml ? (
-        <BpmnViewer xml={xml} filename={filename} />
+        // <BpmnViewer xml={xml} filename={filename} />
+        <Designer xml={xml} filename={filename} />
       ) : (
         <p style={{ margin: "1rem" }}>{t("BPMNSTATUS")}</p>
       )}
