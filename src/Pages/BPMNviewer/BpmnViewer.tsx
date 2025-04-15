@@ -4,7 +4,7 @@ import { exportBPMN } from "../../utils/fileExporter";
 import { useDispatch, useSelector } from "react-redux";
 import { setFileExportSuccess } from "../../store/file/fileSlice";
 import { withTranslation } from "react-i18next";
-
+import Property from "../../components/Panel";
 import { RootState } from "../../store/store";
 interface BpmnEditorProps {
   filename: string | null;
@@ -87,6 +87,7 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
           ref={propertiesRef}
           className="w-1/4 p-4 bg-gray-100 border-r border-gray-300 rounded-l-lg shadow-md overflow-auto"
         >
+          <Property />
           <h3 className="text-lg font-bold mb-2">Properties Panel</h3>
         </div>
       </div>
