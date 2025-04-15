@@ -7,13 +7,13 @@ import type ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 
 
 interface ModelerState {
-  activeElement?: BpmnElement
-  activeElementId?: string
-  modeler?: Modeler
-  moddle?: Moddle
-  modeling?: Modeling
-  canvas?: Canvas
-  elementRegistry?: ElementRegistry
+  activeElement: BpmnElement | undefined
+  activeElementId: string | undefined
+  modeler: Modeler | undefined
+  moddle: Moddle | undefined
+  modeling: Modeling | undefined
+  canvas: Canvas | undefined
+  elementRegistry: ElementRegistry | undefined
 }
 
 const initialState: ModelerState = {

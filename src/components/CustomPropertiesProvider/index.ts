@@ -4,7 +4,6 @@ export default function CustomPropertiesProvider() {
   return {
     __init__: ['propertiesProvider'],
     propertiesProvider: ['type', function(this: any, propertiesPanel: any) {
-
       this.getTabs = function(element: any) {
         const tabs = propertiesPanel.getTabs(element);
 

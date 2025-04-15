@@ -20,7 +20,6 @@ import {
     let moddle: { [key: string]: any } = {} 
     const options: { [key: string]: unknown } = {}
   
-
   
     // 配置模板选择弹窗（会影响默认 popupmenu）
     modules.push(
