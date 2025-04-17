@@ -9,8 +9,9 @@ import getBpmnIconType from "../bpmn-icons/getIconType";
 import bpmnIcons from "../bpmn-icons";
 import flowable from "../../tasks/tasks.json";
 import DynamicProperty from "./components/DynamicProperty";
-
-export default function PropertiesPanel() {
+import { withTranslation } from "react-i18next";
+import { getName } from "../../utils/dynamicPropertyUtil";
+export function PropertiesPanel({ t }: { t: any }) {
   const dispatch = useDispatch();
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -21,9 +22,10 @@ export default function PropertiesPanel() {
   const [elementState, setElementState] = useState({
     currentElementId: "",
     currentElementType: "",
-    panelTitle: "Property configuration",
-    bpmnIconName: "bpmn-icon-process",
-    bpmnElementName: "Process",
+    panelTitle: "Properties Panel",
+    bpmnIconName: "",
+    bpmnElement: "",
+    bpmnElementName: "",
   });
 
   const [tagNames, setTagNames] = useState<Record<string, any[]>>({});
@@ -69,9 +71,10 @@ export default function PropertiesPanel() {
       setElementState({
         currentElementId: activatedElement.id,
         currentElementType: elementType,
-        panelTitle: elementType,
+        panelTitle: "Properties Panel",
         bpmnIconName: iconName,
-        bpmnElementName: activatedElementTypeName,
+        bpmnElement: activatedElementTypeName,
+        bpmnElementName: getName(activatedElement) || "",
       });
     },
     100,
@@ -103,7 +106,8 @@ export default function PropertiesPanel() {
       return (
         <DynamicProperty
           key={propName}
-          name={propName}
+          bpmnName={propName}
+          displayName={item.displayName}
           activeElement={activeElement}
           modeling={modeling}
         />
@@ -113,11 +117,19 @@ export default function PropertiesPanel() {
 
   return (
     <div ref={panelRef} className="properties-panel p-4 overflow-auto">
+      <h2 className="text-2xl font-bold mb-4">{t(elementState.panelTitle)}</h2>
+
       <div className="panel-header flex items-center mb-4">
-        <BpmnIcon name={elementState.bpmnIconName} />
-        <h2 className="text-lg font-semibold">
-          {elementState.bpmnElementName}
-        </h2>
+        {elementState?.bpmnIconName !== "" ? (
+          <BpmnIcon name={elementState.bpmnIconName} />
+        ) : undefined}
+        <div className="flex items-start flex-col">
+          {" "}
+          <h2 className="text-sm font-semibold">{elementState?.bpmnElement}</h2>
+          <h2 className="text-sm font-light">
+            {elementState?.bpmnElementName}
+          </h2>
+        </div>
       </div>
 
       <div className="panel-body space-y-4">
@@ -130,3 +142,4 @@ export default function PropertiesPanel() {
     </div>
   );
 }
+export default withTranslation()(PropertiesPanel);

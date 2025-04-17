@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { exportBPMN } from "../../utils/fileExporter";
 import { useDispatch, useSelector } from "react-redux";
 import { setFileExportSuccess } from "../../store/file/fileSlice";
@@ -7,6 +7,11 @@ import Property from "../../components/Panel";
 import { RootState } from "../../store/store";
 import BpmnModdle from "bpmn-moddle";
 import PreviewContent from "./previewContent";
+import {
+  openJsonPreview,
+  openXMLPreview,
+} from "../../utils/previewContentUtils";
+
 interface BpmnEditorProps {
   filename: string | null;
   designer: React.RefObject<HTMLDivElement | null>;
@@ -63,27 +68,17 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
     }
   };
 
-  const openXMLPreview = async () => {
-    if (!modeler) return;
-    try {
-      const { xml } = await modeler.saveXML({ format: true, preamble: true });
-      openPreviewModal(xml as string, "xml");
-    } catch (error) {
-      console.error("Error generating XML preview:", error);
-    }
-  };
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const commandStack: any = modeler?.get("commandStack");
+      if (commandStack.canUndo()) {
+        event.preventDefault();
+      }
+    };
 
-  const openJsonPreview = async () => {
-    if (!modeler) return;
-    try {
-      const { xml } = await modeler.saveXML({ format: true });
-      const json = await moddle.fromXML(xml as string);
-      openPreviewModal(JSON.stringify(json, null, 2), "json");
-    } catch (error) {
-      console.error("Error generating JSON preview:", error);
-    }
-  };
-
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [modeler]);
   return (
     <div className="flex flex-col gap-4 p-4">
       {/* Toolbar */}
@@ -107,13 +102,25 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
           💾 {t("Export")}
         </button>
         <button
-          onClick={openXMLPreview}
+          onClick={() => {
+            isPreviewModalOpen
+              ? closePreviewModal()
+              : modeler
+              ? openXMLPreview({ modeler, openPreviewModal })
+              : undefined;
+          }}
           className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
         >
           📝 {t("Preview as XML")}
         </button>
         <button
-          onClick={openJsonPreview}
+          onClick={() => {
+            isPreviewModalOpen
+              ? closePreviewModal()
+              : modeler && moddle
+              ? openJsonPreview({ modeler, moddle, openPreviewModal })
+              : undefined;
+          }}
           className="px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-md"
         >
           📝 {t("Preview as JSON")}

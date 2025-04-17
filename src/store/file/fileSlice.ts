@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface FileState {
   filename: string | null;
   fileContent:string | null;
+  fileContentCopySuccess:boolean|null;
   fileImportSuccess: boolean;
   fileExportSuccess: boolean;
   fileError: string | null;
@@ -11,6 +12,7 @@ interface FileState {
 const initialState: FileState = {
   filename: null,
   fileContent:null,
+  fileContentCopySuccess:false,
   fileExportSuccess: false,
   fileImportSuccess: false,
   fileError:null,
@@ -39,6 +41,12 @@ const fileSlice = createSlice({
     clearFileExportSuccess: (state) => {
       state.fileExportSuccess=false;
     },
+    setFileContentCopySuccess: (state) => {
+      state.fileContentCopySuccess=true;
+    },
+    clearFileContentCopySuccess: (state) => {
+      state.fileContentCopySuccess=false;
+    },
     setFileError: (state, action: PayloadAction<string>) => {
         state.fileError = action.payload;
     },
@@ -48,5 +56,5 @@ const fileSlice = createSlice({
   },
 });
 
-export const { setFileData, clearFileData,clearFileImportSucess,setFileExportSuccess,clearFileExportSuccess,setFileError,clearFileError } = fileSlice.actions;
+export const { setFileData, clearFileData,clearFileImportSucess,setFileExportSuccess,clearFileExportSuccess,setFileError,clearFileError,setFileContentCopySuccess,clearFileContentCopySuccess } = fileSlice.actions;
 export default fileSlice.reducer;

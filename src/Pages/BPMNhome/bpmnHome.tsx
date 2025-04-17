@@ -8,6 +8,7 @@ import {
   clearFileError,
   clearFileExportSuccess,
   clearFileImportSucess,
+  clearFileContentCopySuccess,
 } from "../../store/file/fileSlice";
 import { withTranslation } from "react-i18next";
 import Designer from "../../components/Designer";
@@ -18,8 +19,13 @@ interface Bpmnhome {
 const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
   const dispatch = useDispatch();
   const [xml, setXml] = useState<string | null>(null);
-  const { filename, fileExportSuccess, fileImportSuccess, fileError } =
-    useSelector((state: RootState) => state.file);
+  const {
+    filename,
+    fileExportSuccess,
+    fileImportSuccess,
+    fileContentCopySuccess,
+    fileError,
+  } = useSelector((state: RootState) => state.file);
   // Restore the file content and filename from local storage if available
   // const savedXMLContent = localStorage.getItem("bpmnFileContent");
   // const savedXMLFileName = localStorage.getItem("bpmnFileName");
@@ -36,11 +42,14 @@ const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
     ? toast.error(fileError) && dispatch(clearFileError())
     : filename
     ? fileImportSuccess
-      ? toast.success(filename + " imported successfully!") &&
+      ? toast.success(filename + t("BPMNIMPORTSUCCESS")) &&
         dispatch(clearFileImportSucess())
       : fileExportSuccess
-      ? toast.success(filename + " exported successfully!") &&
+      ? toast.success(filename + t("BPMNEXPORTSUCCESS")) &&
         dispatch(clearFileExportSuccess())
+      : fileContentCopySuccess
+      ? toast.success(filename + t("BPMNCOPYSUCCESS")) &&
+        dispatch(clearFileContentCopySuccess())
       : null
     : null;
   return (

@@ -7,5 +7,7 @@ export default{
     "Preview as JSON":"Aperçu en tant que JSON",
     "Properties Panel":"Panneau de propriétés",
     "XML Preview":"Aperçu XML",
-    "JSON Preview":"Aperçu JSON",   
+    "JSON Preview":"Aperçu JSON",
+    "Copy to clipboard":"Copier dans le presse-papiers",
+    "Copied!":"Copié!",
 }

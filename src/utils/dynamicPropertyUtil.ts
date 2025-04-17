@@ -4,14 +4,17 @@ import { FORMKEY_ALLOWED_TYPES } from '../CommonData/bpmnEnums';
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling';
 
 
-const prefix = 'flowable';
+const prefix = import.meta.env.VITE_PROCESS_ENGINE;
 
 // 🔹 Get formKey value from element
 export function getDynamicProperty(element: Element,name:string): string | undefined {
   const businessObject = getBusinessObject(element);
   return businessObject.get(`${prefix}:${name}`);
 }
-
+export function getName(element: Element): string | undefined {
+  const businessObject = getBusinessObject(element);
+  return businessObject.get("name");
+}
 // 🔹 Set or update formKey value
 export function updateDynamicProperty(modeling:Modeling, element: Element, name:string,value: string) {
   modeling?.updateProperties(element, {
