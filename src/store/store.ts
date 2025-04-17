@@ -9,6 +9,13 @@ export const store = configureStore({
     user: userReducer,
     modeler: modelerSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['modeler.activeElement','modeler.modeler','modeler.moddle','modeler.modeling','modeler.canvas','modeler.elementRegistry'],
+        ignoredActions: ['modeler/setElement', 'modeler/setModeler'],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

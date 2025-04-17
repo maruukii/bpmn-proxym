@@ -1,5 +1,4 @@
 import Modeler from 'bpmn-js/lib/Modeler';
-import type { Moddle } from 'moddle'
 
 import { setModeler } from '../../store/modeler/modelerSlice'; 
 import EventEmitter from '../../utils/EventEmitter'; 

@@ -3,32 +3,26 @@ import { Element } from 'bpmn-js/lib/model/Types';
 import { FORMKEY_ALLOWED_TYPES } from '../CommonData/bpmnEnums';
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling';
 
-export const EXECUTION_LISTENER_TYPE = {
-  class: 'Java class',
-  expression: 'Expression',
-  delegateExpression: 'Delegate expression',
-  script: 'Script'
-};
 
 const prefix = 'flowable';
 
 // 🔹 Get formKey value from element
-export function getFormKey(element: Element): string | undefined {
+export function getDynamicProperty(element: Element,name:string): string | undefined {
   const businessObject = getBusinessObject(element);
-  return businessObject.get(`${prefix}:formKey`);
+  return businessObject.get(`${prefix}:${name}`);
 }
 
 // 🔹 Set or update formKey value
-export function updateFormKey(modeling:Modeling, element: Element, value: string) {
+export function updateDynamicProperty(modeling:Modeling, element: Element, name:string,value: string) {
   modeling?.updateProperties(element, {
-    [`${prefix}:formKey`]: value
+    [`${prefix}:${name}`]: value
   });
 }
 
 // 🔹 Remove formKey value
-export function removeFormKey(modeling:Modeling,element: Element) {
+export function removeDynamicProperty(modeling:Modeling,element: Element,name:string) {
   modeling?.updateProperties(element, {
-    [`${prefix}:formKey`]: undefined
+    [`${prefix}:${name}`]: undefined
   });
 }
 

@@ -1,187 +1,128 @@
-import { JSX, useEffect, useRef, useState } from "react";
-import FormKey from "./components/formKey";
-// import EventEmitter from "@/utils/EventEmitter"; // Your EventEmitter
-// import Logger from "@/utils/Logger"; // Your Logger
-
-// import { isAsynchronous } from "@/bo-utils/asynchronousContinuationsUtil";
-// import { isExecutable } from "@/bo-utils/executionListenersUtil";
-// import { isJobExecutable } from "@/bo-utils/jobExecutionUtil";
-// import {
-//   isStartInitializable,
-//   isUserAssignmentSupported,
-// } from "@/bo-utils/initiatorUtil";
-// import { isCanbeConditional } from "@/bo-utils/conditionUtil";
-import { RootState } from "../../store/store";
-import { debounce } from "lodash";
-import { setElement } from "../../store/modeler/modelerSlice";
+import { useEffect, useRef, useState, JSX } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { throttle } from "lodash";
+import { setElement } from "../../store/modeler/modelerSlice";
+import { RootState } from "../../store/store";
 import { Connection, Label, Shape } from "bpmn-js/lib/model/Types";
-import getBpmnIconType from "../bpmn-icons/getIconType";
-// import getBpmnIconType from "@/bpmn-icons/getIconType";
-import bpmnIcons from "../bpmn-icons";
 import BpmnIcon from "../Common/BpmnIcon";
-
-// import ElementGenerations from "./components/ElementGenerations";
-// import ElementConditional from "./components/ElementConditional";
-// import ElementDocumentations from "./components/ElementDocumentations";
-// import ElementExecutionListeners from "./components/ElementExecutionListeners";
-// import ElementExtensionProperties from "./components/ElementExtensionProperties";
-// import ElementAsyncContinuations from "./components/ElementAsyncContinuations";
-// import ElementJobExecution from "./components/ElementJobExecution";
-// import ElementStartInitiator from "./components/ElementStartInitiator";
-// import UserAssignment from "./components/UserAssignment";
-
-// import BpmnIcon from "@/components/common/BpmnIcon"; // Assuming this is a simple Icon component
+import getBpmnIconType from "../bpmn-icons/getIconType";
+import bpmnIcons from "../bpmn-icons";
+import flowable from "../../tasks/tasks.json";
+import DynamicProperty from "./components/DynamicProperty";
 
 export default function PropertiesPanel() {
-  const panelRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const { elementRegistry, modeler, activeElement } = useSelector(
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const { elementRegistry, modeler, activeElement, modeling } = useSelector(
     (state: RootState) => state.modeler
   );
-  const [currentElementId, setCurrentElementId] = useState<
-    string | undefined
-  >();
-  const [currentElementType, setCurrentElementType] = useState<
-    string | undefined
-  >();
 
-  const [panelTitle, setPanelTitle] = useState<string>(
-    "Property configuration"
-  );
-  const [bpmnIconName, setBpmnIconName] = useState<string | undefined>();
-  const [bpmnElementName, setBpmnElementName] = useState<string>("Process");
+  const [elementState, setElementState] = useState({
+    currentElementId: "",
+    currentElementType: "",
+    panelTitle: "Property configuration",
+    bpmnIconName: "bpmn-icon-process",
+    bpmnElementName: "Process",
+  });
 
-  const [renderComponents, setRenderComponents] = useState<JSX.Element[]>([
-    <FormKey />,
-  ]);
-  const setCurrentElement = debounce(
+  const [tagNames, setTagNames] = useState<Record<string, any[]>>({});
+
+  useEffect(() => {
+    const extractTagsWithProperties = (types: any[]) => {
+      const result: Record<string, any[]> = {};
+      types.forEach((type) => {
+        if (type.extends && type.properties) {
+          type.extends.forEach((extendType: string) => {
+            const tagName = extendType.split(":")[1];
+            result[tagName] = result[tagName] || [];
+            result[tagName].push(...type.properties);
+          });
+        }
+      });
+      return result;
+    };
+
+    setTagNames(extractTagsWithProperties(flowable.types));
+  }, []);
+
+  const setCurrentElement = throttle(
     (element: Shape | Element | Connection | Label | null) => {
       let activatedElement: BpmnElement | undefined = element;
-      let activatedElementTypeName = "";
-
       if (!activatedElement) {
         activatedElement =
           elementRegistry?.find((el: any) => el.type === "bpmn:Process") ||
           elementRegistry?.find((el: any) => el.type === "bpmn:Collaboration");
 
-        if (!activatedElement) {
-          console.log("no activated elements");
-        }
+        if (!activatedElement) return;
       }
-      activatedElementTypeName = getBpmnIconType(activatedElement);
+
+      const activatedElementTypeName = getBpmnIconType(activatedElement);
+      const elementType = activatedElement.type.split(":")[1];
+      const iconName =
+        bpmnIcons[activatedElementTypeName as keyof typeof bpmnIcons];
+
+      // Set Redux state
       dispatch(setElement(activatedElement));
-      // modeler.setElement(markRaw(activatedElement));
-      setCurrentElementId(activatedElement.id);
-      setCurrentElementType(activatedElement.type.split(":")[1]);
 
-      setPanelTitle(currentElementType as string);
-      setBpmnIconName(
-        bpmnIcons[activatedElementTypeName as keyof typeof bpmnIcons]
-      );
-      setBpmnElementName(activatedElementTypeName);
-      setCurrentComponents(activatedElement);
-
-      console.log(
-        "Selected element changed",
-        `ID: ${activatedElement.id} , type: ${activatedElement.type}`
-      );
+      // Local state for rendering
+      setElementState({
+        currentElementId: activatedElement.id,
+        currentElementType: elementType,
+        panelTitle: elementType,
+        bpmnIconName: iconName,
+        bpmnElementName: activatedElementTypeName,
+      });
     },
-    100
+    100,
+    { leading: true, trailing: true }
   );
-  modeler?.on("import.done", () => {
-    console.log("gg");
-  });
-  // 监听选择事件，修改当前激活的元素以及表单
-  modeler?.on("selection.changed", ({ newSelection }) => {
-    setCurrentElement(newSelection[0] || null);
-  });
-  modeler?.on(
-    "element.changed",
-    ({ element }: { element: { id: string; type?: string } }) => {
-      if (element && element.id === currentElementId) {
+
+  useEffect(() => {
+    if (!modeler) return;
+
+    modeler.on("selection.changed", ({ newSelection }) => {
+      setCurrentElement(newSelection[0] || null);
+    });
+
+    modeler.on("element.changed", ({ element }: any) => {
+      if (element?.id === elementState.currentElementId) {
         setCurrentElement(element);
       }
-    }
-  );
+    });
+  }, [modeler, elementRegistry, elementState.currentElementId]);
 
-  // Called when a new BPMN element is selected
-  const setCurrentComponents = (element: any) => {
-    const components: JSX.Element[] = [];
+  const renderProperties = () => {
+    if (!activeElement || !modeling) return [];
 
-    //   components.push(<ElementGenerations key="generations" />);
-    //   components.push(<ElementDocumentations key="documentations" />);
+    const tag = tagNames[activeElement.type.split(":")[1]];
+    if (!tag) return [];
 
-    //   if (isCanbeConditional(element)) {
-    //     components.push(<ElementConditional key="conditional" />);
-    //   }
-
-    //   if (isJobExecutable(element)) {
-    //     components.push(<ElementJobExecution key="job-execution" />);
-    //   }
-
-    //   components.push(<ElementExtensionProperties key="extension-properties" />);
-
-    //   if (isExecutable(element)) {
-    //     components.push(<ElementExecutionListeners key="execution-listeners" />);
-    //   }
-
-    //   if (isAsynchronous(element)) {
-    //     components.push(<ElementAsyncContinuations key="async-continuations" />);
-    //   }
-
-    //   if (isStartInitializable(element)) {
-    //     components.push(<ElementStartInitiator key="start-initiator" />);
-    //   }
-
-    //   if (isUserAssignmentSupported(element)) {
-    //     components.push(<UserAssignment key="user-assignment" />);
-    //   }
-
-    //   setRenderComponents(components);
+    return tag.map((item) => {
+      const propName = item.name.split(":")[1];
+      return (
+        <DynamicProperty
+          key={propName}
+          name={propName}
+          activeElement={activeElement}
+          modeling={modeling}
+        />
+      );
+    });
   };
-
-  // useEffect(() => {
-  //   if (panelRef.current) {
-  //     EventEmitter.emit("properties-panel-mounted", panelRef.current);
-  //   }
-
-  //   const onElementChanged = (element: any) => {
-  //     if (!element) {
-  //       Logger.warn("No element selected");
-  //       return;
-  //     }
-
-  //     setCurrentElementId(element.id);
-  //     setCurrentElementType(element.type);
-
-  //     const iconName = getBpmnIconType(element);
-  //     setBpmnIconName(iconName);
-
-  //     const elementName =
-  //       element.businessObject?.name || element.type.split(":").pop();
-  //     setBpmnElementName(elementName || "Process");
-
-  //     setCurrentComponents(element);
-  //   };
-
-  //   EventEmitter.on("element-selected", onElementChanged);
-
-  //   return () => {
-  //     EventEmitter.off("element-selected", onElementChanged);
-  //   };
-  // }, []);
 
   return (
     <div ref={panelRef} className="properties-panel p-4 overflow-auto">
       <div className="panel-header flex items-center mb-4">
-        <BpmnIcon name={bpmnIconName} /> {/* Add margin-right */}
-        <h2 className="text-lg font-semibold">{bpmnElementName}</h2>
+        <BpmnIcon name={elementState.bpmnIconName} />
+        <h2 className="text-lg font-semibold">
+          {elementState.bpmnElementName}
+        </h2>
       </div>
 
       <div className="panel-body space-y-4">
-        {renderComponents.length > 0 ? (
-          renderComponents
+        {activeElement ? (
+          renderProperties()
         ) : (
           <div className="text-gray-400">No element selected</div>
         )}
