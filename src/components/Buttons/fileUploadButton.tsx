@@ -19,7 +19,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ setXml }) => {
     }
   };
   return (
-    <div className="fixed bottom-8 right-8 z-10">
+    <div className="fixed bottom-8 right-8 z-30">
       {/* Visible Button with File Upload Icon */}
       <label
         htmlFor="file-upload"

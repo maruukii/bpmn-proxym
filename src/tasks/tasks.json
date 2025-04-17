@@ -6,1207 +6,1371 @@
     "tagAlias": "lowerCase"
   },
   "associations": [],
-  "types": [
-    {
-      "name": "InOutBinding",
-      "superClass": ["Element"],
-      "isAbstract": true,
-      "properties": [
-        {
-          "name": "source",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "sourceExpression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "target",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "businessKey",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "local",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": false
-        },
-        {
-          "name": "variables",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "In",
-      "superClass": ["InOutBinding"],
-      "meta": {
-        "allowedIn": ["bpmn:CallActivity"]
-      }
-    },
-    {
-      "name": "Out",
-      "superClass": ["InOutBinding"],
-      "meta": {
-        "allowedIn": ["bpmn:CallActivity"]
-      }
-    },
-    {
-      "name": "AsyncCapable",
-      "isAbstract": true,
-      "extends": ["bpmn:Activity", "bpmn:Gateway", "bpmn:Event"],
-      "properties": [
-        {
-          "name": "async",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": false
-        },
-        {
-          "name": "asyncBefore",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": false
-        },
-        {
-          "name": "asyncAfter",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": false
-        },
-        {
-          "name": "exclusive",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": true
-        }
-      ]
-    },
-    {
-      "name": "JobPriorized",
-      "isAbstract": true,
-      "extends": ["bpmn:Process", "flowable:AsyncCapable"],
-      "properties": [
-        {
-          "name": "jobPriority",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "SignalEventDefinition",
-      "isAbstract": true,
-      "extends": ["bpmn:SignalEventDefinition"],
-      "properties": [
-        {
-          "name": "async",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": false
-        }
-      ]
-    },
-    {
-      "name": "ErrorEventDefinition",
-      "isAbstract": true,
-      "extends": ["bpmn:ErrorEventDefinition"],
-      "properties": [
-        {
-          "name": "errorCodeVariable",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "errorMessageVariable",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Error",
-      "isAbstract": true,
-      "extends": ["bpmn:Error"],
-      "properties": [
-        {
-          "name": "flowable:errorMessage",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "PotentialStarter",
-      "superClass": ["Element"],
-      "properties": [
-        {
-          "name": "resourceAssignmentExpression",
-          "type": "bpmn:ResourceAssignmentExpression"
-        }
-      ]
-    },
-    {
-      "name": "FormSupported",
-      "isAbstract": true,
-      "extends": ["bpmn:StartEvent", "bpmn:UserTask"],
-      "properties": [
-        {
-          "name": "formHandlerClass",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "formKey",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "formType",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "formReadOnly",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": false
-        },
-        {
-          "name": "formInit",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": true
-        }
-      ]
-    },
-    {
-      "name": "TemplateSupported",
-      "isAbstract": true,
-      "extends": ["bpmn:Process", "bpmn:FlowElement"],
-      "properties": [
-        {
-          "name": "modelerTemplate",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Initiator",
-      "isAbstract": true,
-      "extends": ["bpmn:StartEvent"],
-      "properties": [
-        {
-          "name": "initiator",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "ScriptTask",
-      "isAbstract": true,
-      "extends": ["bpmn:ScriptTask"],
-      "properties": [
-        {
-          "name": "resultVariable",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "resource",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Process",
-      "isAbstract": true,
-      "extends": ["bpmn:Process"],
-      "properties": [
-        {
-          "name": "candidateStarterGroups",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "candidateStarterUsers",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "versionTag",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "historyTimeToLive",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "isStartableInTasklist",
-          "isAttr": true,
-          "type": "Boolean",
-          "default": true
-        }
-      ]
-    },
-    {
-      "name": "EscalationEventDefinition",
-      "isAbstract": true,
-      "extends": ["bpmn:EscalationEventDefinition"],
-      "properties": [
-        {
-          "name": "escalationCodeVariable",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "FormalExpression",
-      "isAbstract": true,
-      "extends": ["bpmn:FormalExpression"],
-      "properties": [
-        {
-          "name": "resource",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Assignable",
-      "extends": ["bpmn:UserTask"],
-      "properties": [
-        {
-          "name": "assignee",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "candidateUsers",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "candidateGroups",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "dueDate",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "followUpDate",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "priority",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Assignee",
-      "supperClass": "Element",
-      "meta": {
-        "allowedIn": ["*"]
-      },
-      "properties": [
-        {
-          "name": "label",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "viewId",
-          "type": "Number",
-          "isAttr": true
-        }
-      ]
-    },
-    {
-      "name": "CallActivity",
-      "extends": ["bpmn:CallActivity"],
-      "properties": [
-        {
-          "name": "calledElementBinding",
-          "isAttr": true,
-          "type": "String",
-          "default": "latest"
-        },
-        {
-          "name": "calledElementVersion",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "calledElementVersionTag",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "calledElementTenantId",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "caseRef",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "caseBinding",
-          "isAttr": true,
-          "type": "String",
-          "default": "latest"
-        },
-        {
-          "name": "caseVersion",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "caseTenantId",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "variableMappingClass",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "variableMappingDelegateExpression",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "ServiceTaskLike",
-      "extends": [
-        "bpmn:ServiceTask",
-        "bpmn:BusinessRuleTask",
-        "bpmn:SendTask",
-        "bpmn:MessageEventDefinition"
-      ],
-      "properties": [
-        {
-          "name": "expression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "class",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "delegateExpression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "resultVariable",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "DmnCapable",
-      "extends": ["bpmn:BusinessRuleTask"],
-      "properties": [
-        {
-          "name": "decisionRef",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "decisionRefBinding",
-          "isAttr": true,
-          "type": "String",
-          "default": "latest"
-        },
-        {
-          "name": "decisionRefVersion",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "mapDecisionResult",
-          "isAttr": true,
-          "type": "String",
-          "default": "resultList"
-        },
-        {
-          "name": "decisionRefTenantId",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "ExternalCapable",
-      "extends": ["flowable:ServiceTaskLike"],
-      "properties": [
-        {
-          "name": "type",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "topic",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "TaskPriorized",
-      "extends": ["bpmn:Process", "flowable:ExternalCapable"],
-      "properties": [
-        {
-          "name": "taskPriority",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Properties",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["*"]
-      },
-      "properties": [
-        {
-          "name": "values",
-          "type": "Property",
-          "isMany": true
-        }
-      ]
-    },
-    {
-      "name": "Property",
-      "superClass": ["Element"],
-      "properties": [
-        {
-          "name": "id",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "name",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "value",
-          "type": "String",
-          "isAttr": true
-        }
-      ]
-    },
-    {
-      "name": "Button",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["bpmn:UserTask"]
-      },
-      "properties": [
-        {
-          "name": "id",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "name",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "code",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "isHide",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "next",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "sort",
-          "type": "Integer",
-          "isAttr": true
-        }
-      ]
-    },
-    {
-      "name": "Assignee",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["bpmn:UserTask"]
-      },
-      "properties": [
-        {
-          "name": "id",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "type",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "value",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "condition",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "operationType",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "sort",
-          "type": "Integer",
-          "isAttr": true
-        }
-      ]
-    },
-    {
-      "name": "Connector",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["flowable:ServiceTaskLike"]
-      },
-      "properties": [
-        {
-          "name": "inputOutput",
-          "type": "InputOutput"
-        },
-        {
-          "name": "connectorId",
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "InputOutput",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["bpmn:FlowNode", "flowable:Connector"]
-      },
-      "properties": [
-        {
-          "name": "inputOutput",
-          "type": "InputOutput"
-        },
-        {
-          "name": "connectorId",
-          "type": "String"
-        },
-        {
-          "name": "inputParameters",
-          "isMany": true,
-          "type": "InputParameter"
-        },
-        {
-          "name": "outputParameters",
-          "isMany": true,
-          "type": "OutputParameter"
-        }
-      ]
-    },
-    {
-      "name": "InputOutputParameter",
-      "properties": [
-        {
-          "name": "name",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "value",
-          "isBody": true,
-          "type": "String"
-        },
-        {
-          "name": "definition",
-          "type": "InputOutputParameterDefinition"
-        }
-      ]
-    },
-    {
-      "name": "InputOutputParameterDefinition",
-      "isAbstract": true
-    },
-    {
-      "name": "List",
-      "superClass": ["InputOutputParameterDefinition"],
-      "properties": [
-        {
-          "name": "items",
-          "isMany": true,
-          "type": "InputOutputParameterDefinition"
-        }
-      ]
-    },
-    {
-      "name": "Map",
-      "superClass": ["InputOutputParameterDefinition"],
-      "properties": [
-        {
-          "name": "entries",
-          "isMany": true,
-          "type": "Entry"
-        }
-      ]
-    },
-    {
-      "name": "Entry",
-      "properties": [
-        {
-          "name": "key",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "value",
-          "isBody": true,
-          "type": "String"
-        },
-        {
-          "name": "definition",
-          "type": "InputOutputParameterDefinition"
-        }
-      ]
-    },
-    {
-      "name": "Value",
-      "superClass": ["InputOutputParameterDefinition"],
-      "properties": [
-        {
-          "name": "id",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "name",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "value",
-          "isBody": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Script",
-      "superClass": ["InputOutputParameterDefinition"],
-      "properties": [
-        {
-          "name": "scriptFormat",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "resource",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "value",
-          "isBody": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Field",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": [
-          "flowable:ServiceTaskLike",
-          "flowable:ExecutionListener",
-          "flowable:TaskListener",
-          "bpmn:ServiceTask"
+    "types": [
+      {
+        "name": "InOutBinding",
+        "superClass": ["Element"],
+        "isAbstract": true,
+        "properties": [
+          {
+            "name": "source",
+            "displayName": "Source",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "sourceExpression",
+            "displayName": "Source Expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "target",
+            "displayName": "Target",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "businessKey",
+            "displayName": "Business Key",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "local",
+            "displayName": "Local",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": false
+          },
+          {
+            "name": "variables",
+            "displayName": "Variables",
+            "isAttr": true,
+            "type": "String"
+          }
         ]
       },
-      "properties": [
-        {
-          "name": "name",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "expression",
-          "type": "String"
-        },
-        {
-          "name": "stringValue",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "string",
-          "type": "String"
-        },
-        {
-          "name": "htmlVar",
-          "type": "Expression"
+      {
+        "name": "In",
+        "superClass": ["InOutBinding"],
+        "meta": {
+          "allowedIn": ["bpmn:CallActivity"]
         }
-      ]
-    },
-    {
-      "name": "ChildField",
-      "superClass": ["Element"],
-      "properties": [
-        {
-          "name": "id",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "name",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "type",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "required",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "readable",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "writable",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "variable",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "expression",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "datePattern",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "default",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "values",
-          "type": "Value",
-          "isMany": true
-        }
-      ]
-    },
-    {
-      "name": "InputParameter",
-      "superClass": ["InputOutputParameter"]
-    },
-    {
-      "name": "OutputParameter",
-      "superClass": ["InputOutputParameter"]
-    },
-    {
-      "name": "Collectable",
-      "isAbstract": true,
-      "extends": ["bpmn:MultiInstanceLoopCharacteristics"],
-      "superClass": ["flowable:AsyncCapable"],
-      "properties": [
-        {
-          "name": "collection",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "elementVariable",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "FailedJobRetryTimeCycle",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["flowable:AsyncCapable", "bpmn:MultiInstanceLoopCharacteristics"]
       },
-      "properties": [
-        {
-          "name": "body",
-          "isBody": true,
-          "type": "String"
+      {
+        "name": "Out",
+        "superClass": ["InOutBinding"],
+        "meta": {
+          "allowedIn": ["bpmn:CallActivity"]
         }
-      ]
-    },
-    {
-      "name": "ExecutionListener",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": [
-          "bpmn:Task",
+      },
+      {
+        "name": "AsyncCapable",
+        "isAbstract": true,
+        "extends": ["bpmn:Activity", "bpmn:Gateway", "bpmn:Event"],
+        "properties": [
+          {
+            "name": "async",
+            "displayName": "Asynchronous",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": false
+          },
+          {
+            "name": "asyncBefore",
+            "displayName": "Asynchronous Before",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": false
+          },
+          {
+            "name": "asyncAfter",
+            "displayName": "Asynchronous After",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": false
+          },
+          {
+            "name": "exclusive",
+            "displayName": "Exclusive",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": true
+          }
+        ]
+      },
+      {
+        "name": "JobPriorized",
+        "isAbstract": true,
+        "extends": ["bpmn:Process", "flowable:AsyncCapable"],
+        "properties": [
+          {
+            "name": "jobPriority",
+            "displayName": "Job Priority",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "SignalEventDefinition",
+        "isAbstract": true,
+        "extends": ["bpmn:SignalEventDefinition"],
+        "properties": [
+          {
+            "name": "async",
+            "displayName": "Asynchronous",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": false
+          }
+        ]
+      },
+      {
+        "name": "ErrorEventDefinition",
+        "isAbstract": true,
+        "extends": ["bpmn:ErrorEventDefinition"],
+        "properties": [
+          {
+            "name": "errorCodeVariable",
+            "displayName": "Error Code Variable",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "errorMessageVariable",
+            "displayName": "Error Message Variable",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Error",
+        "isAbstract": true,
+        "extends": ["bpmn:Error"],
+        "properties": [
+          {
+            "name": "flowable:errorMessage",
+            "displayName": "Error Message",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "PotentialStarter",
+        "superClass": ["Element"],
+        "properties": [
+          {
+            "name": "resourceAssignmentExpression",
+            "displayName": "Resource Assignment Expression",
+            "type": "bpmn:ResourceAssignmentExpression"
+          }
+        ]
+      },
+      {
+        "name": "FormSupported",
+        "isAbstract": true,
+        "extends": ["bpmn:StartEvent", "bpmn:UserTask"],
+        "properties": [
+          {
+            "name": "formHandlerClass",
+            "displayName": "Form Handler Class",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "formKey",
+            "displayName": "Form Key",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "formType",
+            "displayName": "Form Type",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "formReadOnly",
+            "displayName": "Form Read Only",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": false
+          },
+          {
+            "name": "formInit",
+            "displayName": "Form Initialize",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": true
+          }
+        ]
+      },
+      {
+        "name": "TemplateSupported",
+        "isAbstract": true,
+        "extends": ["bpmn:Process", "bpmn:FlowElement"],
+        "properties": [
+          {
+            "name": "modelerTemplate",
+            "displayName": "Modeler Template",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Initiator",
+        "isAbstract": true,
+        "extends": ["bpmn:StartEvent"],
+        "properties": [
+          {
+            "name": "initiator",
+            "displayName": "Initiator",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ScriptTask",
+        "isAbstract": true,
+        "extends": ["bpmn:ScriptTask"],
+        "properties": [
+          {
+            "name": "resultVariable",
+            "displayName": "Result Variable",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "resource",
+            "displayName": "Resource",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Process",
+        "isAbstract": true,
+        "extends": ["bpmn:Process"],
+        "properties": [
+          {
+            "name": "candidateStarterGroups",
+            "displayName": "Candidate Starter Groups",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "candidateStarterUsers",
+            "displayName": "Candidate Starter Users",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "versionTag",
+            "displayName": "Version Tag",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "historyTimeToLive",
+            "displayName": "History Time To Live",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "isStartableInTasklist",
+            "displayName": "Startable In Tasklist",
+            "isAttr": true,
+            "type": "Boolean",
+            "default": true
+          }
+        ]
+      },
+      {
+        "name": "EscalationEventDefinition",
+        "isAbstract": true,
+        "extends": ["bpmn:EscalationEventDefinition"],
+        "properties": [
+          {
+            "name": "escalationCodeVariable",
+            "displayName": "Escalation Code Variable",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "FormalExpression",
+        "isAbstract": true,
+        "extends": ["bpmn:FormalExpression"],
+        "properties": [
+          {
+            "name": "resource",
+            "displayName": "Resource",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Assignable",
+        "extends": ["bpmn:UserTask"],
+        "properties": [
+          {
+            "name": "assignee",
+            "displayName": "Assignee",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "candidateUsers",
+            "displayName": "Candidate Users",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "candidateGroups",
+            "displayName": "Candidate Groups",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "dueDate",
+            "displayName": "Due Date",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "followUpDate",
+            "displayName": "Follow Up Date",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "priority",
+            "displayName": "Priority",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Assignee",
+        "supperClass": "Element",
+        "meta": {
+          "allowedIn": [""]
+        },
+        "properties": [
+          {
+            "name": "label",
+            "displayName": "Label",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "viewId",
+            "displayName": "View ID",
+            "type": "Number",
+            "isAttr": true
+          }
+        ]
+      },
+      {
+        "name": "CallActivity",
+        "extends": ["bpmn:CallActivity"],
+        "properties": [
+          {
+            "name": "calledElementBinding",
+            "displayName": "Called Element Binding",
+            "isAttr": true,
+            "type": "String",
+            "default": "latest"
+          },
+          {
+            "name": "calledElementVersion",
+            "displayName": "Called Element Version",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "calledElementVersionTag",
+            "displayName": "Called Element Version Tag",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "calledElementTenantId",
+            "displayName": "Called Element Tenant ID",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "caseRef",
+            "displayName": "Case Reference",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "caseBinding",
+            "displayName": "Case Binding",
+            "isAttr": true,
+            "type": "String",
+            "default": "latest"
+          },
+          {
+            "name": "caseVersion",
+            "displayName": "Case Version",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "caseTenantId",
+            "displayName": "Case Tenant ID",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "variableMappingClass",
+            "displayName": "Variable Mapping Class",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "variableMappingDelegateExpression",
+            "displayName": "Variable Mapping Delegate Expression",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ServiceTaskLike",
+        "extends": [
           "bpmn:ServiceTask",
-          "bpmn:UserTask",
           "bpmn:BusinessRuleTask",
-          "bpmn:ScriptTask",
-          "bpmn:ReceiveTask",
-          "bpmn:ManualTask",
-          "bpmn:ExclusiveGateway",
-          "bpmn:SequenceFlow",
-          "bpmn:ParallelGateway",
-          "bpmn:InclusiveGateway",
-          "bpmn:EventBasedGateway",
-          "bpmn:StartEvent",
-          "bpmn:IntermediateCatchEvent",
-          "bpmn:IntermediateThrowEvent",
-          "bpmn:EndEvent",
-          "bpmn:BoundaryEvent",
-          "bpmn:CallActivity",
-          "bpmn:SubProcess",
-          "bpmn:Process"
+          "bpmn:SendTask",
+          "bpmn:MessageEventDefinition"
+        ],
+        "properties": [
+          {
+            "name": "expression",
+            "displayName": "Expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "class",
+            "displayName": "Class",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "delegateExpression",
+            "displayName": "Delegate Expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "resultVariable",
+            "displayName": "Result Variable",
+            "isAttr": true,
+            "type": "String"
+          }
         ]
       },
-      "properties": [
-        {
-          "name": "expression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "class",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "delegateExpression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "event",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "script",
-          "type": "Script"
-        },
-        {
-          "name": "fields",
-          "type": "Field",
-          "isMany": true
-        }
-      ]
-    },
-    {
-      "name": "TaskListener",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["bpmn:UserTask"]
+      {
+        "name": "DmnCapable",
+        "extends": ["bpmn:BusinessRuleTask"],
+        "properties": [
+          {
+            "name": "decisionRef",
+            "displayName": "Decision Reference",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "decisionRefBinding",
+            "displayName": "Decision Reference Binding",
+            "isAttr": true,
+            "type": "String",
+            "default": "latest"
+          },
+          {
+            "name": "decisionRefVersion",
+            "displayName": "Decision Reference Version",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "mapDecisionResult",
+            "displayName": "Map Decision Result",
+            "isAttr": true,
+            "type": "String",
+            "default": "resultList"
+          },
+          {
+            "name": "decisionRefTenantId",
+            "displayName": "Decision Reference Tenant ID",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
       },
-      "properties": [
-        {
-          "name": "expression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "class",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "delegateExpression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "event",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "script",
-          "type": "Script"
-        },
-        {
-          "name": "fields",
-          "type": "Field",
-          "isMany": true
-        }
-      ]
-    },
-    {
-      "name": "FormProperty",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["bpmn:StartEvent", "bpmn:UserTask"]
+      {
+        "name": "ExternalCapable",
+        "extends": ["flowable:ServiceTaskLike"],
+        "properties": [
+          {
+            "name": "type",
+            "displayName": "Type",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "topic",
+            "displayName": "Topic",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
       },
-      "properties": [
-        {
-          "name": "id",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "name",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "type",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "required",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "readable",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "writable",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "variable",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "expression",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "datePattern",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "default",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "values",
-          "type": "Value",
-          "isMany": true
-        },
-        {
-          "name": "children",
-          "type": "ChildField",
-          "isMany": true
-        },
-        {
-          "name": "extensionElements",
-          "type": "bpmn:ExtensionElements",
-          "isMany": true
-        }
-      ]
-    },
-    {
-      "name": "FormData",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["bpmn:StartEvent", "bpmn:UserTask"]
+      {
+        "name": "TaskPriorized",
+        "extends": ["bpmn:Process", "flowable:ExternalCapable"],
+        "properties": [
+          {
+            "name": "taskPriority",
+            "displayName": "Task Priority",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
       },
-      "properties": [
-        {
-          "name": "fields",
-          "type": "FormField",
-          "isMany": true
+      {
+        "name": "Properties",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": [""]
         },
-        {
-          "name": "businessKey",
-          "type": "String",
-          "isAttr": true
-        }
-      ]
-    },
-    {
-      "name": "FormField",
-      "superClass": ["Element"],
-      "properties": [
-        {
-          "name": "id",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "label",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "type",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "datePattern",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "defaultValue",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "properties",
-          "type": "Properties"
-        },
-        {
-          "name": "validation",
-          "type": "Validation"
-        },
-        {
-          "name": "values",
-          "type": "Value",
-          "isMany": true
-        }
-      ]
-    },
-    {
-      "name": "Validation",
-      "superClass": ["Element"],
-      "properties": [
-        {
-          "name": "constraints",
-          "type": "Constraint",
-          "isMany": true
-        }
-      ]
-    },
-    {
-      "name": "Constraint",
-      "superClass": ["Element"],
-      "properties": [
-        {
-          "name": "name",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "config",
-          "type": "String",
-          "isAttr": true
-        }
-      ]
-    },
-    {
-      "name": "ConditionalEventDefinition",
-      "isAbstract": true,
-      "extends": ["bpmn:ConditionalEventDefinition"],
-      "properties": [
-        {
-          "name": "variableName",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "variableEvent",
-          "isAttr": true,
-          "type": "String"
-        }
-      ]
-    },
-    {
-      "name": "Condition",
-      "superClass": ["Element"],
-      "meta": {
-        "allowedIn": ["bpmn:SequenceFlow"]
+        "properties": [
+          {
+            "name": "values",
+            "displayName": "Values",
+            "type": "Property",
+            "isMany": true
+          }
+        ]
       },
-      "properties": [
-        {
-          "name": "id",
-          "type": "String",
-          "isAttr": true
+      {
+        "name": "Property",
+        "superClass": ["Element"],
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "name",
+            "displayName": "Name",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "value",
+            "displayName": "Value",
+            "type": "String",
+            "isAttr": true
+          }
+        ]
+      },
+      {
+        "name": "Button",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["bpmn:UserTask"]
         },
-        {
-          "name": "field",
-          "type": "String",
-          "isAttr": true
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "name",
+            "displayName": "Name",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "code",
+            "displayName": "Code",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "isHide",
+            "displayName": "Is Hidden",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "next",
+            "displayName": "Next",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "sort",
+            "displayName": "Sort Order",
+            "type": "Integer",
+            "isAttr": true
+          }
+        ]
+      },
+      {
+        "name": "Assignee",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["bpmn:UserTask"]
         },
-        {
-          "name": "compare",
-          "type": "String",
-          "isAttr": true
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "type",
+            "displayName": "Type",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "value",
+            "displayName": "Value",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "condition",
+            "displayName": "Condition",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "operationType",
+            "displayName": "Operation Type",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "sort",
+            "displayName": "Sort Order",
+            "type": "Integer",
+            "isAttr": true
+          }
+        ]
+      },
+      {
+        "name": "Connector",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["flowable:ServiceTaskLike"]
         },
-        {
-          "name": "value",
-          "type": "String",
-          "isAttr": true
+        "properties": [
+          {
+            "name": "inputOutput",
+            "displayName": "Input Output",
+            "type": "InputOutput"
+          },
+          {
+            "name": "connectorId",
+            "displayName": "Connector ID",
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "InputOutput",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["bpmn:FlowNode", "flowable:Connector"]
         },
-        {
-          "name": "logic",
-          "type": "String",
-          "isAttr": true
+        "properties": [
+          {
+            "name": "inputOutput",
+            "displayName": "Input Output",
+            "type": "InputOutput"
+          },
+          {
+            "name": "connectorId",
+            "displayName": "Connector ID",
+            "type": "String"
+          },
+          {
+            "name": "inputParameters",
+            "displayName": "Input Parameters",
+            "isMany": true,
+            "type": "InputParameter"
+          },
+          {
+            "name": "outputParameters",
+            "displayName": "Output Parameters",
+            "isMany": true,
+            "type": "OutputParameter"
+          }
+        ]
+      },
+      {
+        "name": "InputOutputParameter",
+        "properties": [
+          {
+            "name": "name",
+            "displayName": "Name",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "value",
+            "displayName": "Value",
+            "isBody": true,
+            "type": "String"
+          },
+          {
+            "name": "definition",
+            "displayName": "Definition",
+            "type": "InputOutputParameterDefinition"
+          }
+        ]
+      },
+      {
+        "name": "InputOutputParameterDefinition",
+        "isAbstract": true
+      },
+      {
+        "name": "List",
+        "superClass": ["InputOutputParameterDefinition"],
+        "properties": [
+          {
+            "name": "items",
+            "displayName": "Items",
+            "isMany": true,
+            "type": "InputOutputParameterDefinition"
+          }
+        ]
+      },
+      {
+        "name": "Map",
+        "superClass": ["InputOutputParameterDefinition"],
+        "properties": [
+          {
+            "name": "entries",
+            "displayName": "Entries",
+            "isMany": true,
+            "type": "Entry"
+          }
+        ]
+      },
+      {
+        "name": "Entry",
+        "properties": [
+          {
+            "name": "key",
+            "displayName": "Key",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "value",
+            "displayName": "Value",
+            "isBody": true,
+            "type": "String"
+          },
+          {
+            "name": "definition",
+            "displayName": "Definition",
+            "type": "InputOutputParameterDefinition"
+          }
+        ]
+      },
+      {
+        "name": "Value",
+        "superClass": ["InputOutputParameterDefinition"],
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "name",
+            "displayName": "Name",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "value",
+            "displayName": "Value",
+            "isBody": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Script",
+        "superClass": ["InputOutputParameterDefinition"],
+        "properties": [
+          {
+            "name": "scriptFormat",
+            "displayName": "Script Format",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "resource",
+            "displayName": "Resource",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "value",
+            "displayName": "Value",
+            "isBody": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Field",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": [
+            "flowable:ServiceTaskLike",
+            "flowable:ExecutionListener",
+            "flowable:TaskListener",
+            "bpmn:ServiceTask"
+          ]
         },
-        {
-          "name": "sort",
-          "type": "Integer",
-          "isAttr": true
-        }
-      ]
-    }
-  ],
+        "properties": [
+          {
+            "name": "name",
+            "displayName": "Name",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "expression",
+            "displayName": "Expression",
+            "type": "String"
+          },
+          {
+            "name": "stringValue",
+            "displayName": "String Value",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "string",
+            "displayName": "String",
+            "type": "String"
+          },
+          {
+            "name": "htmlVar",
+            "displayName": "HTML Variable",
+            "type": "Expression"
+          }
+        ]
+      },
+      {
+        "name": "ChildField",
+        "superClass": ["Element"],
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "name",
+            "displayName": "Name",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "type",
+            "displayName": "Type",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "required",
+            "displayName": "Required",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "readable",
+            "displayName": "Readable",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "writable",
+            "displayName": "Writable",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "variable",
+            "displayName": "Variable",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "expression",
+            "displayName": "Expression",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "datePattern",
+            "displayName": "Date Pattern",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "default",
+            "displayName": "Default",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "values",
+            "displayName": "Values",
+            "type": "Value",
+            "isMany": true
+          }
+        ]
+      },
+      {
+        "name": "InputParameter",
+        "superClass": ["InputOutputParameter"]
+      },
+      {
+        "name": "OutputParameter",
+        "superClass": ["InputOutputParameter"]
+      },
+      {
+        "name": "Collectable",
+        "isAbstract": true,
+        "extends": ["bpmn:MultiInstanceLoopCharacteristics"],
+        "superClass": ["flowable:AsyncCapable"],
+        "properties": [
+          {
+            "name": "collection",
+            "displayName": "Collection",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "elementVariable",
+            "displayName": "Element Variable",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "FailedJobRetryTimeCycle",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["flowable:AsyncCapable", "bpmn:MultiInstanceLoopCharacteristics"]
+        },
+        "properties": [
+          {
+            "name": "body",
+            "displayName": "Body",
+            "isBody": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "ExecutionListener",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": [
+            "bpmn:Task",
+            "bpmn:ServiceTask",
+            "bpmn:UserTask",
+            "bpmn:BusinessRuleTask",
+            "bpmn:ScriptTask",
+            "bpmn:ReceiveTask",
+            "bpmn:ManualTask",
+            "bpmn:ExclusiveGateway",
+            "bpmn:SequenceFlow",
+            "bpmn:ParallelGateway",
+            "bpmn:InclusiveGateway",
+            "bpmn:EventBasedGateway",
+            "bpmn:StartEvent",
+            "bpmn:IntermediateCatchEvent",
+            "bpmn:IntermediateThrowEvent",
+            "bpmn:EndEvent",
+            "bpmn:BoundaryEvent",
+            "bpmn:CallActivity",
+            "bpmn:SubProcess",
+            "bpmn:Process"
+          ]
+        },
+        "properties": [
+          {
+            "name": "expression",
+            "displayName": "Expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "class",
+            "displayName": "Class",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "delegateExpression",
+            "displayName": "Delegate Expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "event",
+            "displayName": "Event",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "script",
+            "displayName": "Script",
+            "type": "Script"
+          },
+          {
+            "name": "fields",
+            "displayName": "Fields",
+            "type": "Field",
+            "isMany": true
+          }
+        ]
+      },
+      {
+        "name": "TaskListener",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["bpmn:UserTask"]
+        },
+        "properties": [
+          {
+            "name": "expression",
+            "displayName": "Expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "class",
+            "displayName": "Class",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "delegateExpression",
+            "displayName": "Delegate Expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "event",
+            "displayName": "Event",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "script",
+            "displayName": "Script",
+            "type": "Script"
+          },
+          {
+            "name": "fields",
+            "displayName": "Fields",
+            "type": "Field",
+            "isMany": true
+          }
+        ]
+      },
+      {
+        "name": "FormProperty",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["bpmn:StartEvent", "bpmn:UserTask"]
+        },
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "name",
+            "displayName": "Name",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "type",
+            "displayName": "Type",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "required",
+            "displayName": "Required",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "readable",
+            "displayName": "Readable",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "writable",
+            "displayName": "Writable",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "variable",
+            "displayName": "Variable",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "expression",
+            "displayName": "Expression",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "datePattern",
+            "displayName": "Date Pattern",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "default",
+            "displayName": "Default",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "values",
+            "displayName": "Values",
+            "type": "Value",
+            "isMany": true
+          },
+          {
+            "name": "children",
+            "displayName": "Children",
+            "type": "ChildField",
+            "isMany": true
+          },
+          {
+            "name": "extensionElements",
+            "displayName": "Extension Elements",
+            "type": "bpmn:ExtensionElements",
+            "isMany": true
+          }
+        ]
+      },
+      {
+        "name": "FormData",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["bpmn:StartEvent", "bpmn:UserTask"]
+        },
+        "properties": [
+          {
+            "name": "fields",
+            "displayName": "Fields",
+            "type": "FormField",
+            "isMany": true
+          },
+          {
+            "name": "businessKey",
+            "displayName": "Business Key",
+            "type": "String",
+            "isAttr": true
+          }
+        ]
+      },
+      
+      {
+        "name": "FormField",
+        "superClass": ["Element"],
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "label",
+            "displayName": "Label",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "type",
+            "displayName": "Type",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "datePattern",
+            "displayName": "Date Pattern",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "defaultValue",
+            "displayName": "Default Value",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "properties",
+            "displayName": "Properties",
+            "type": "Properties"
+          },
+          {
+            "name": "validation",
+            "displayName": "Validation",
+            "type": "Validation"
+          },
+          {
+            "name": "values",
+            "displayName": "Values",
+            "type": "Value",
+            "isMany": true
+          }
+        ]
+      },
+      {
+        "name": "Validation",
+        "superClass": ["Element"],
+        "properties": [
+          {
+            "name": "constraints",
+            "displayName": "Constraints",
+            "type": "Constraint",
+            "isMany": true
+          }
+        ]
+      },
+      {
+        "name": "Constraint",
+        "superClass": ["Element"],
+        "properties": [
+          {
+            "name": "name",
+            "displayName": "Name",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "config",
+            "displayName": "Configuration",
+            "type": "String",
+            "isAttr": true
+          }
+        ]
+      },
+      {
+        "name": "ConditionalEventDefinition",
+        "isAbstract": true,
+        "extends": ["bpmn:ConditionalEventDefinition"],
+        "properties": [
+          {
+            "name": "variableName",
+            "displayName": "Variable Name",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "variableEvent",
+            "displayName": "Variable Event",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
+        "name": "Condition",
+        "superClass": ["Element"],
+        "meta": {
+          "allowedIn": ["bpmn:SequenceFlow"]
+        },
+        "properties": [
+          {
+            "name": "id",
+            "displayName": "ID",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "field",
+            "displayName": "Field",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "compare",
+            "displayName": "Comparison",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "value",
+            "displayName": "Value",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "logic",
+            "displayName": "Logic",
+            "type": "String",
+            "isAttr": true
+          },
+          {
+            "name": "sort",
+            "displayName": "Sort Order",
+            "type": "Integer",
+            "isAttr": true
+          }
+        ]
+      }
+    ],
   "emumerations": []
 }
