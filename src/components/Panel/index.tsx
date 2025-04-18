@@ -10,7 +10,7 @@ import bpmnIcons from "../bpmn-icons";
 import flowable from "../../tasks/tasks.json";
 import DynamicProperty from "./components/DynamicProperty";
 import { withTranslation } from "react-i18next";
-import { getName } from "../../utils/dynamicPropertyUtil";
+import { getDynamicProperty } from "../../utils/dynamicPropertyUtil";
 export function PropertiesPanel({ t }: { t: any }) {
   const dispatch = useDispatch();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -33,15 +33,44 @@ export function PropertiesPanel({ t }: { t: any }) {
   useEffect(() => {
     const extractTagsWithProperties = (types: any[]) => {
       const result: Record<string, any[]> = {};
+      const generalType = types.find((type) => type.name === "General");
+      const generalProps = generalType?.properties || [];
       types.forEach((type) => {
-        if (type.extends && type.properties) {
-          type.extends.forEach((extendType: string) => {
+        if (
+          (type?.extends && type.properties) ||
+          (type?.meta?.allowedIn && type.properties)
+        ) {
+          type?.extends?.forEach((extendType: string) => {
             const tagName = extendType.split(":")[1];
             result[tagName] = result[tagName] || [];
-            result[tagName].push(...type.properties);
+            type.properties.forEach((prop: any) => {
+              if (
+                !result[tagName].some((existing) => existing.name === prop.name)
+              ) {
+                result[tagName].push(prop);
+              }
+            });
+          });
+          type?.meta?.allowedIn?.forEach((allowedInType: string) => {
+            const tagName = allowedInType
+              ? allowedInType.split(":")[1]
+              : type.name;
+            result[tagName] = result[tagName] || [];
+            type.properties.forEach((prop: any) => {
+              if (
+                !result[tagName].some((existing) => existing.name === prop.name)
+              ) {
+                result[tagName].push(prop);
+              }
+            });
           });
         }
       });
+      Object.keys(result).forEach((tagName) => {
+        result[tagName] = [...generalProps, ...result[tagName]];
+      });
+      // console.log(result);
+
       return result;
     };
 
@@ -74,7 +103,8 @@ export function PropertiesPanel({ t }: { t: any }) {
         panelTitle: "Properties Panel",
         bpmnIconName: iconName,
         bpmnElement: activatedElementTypeName,
-        bpmnElementName: getName(activatedElement) || "",
+        bpmnElementName:
+          getDynamicProperty(activatedElement, "name", "General name") || "",
       });
     },
     100,
@@ -99,17 +129,18 @@ export function PropertiesPanel({ t }: { t: any }) {
     if (!activeElement || !modeling) return [];
 
     const tag = tagNames[activeElement.type.split(":")[1]];
-    if (!tag) return [];
-
+    if (!tag || !modeler) return [];
     return tag.map((item) => {
       const propName = item.name.split(":")[1];
       return (
         <DynamicProperty
           key={propName}
           bpmnName={propName}
+          inputType={item.type}
           displayName={item.displayName}
           activeElement={activeElement}
           modeling={modeling}
+          modeler={modeler}
         />
       );
     });
@@ -117,7 +148,7 @@ export function PropertiesPanel({ t }: { t: any }) {
 
   return (
     <div ref={panelRef} className="properties-panel p-4 overflow-auto">
-      <h2 className="text-2xl font-bold mb-4">{t(elementState.panelTitle)}</h2>
+      <h2 className="text-xl font-bold mb-4">{t(elementState.panelTitle)}</h2>
 
       <div className="panel-header flex items-center mb-4">
         {elementState?.bpmnIconName !== "" ? (

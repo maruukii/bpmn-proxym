@@ -15,14 +15,14 @@ import {
 interface BpmnEditorProps {
   filename: string | null;
   designer: React.RefObject<HTMLDivElement | null>;
-  propertiesRef: React.RefObject<HTMLDivElement | null>;
+  // propertiesRef: React.RefObject<HTMLDivElement | null>;
   t: any;
 }
 
 const BpmnViewer: React.FC<BpmnEditorProps> = ({
   filename,
   designer,
-  propertiesRef,
+  // propertiesRef,
   t,
 }) => {
   const { modeler } = useSelector((state: RootState) => state.modeler);
@@ -30,19 +30,24 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
 
   const moddle = new BpmnModdle();
 
-  // State to handle the preview modal visibility
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState({
+    json: false,
+    xml: false,
+  });
   const [previewData, setPreviewData] = useState<string | null>(null);
   const [previewType, setPreviewType] = useState<"xml" | "json" | null>(null);
 
   const openPreviewModal = (data: string, type: "xml" | "json") => {
     setPreviewData(data);
     setPreviewType(type);
-    setIsPreviewModalOpen(true);
+    setIsPreviewModalOpen({
+      json: type === "json",
+      xml: type === "xml",
+    });
   };
 
   const closePreviewModal = () => {
-    setIsPreviewModalOpen(false);
+    setIsPreviewModalOpen({ json: false, xml: false });
     setPreviewData(null);
     setPreviewType(null);
   };
@@ -103,9 +108,9 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
         </button>
         <button
           onClick={() => {
-            isPreviewModalOpen
+            isPreviewModalOpen.xml
               ? closePreviewModal()
-              : modeler
+              : (isPreviewModalOpen.json && modeler) || modeler
               ? openXMLPreview({ modeler, openPreviewModal })
               : undefined;
           }}
@@ -115,9 +120,10 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
         </button>
         <button
           onClick={() => {
-            isPreviewModalOpen
+            isPreviewModalOpen.json
               ? closePreviewModal()
-              : modeler && moddle
+              : (isPreviewModalOpen.xml && modeler && moddle) ||
+                (modeler && moddle)
               ? openJsonPreview({ modeler, moddle, openPreviewModal })
               : undefined;
           }}
@@ -128,21 +134,20 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
       </div>
 
       {/* BPMN Editor Container */}
-      <div className="flex flex-row w-full h-[80vh] border border-gray-300 rounded-lg shadow-md">
+      <div className="flex flex-col w-full h-[80vh] border border-gray-300 rounded-lg shadow-md">
         {/* BPMN Modeler (Right) */}
-        <div ref={designer} className="w-3/4 h-full" />
+        <div ref={designer} className="h-3/4 w-full" />
         {/* Properties Panel (Left) */}
         <div
-          ref={propertiesRef}
-          className="w-1/4 p-4 bg-gray-100 border-r border-gray-300 rounded-l-lg shadow-md overflow-auto"
+          // ref={propertiesRef}
+          className="h-1/4 p-4 w-full bg-gray-100 border-r border-gray-300 rounded-l-lg shadow-md overflow-auto"
         >
           <Property />
-          <h3 className="text-lg font-bold mb-2">Properties Panel</h3>
         </div>
       </div>
 
       {/* Preview Modal */}
-      {isPreviewModalOpen && (
+      {(isPreviewModalOpen.json || isPreviewModalOpen.xml) && (
         <PreviewContent
           previewType={previewType}
           previewData={previewData}
