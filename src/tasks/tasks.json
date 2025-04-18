@@ -1224,7 +1224,25 @@
           }
         ]
       },
-      
+      {
+        "name":"General",
+        "superClass":["Element"],
+        "properties":[
+          {"name":"name",
+          "displayName":"General Name"
+          ,"type":"String",
+          "isAttr":true},{"name":"id"
+          ,"displayName":"General Id"
+          ,"type":"String"
+          ,"isAttr":true
+          },
+          {"name":"documentation",
+          "displayName":"Documentation",
+          "type":"String",
+          "isAttr":true}
+          
+        ]
+      },
       {
         "name": "FormField",
         "superClass": ["Element"],

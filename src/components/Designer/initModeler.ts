@@ -10,7 +10,7 @@ import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
 import { AppDispatch } from '../../store/store';
 interface InitModelerProps {
     designer: React.RefObject<HTMLDivElement | null>;
-    propertiesRef: React.RefObject<HTMLDivElement | null>;
+    // propertiesRef: React.RefObject<HTMLDivElement | null>;
     xml: string;
     modelerModules: ModulesAndModdles;
   dispatch:AppDispatch;
@@ -21,7 +21,7 @@ interface InitModelerProps {
 /**
  * Initialize BPMN Modeler
  */
-export default async function initModeler({ designer, xml,propertiesRef,modelerModules,dispatch,modeler }: InitModelerProps) {
+export default async function initModeler({ designer, xml,/*propertiesRef,*/modelerModules,dispatch,modeler }: InitModelerProps) {
   if (!designer) {
     console.error('Designer container is not available');
     return;
@@ -29,9 +29,9 @@ export default async function initModeler({ designer, xml,propertiesRef,modelerM
 
   const options: BaseViewerOptions = {
     container: designer.current as HTMLDivElement,
-    propertiesPanel: {
-        parent: propertiesRef.current,
-      },
+    // propertiesPanel: {
+    //     parent: propertiesRef.current,
+    //   },
     additionalModules: modelerModules[0] || [],
     moddleExtensions: modelerModules[1] || {},
     ...modelerModules[2],

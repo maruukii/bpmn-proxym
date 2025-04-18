@@ -1,4 +1,4 @@
-import { getBusinessObject, is, isAny } from 'bpmn-js/lib/util/ModelUtil';
+import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
 import { Element } from 'bpmn-js/lib/model/Types';
 import { FORMKEY_ALLOWED_TYPES } from '../CommonData/bpmnEnums';
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling';
@@ -7,14 +7,18 @@ import Modeling from 'bpmn-js/lib/features/modeling/Modeling';
 const prefix = import.meta.env.VITE_PROCESS_ENGINE;
 
 // 🔹 Get formKey value from element
-export function getDynamicProperty(element: Element,name:string): string | undefined {
+export function getDynamicProperty(element: Element,bpmnname:string,displayName:string): string | undefined {
   const businessObject = getBusinessObject(element);
-  return businessObject.get(`${prefix}:${name}`);
+if (!businessObject) {
+    return undefined;
+  }
+  if (displayName === 'General Name'|| displayName === 'General Id') {
+    return businessObject.get(`${bpmnname}`);
+  }
+  return businessObject.get(`${prefix}:${bpmnname}`);
 }
-export function getName(element: Element): string | undefined {
-  const businessObject = getBusinessObject(element);
-  return businessObject.get("name");
-}
+
+
 // 🔹 Set or update formKey value
 export function updateDynamicProperty(modeling:Modeling, element: Element, name:string,value: string) {
   modeling?.updateProperties(element, {

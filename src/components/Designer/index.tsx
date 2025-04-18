@@ -27,7 +27,7 @@ const Designer: React.FC<DesignerProps> = ({ xml, filename }) => {
         await initModeler({
           designer,
           xml,
-          propertiesRef,
+          // propertiesRef,
           modelerModules,
           dispatch,
           modeler,
@@ -49,7 +49,7 @@ const Designer: React.FC<DesignerProps> = ({ xml, filename }) => {
     <BpmnViewer
       filename={filename}
       designer={designer}
-      propertiesRef={propertiesRef}
+      // propertiesRef={propertiesRef}
     />
   );
 };
