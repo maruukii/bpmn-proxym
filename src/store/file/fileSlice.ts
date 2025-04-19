@@ -6,6 +6,7 @@ interface FileState {
   fileContentCopySuccess:boolean|null;
   fileImportSuccess: boolean;
   fileExportSuccess: boolean;
+  newDiagramCreationSuccess: boolean;
   fileError: string | null;
 }
 
@@ -15,6 +16,7 @@ const initialState: FileState = {
   fileContentCopySuccess:false,
   fileExportSuccess: false,
   fileImportSuccess: false,
+  newDiagramCreationSuccess: false,
   fileError:null,
 };
 
@@ -26,6 +28,11 @@ const fileSlice = createSlice({
       state.filename = action.payload.filename;
       state.fileContent = action.payload.fileContent;
       state.fileImportSuccess=true;
+    },
+    setNewDiagram:(state, action: PayloadAction<{filename:string;fileContent:string}>) => {
+      state.filename = action.payload.filename;
+      state.fileContent = action.payload.fileContent;
+      state.newDiagramCreationSuccess=true;
     },
     clearFileData: (state) => {
       state.filename = null;
@@ -47,6 +54,8 @@ const fileSlice = createSlice({
     clearFileContentCopySuccess: (state) => {
       state.fileContentCopySuccess=false;
     },
+    clearNewDiagramCreationSuccess: (state) => {
+      state.newDiagramCreationSuccess=false;},
     setFileError: (state, action: PayloadAction<string>) => {
         state.fileError = action.payload;
     },
@@ -56,5 +65,5 @@ const fileSlice = createSlice({
   },
 });
 
-export const { setFileData, clearFileData,clearFileImportSucess,setFileExportSuccess,clearFileExportSuccess,setFileError,clearFileError,setFileContentCopySuccess,clearFileContentCopySuccess } = fileSlice.actions;
+export const { setFileData, clearFileData,clearFileImportSucess,setFileExportSuccess,clearFileExportSuccess,setFileError,clearFileError,setFileContentCopySuccess,clearFileContentCopySuccess,setNewDiagram,clearNewDiagramCreationSuccess } = fileSlice.actions;
 export default fileSlice.reducer;
