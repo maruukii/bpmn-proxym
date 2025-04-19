@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import BpmnViewer from "../../Pages/BPMNviewer/bpmnViewer";
 import modulesAndModdle, { ModulesAndModdles } from "./modulesAndModdle";
 import initModeler from "./initModeler";
-import { createNewDiagram } from "../../utils/createNewDiagram";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 interface DesignerProps {
@@ -12,7 +11,7 @@ interface DesignerProps {
 
 const Designer: React.FC<DesignerProps> = ({ xml, filename }) => {
   const designer = useRef<HTMLDivElement>(null);
-  const propertiesRef = useRef<HTMLDivElement | null>(null);
+  // const propertiesRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch();
   const { modeler } = useSelector((state: RootState) => state.modeler);
 
@@ -32,12 +31,6 @@ const Designer: React.FC<DesignerProps> = ({ xml, filename }) => {
           dispatch,
           modeler,
         });
-
-        // if (!xml || !xml.length) {
-        //   await createNewDiagram();
-        // } else {
-        //   await createNewDiagram(xml, modeler);
-        // }
       } catch (error) {
         console.error(error);
       }

@@ -3,5 +3,5 @@ export default {
   BPMNIMPORTSUCCESS: " imported successfully!",
   BPMNEXPORTSUCCESS: " exported successfully!",
   BPMNCOPYSUCCESS: "'s content copied successfully!",
-
+  BPMNCREATESUCCESS:" created successfully!",
 };

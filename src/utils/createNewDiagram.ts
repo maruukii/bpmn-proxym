@@ -1,24 +1,19 @@
+import { setNewDiagram } from '../store/file/fileSlice';
+import { AppDispatch } from '../store/store';
 import EmptyXML from './EmptyXML'
 // import { EditorSettings } from 'types/editor/settings'
 
-import Modeler from 'bpmn-js/lib/Modeler';
 
-export const createNewDiagram = async function (newXml?: string,modeler?:Modeler) {
+export const createNewDiagram = async function (setXml:(xml: string) => void
+,dispatch:AppDispatch, settings?:{id?:string,name?:string,description:string}) {
   try {
-
-    const timestamp = Date.now()
-    // const { processId, processName, processEngine } = settings || {}
-    const newId: string =  `Process_${timestamp}`
-    const newName: string = `PrcessName${timestamp}`
-    const xmlString = newXml || EmptyXML(newId, newName, "flowable")
-    const BpmnModeler = modeler
-   await BpmnModeler!.importXML(xmlString).then(() => {
-      const canvas: any = BpmnModeler?.get<"canvas">("canvas");
-      canvas.zoom("fit-viewport");})
-      
-    // if (warnings && warnings.length) {
-    //   warnings.forEach((warn:any) => console.warn(warn))
-    // }
+if (!settings?.id||!settings?.name) {
+  throw new Error('Modeler, dispatch, or settings are not available');}
+    const { id, name, description } = settings
+    const xmlString = EmptyXML(id, name, description)
+    setXml(xmlString)
+  dispatch(setNewDiagram({ filename: id, fileContent:xmlString }));
+   
   } catch (e) {
     console.error(`[Process Designer Warn]: ${typeof e === 'string' ? e : (e as Error)?.message}`)
   }

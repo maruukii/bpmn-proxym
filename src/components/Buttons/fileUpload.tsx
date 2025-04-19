@@ -25,7 +25,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({ setXml }) => {
         htmlFor="file-upload"
         className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-4 rounded-full shadow-lg cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
       >
-        <span style={{ fontSize: "2rem" }}>📥</span>{" "}
+        <span className="text-3xl">📥</span>{" "}
       </label>
 
       {/* Hidden File Input */}
