@@ -6,7 +6,7 @@ interface BpmnIconProps {
 }
 
 const BpmnIcon: React.FC<BpmnIconProps> = ({
-  name = "bpmn-icon-process",
+  name,
   // color = "#1d1d1f", needs to be svg
 }) => {
   return (
@@ -14,14 +14,16 @@ const BpmnIcon: React.FC<BpmnIconProps> = ({
       {/* <svg className="bpmn-icon" aria-hidden="true" width="32" height="32">
         <use xlinkHref={`/src/assets/icons/${name}.svg`} fill={color} />
       </svg> */}
-      <img
-        className="bpmn-icon mr-2"
-        aria-hidden="true"
-        src={`/src/assets/icons/${name}.svg`}
-        alt={name}
-        width={32}
-        height={32}
-      />
+      {name ? (
+        <img
+          className="bpmn-icon mr-2"
+          aria-hidden="true"
+          src={`/src/assets/icons/${name}.svg`}
+          alt={name}
+          width={32}
+          height={32}
+        />
+      ) : undefined}
     </>
   );
 };

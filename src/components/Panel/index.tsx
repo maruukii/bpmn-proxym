@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState, JSX } from "react";
+import { useEffect, useRef, useState, JSX, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { throttle } from "lodash";
-import { setElement } from "../../store/modeler/modelerSlice";
+import {
+  setElement,
+  setNewDiagramStatus,
+} from "../../store/modeler/modelerSlice";
 import { RootState } from "../../store/store";
 import { Connection, Label, Shape } from "bpmn-js/lib/model/Types";
 import BpmnIcon from "../Common/BpmnIcon";
@@ -28,13 +31,12 @@ export function PropertiesPanel({ t }: { t: any }) {
     bpmnElementName: "",
   });
 
-  const [tagNames, setTagNames] = useState<Record<string, any[]>>({});
-
-  useEffect(() => {
+  const tagNames = useMemo(() => {
     const extractTagsWithProperties = (types: any[]) => {
       const result: Record<string, any[]> = {};
       const generalType = types.find((type) => type.name === "General");
       const generalProps = generalType?.properties || [];
+
       types.forEach((type) => {
         if (
           (type?.extends && type.properties) ||
@@ -51,6 +53,7 @@ export function PropertiesPanel({ t }: { t: any }) {
               }
             });
           });
+
           type?.meta?.allowedIn?.forEach((allowedInType: string) => {
             const tagName = allowedInType
               ? allowedInType.split(":")[1]
@@ -66,15 +69,15 @@ export function PropertiesPanel({ t }: { t: any }) {
           });
         }
       });
+
       Object.keys(result).forEach((tagName) => {
         result[tagName] = [...generalProps, ...result[tagName]];
       });
-      // console.log(result);
 
       return result;
     };
 
-    setTagNames(extractTagsWithProperties(flowable.types));
+    return extractTagsWithProperties(flowable.types);
   }, []);
 
   const setCurrentElement = throttle(
@@ -113,7 +116,7 @@ export function PropertiesPanel({ t }: { t: any }) {
 
   useEffect(() => {
     if (!modeler) return;
-
+    //
     modeler.on("selection.changed", ({ newSelection }) => {
       setCurrentElement(newSelection[0] || null);
     });

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { withTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { setFileContentCopySuccess } from "../../store/file/fileSlice";
+
 interface PreviewContentProps {
   t: any;
   previewData: string | null;
@@ -17,26 +18,45 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const dispatch = useDispatch();
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Detect click outside modal
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        closePreviewModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [closePreviewModal]);
+
   const handleCopy = () => {
     if (previewData) {
       navigator.clipboard.writeText(previewData).then(() => {
         setCopied(true);
         dispatch(setFileContentCopySuccess());
-        setTimeout(() => setCopied(false), 2500); // Reset after 2s
+        setTimeout(() => setCopied(false), 2500);
       });
     }
   };
 
   return (
-    <div className="fixed inset-40 flex justify-center items-start bg-transparent z-100">
-      <div className="bg-white p-6 rounded-lg w-full max-w-3xl h-[80vh] overflow-y-auto shadow-xl z-60">
-        {/* Header row with title + copy action */}
+    <div className="fixed inset-20 flex justify-center items-start bg-transparent  z-50">
+      <div
+        ref={modalRef}
+        className="bg-white p-6 rounded-lg w-full max-w-3xl h-[80vh] overflow-y-auto shadow-xl mt-20"
+      >
+        {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">
             {previewType === "xml" ? t("XML Preview") : t("JSON Preview")}
           </h2>
 
-          {/* Copy button with status */}
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopy}
@@ -67,7 +87,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
           </div>
         </div>
 
-        {/* Preview content */}
+        {/* Preview */}
         <pre className="bg-gray-100 p-4 rounded-md overflow-auto whitespace-pre-wrap text-sm text-gray-800 h-[64vh]">
           {previewData}
         </pre>

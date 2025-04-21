@@ -14,7 +14,6 @@ const NewDiagram: React.FC<NewDiagramProps> = ({
   modelOpen,
 }) => {
   const dispatch = useDispatch();
-
   const [settings, setSettings] = useState({
     id: "",
     name: "",
@@ -29,6 +28,7 @@ const NewDiagram: React.FC<NewDiagramProps> = ({
     try {
       await createNewDiagram(setXml, dispatch, settings);
       setModelOpen(false);
+      setSettings({ id: "", name: "", description: "" });
     } catch (error) {
       console.error("Error creating diagram:", error);
     }

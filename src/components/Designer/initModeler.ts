@@ -39,8 +39,7 @@ export default async function initModeler({ designer, xml,/*propertiesRef,*/mode
   // Destroy existing modeler if it exists
   const currentModeler = modeler
   if (currentModeler) {
-    currentModeler.destroy();
-    dispatch(setModeler(undefined));
+    currentModeler.clear();
   }
 
   // Create new modeler
@@ -51,7 +50,7 @@ export default async function initModeler({ designer, xml,/*propertiesRef,*/mode
     });
   dispatch(setModeler(BpmnModeler));
   // Emit modeler-init event (if you're using EventEmitter)
-  EventEmitter.emit('modeler-init', modeler);
+  // EventEmitter.emit('modeler-init', modeler);
   // Enhance the modeler (add context menu etc.)
 //   EnhancementContextmenu(modeler);
 

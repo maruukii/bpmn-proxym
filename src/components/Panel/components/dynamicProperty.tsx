@@ -35,7 +35,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     var property: string | boolean | undefined;
     if (bpmnName === "documentation") {
       property = getDynamicPropertyDocumentation(activeElement);
-      console.log(property);
+      // console.log(property);
       setDocumentValue(activeElement, modeler, modeling, property);
     } else {
       property = getDynamicProperty(activeElement, bpmnName, displayName);
