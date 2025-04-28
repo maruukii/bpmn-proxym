@@ -19,6 +19,7 @@ interface Bpmnhome {
   t: any;
 }
 const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
+  document.title = "BPMN";
   const dispatch = useDispatch();
   const [xml, setXml] = useState<string | null>(null);
   const [modelOpen, setModelOpen] = useState<boolean>(false);

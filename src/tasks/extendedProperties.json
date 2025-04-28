@@ -1,0 +1,40 @@
+{ 
+  "mapException": [
+      {
+        "label": "Error Code",
+        "key": "errorCode",
+        "type": "String"
+      },
+      {
+        "label": "Class",
+        "key": "class",
+        "type": "String",
+        "isValue": true
+      },{
+        "label": "Include child exceptions",
+        "key": "includeChildExceptions",
+        "type": "Boolean"
+      }
+    ],
+    "field":[
+      {
+        "label": "Name",
+        "key": "name",
+        "type": "String"
+      },
+      {
+        "label": "String value",
+        "key": "string",
+        "type": "String"
+              },{
+        "label": "Expression",
+        "key": "expression",
+        "type": "String"
+      },{
+        "label": "String",
+        "key": "stringDescription",
+        "type": "Text"
+      }
+    ]
+  }
+  

@@ -8,6 +8,50 @@
   "associations": [],
     "types": [
       {
+        "name": "mapException",
+       "properties": [
+          {
+            "name": "errorCode",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "includeChildExceptions",
+            "isAttr": true,
+            "type": "Boolean"
+          },
+          {
+            "name": "class",
+            "type": "String",
+            "isBody": true
+          }
+        ]
+      },{
+
+        "name": "field",
+        "properties": [
+          {
+            "name": "string",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "expression",
+            "isAttr": true,
+            "type": "String"
+          },
+          {
+            "name": "stringDescription",
+            "isAttr": true,
+            "type": "String"
+          },{
+            "name": "name",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
+      },
+      {
         "name": "InOutBinding",
         "superClass": ["Element"],
         "isAbstract": true,

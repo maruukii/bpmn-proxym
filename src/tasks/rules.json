@@ -1,0 +1,117 @@
+{
+    "rules" : {
+    "cardinalityRules" : [ {
+      "role" : "Startevents_all",
+      "incomingEdges" : [ {
+        "role" : "SequenceFlow",
+        "maximum" : 0
+      } ]
+    }, {
+      "role" : "Endevents_all",
+      "outgoingEdges" : [ {
+        "role" : "SequenceFlow",
+        "maximum" : 0
+      } ]
+    } ],
+    "connectionRules" : [ {
+      "role" : "SequenceFlow",
+      "connects" : [ {
+        "from" : "sequence_start",
+        "to" : [ "sequence_end" ]
+      } ]
+    }, {
+      "role" : "Association",
+      "connects" : [ {
+        "from" : "sequence_start",
+        "to" : [ "TextAnnotation" ]
+      }, {
+        "from" : "sequence_end",
+        "to" : [ "TextAnnotation" ]
+      }, {
+        "from" : "TextAnnotation",
+        "to" : [ "sequence_end" ]
+      }, {
+        "from" : "BoundaryCompensationEvent",
+        "to" : [ "sequence_end" ]
+      }, {
+        "from" : "TextAnnotation",
+        "to" : [ "sequence_start" ]
+      }, {
+        "from" : "BoundaryCompensationEvent",
+        "to" : [ "sequence_start" ]
+      } ]
+    }, {
+      "role" : "DataAssociation",
+      "connects" : [ {
+        "from" : "sequence_start",
+        "to" : [ "DataStore" ]
+      }, {
+        "from" : "sequence_end",
+        "to" : [ "DataStore" ]
+      }, {
+        "from" : "DataStore",
+        "to" : [ "sequence_end" ]
+      }, {
+        "from" : "DataStore",
+        "to" : [ "sequence_start" ]
+      } ]
+    }, {
+      "role" : "IntermediateEventOnActivityBoundary",
+      "connects" : [ {
+        "from" : "Activity",
+        "to" : [ "IntermediateEventOnActivityBoundary" ]
+      } ]
+    } ],
+    "containmentRules" : [ {
+      "role" : "BPMNDiagram",
+      "contains" : [ "all" ]
+    }, {
+      "role" : "SubProcess",
+      "contains" : [ "sequence_start", "sequence_end", "from_task_event", "to_task_event", "EventSubProcess", "TextAnnotation", "DataStore" ]
+    }, {
+      "role" : "AdhocSubProcess",
+      "contains" : [ "sequence_start", "sequence_end", "from_task_event", "to_task_event", "TextAnnotation", "DataStore" ]
+    }, {
+      "role" : "EventSubProcess",
+      "contains" : [ "sequence_start", "sequence_end", "from_task_event", "to_task_event", "TextAnnotation", "DataStore" ]
+    }, {
+      "role" : "Pool",
+      "contains" : [ "Lane" ]
+    }, {
+      "role" : "Lane",
+      "contains" : [ "sequence_start", "sequence_end", "EventSubProcess", "TextAnnotation", "DataStore" ]
+    } ],
+    "morphingRules" : [ {
+      "role" : "ActivitiesMorph",
+      "baseMorphs" : [ "UserTask" ],
+      "preserveBounds" : true
+    }, {
+      "role" : "GatewaysMorph",
+      "baseMorphs" : [ "ExclusiveGateway" ]
+    }, {
+      "role" : "StartEventsMorph",
+      "baseMorphs" : [ "StartNoneEvent" ]
+    }, {
+      "role" : "EndEventsMorph",
+      "baseMorphs" : [ "StartNoneEvent" ]
+    }, {
+      "role" : "CatchEventsMorph",
+      "baseMorphs" : [ "CatchTimerEvent" ]
+    }, {
+      "role" : "ThrowEventsMorph",
+      "baseMorphs" : [ "ThrowNoneEvent" ]
+    }, {
+      "role" : "BoundaryEventsMorph",
+      "baseMorphs" : [ "ThrowNoneEvent" ]
+    }, {
+      "role" : "BoundaryCompensationEvent",
+      "baseMorphs" : [ "BoundaryCompensationEvent" ]
+    }, {
+      "role" : "TextAnnotation",
+      "baseMorphs" : [ "TextAnnotation" ]
+    }, {
+      "role" : "DataStore",
+      "baseMorphs" : [ "DataStore" ]
+    } ]
+  }
+}

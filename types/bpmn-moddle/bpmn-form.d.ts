@@ -20,3 +20,8 @@ declare interface ConditionalForm {
   body?: string
   resource?: string
 }
+declare type ExceptionForm = {
+  errorCode: string;
+  includeChildExceptions: boolean;
+  class: string;
+};

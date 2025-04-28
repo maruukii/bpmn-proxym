@@ -1,7 +1,6 @@
 import Modeler from 'bpmn-js/lib/Modeler';
 
 import { setModeler } from '../../store/modeler/modelerSlice'; 
-import EventEmitter from '../../utils/EventEmitter'; 
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer';
 import type { ModulesAndModdles } from './modulesAndModdle';
 import "diagram-js-minimap/assets/diagram-js-minimap.css";
@@ -41,27 +40,12 @@ export default async function initModeler({ designer, xml,/*propertiesRef,*/mode
   if (currentModeler) {
     currentModeler.clear();
   }
-
   // Create new modeler
   const BpmnModeler:Modeler = new Modeler(options);
+
   await BpmnModeler!.importXML(xml).then(() => {
     const canvas: any = BpmnModeler?.get<"canvas">("canvas");
       canvas!.zoom("fit-viewport");
     });
   dispatch(setModeler(BpmnModeler));
-  // Emit modeler-init event (if you're using EventEmitter)
-  // EventEmitter.emit('modeler-init', modeler);
-  // Enhance the modeler (add context menu etc.)
-//   EnhancementContextmenu(modeler);
-
-//   // Listen to command stack changes
-//   BpmnModeler.on('commandStack.changed', async (event: any) => {
-//     try {
-//       const { xml } = await BpmnModeler.saveXML({ format: true });
-//     //   emit('update:xml', xml);
-//     //   emit('command-stack-changed', event);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   });
 }

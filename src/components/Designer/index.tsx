@@ -29,8 +29,8 @@ const Designer: React.FC<DesignerProps> = ({ xml, filename }) => {
         if (designer.current) {
           designer.current.innerHTML = "";
         }
-
         const modelerModules: ModulesAndModdles = modulesAndModdle();
+
         await initModeler({
           designer,
           xml,

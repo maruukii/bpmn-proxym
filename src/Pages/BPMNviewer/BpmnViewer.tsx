@@ -66,6 +66,7 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
     try {
       if (!modeler || !filename)
         throw new Error("Modeler or filename not found.");
+
       exportBPMN(modeler, filename, dispatch);
       dispatch(setFileExportSuccess());
     } catch (error) {
@@ -78,11 +79,34 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
       const commandStack: any = modeler?.get("commandStack");
       if (commandStack.canUndo()) {
         event.preventDefault();
+        event.returnValue = ""; // Required for modern browsers to show the prompt
+      } else {
+        document.title = originalTitle; // Reset the title if no changes
       }
     };
 
+    const updateTitle = () => {
+      const commandStack: any = modeler?.get("commandStack");
+      if (commandStack?.canUndo()) {
+        document.title = `* ${originalTitle}`; // Add an asterisk before the title
+      } else {
+        document.title = originalTitle; // Reset to the original title
+      }
+    };
+
+    // Store the original title
+    const originalTitle = document.title;
+
+    // Add event listeners
     window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    const interval = setInterval(updateTitle, 100);
+
+    return () => {
+      // Cleanup event listeners and interval
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      clearInterval(interval);
+      document.title = originalTitle; // Reset the title on component unmount
+    };
   }, [modeler]);
   return (
     <div className="flex flex-col gap-4 p-4">

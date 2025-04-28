@@ -46,7 +46,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
   };
 
   return (
-    <div className="fixed inset-20 flex justify-center items-start bg-transparent  z-50">
+    <div className="fixed inset-20 flex justify-center items-start bg-transparent  z-100">
       <div
         ref={modalRef}
         className="bg-white p-6 rounded-lg w-full max-w-3xl h-[80vh] overflow-y-auto shadow-xl mt-20"

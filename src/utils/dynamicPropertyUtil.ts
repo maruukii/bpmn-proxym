@@ -1,27 +1,43 @@
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
-import { Element } from 'bpmn-js/lib/model/Types';
-import { FORMKEY_ALLOWED_TYPES } from '../CommonData/bpmnEnums';
+import type  { Element } from 'bpmn-js/lib/model/Types';
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling';
+import type { Moddle } from 'bpmn-moddle';
 
+
+const standAloneTypes = [
+  "name","isForCompensation", "isExecutable", "scriptFormat", "script","id"
+]
 
 const prefix = import.meta.env.VITE_PROCESS_ENGINE;
 
 // 🔹 Get formKey value from element
-export function getDynamicProperty(element: Element,bpmnname:string,displayName:string): string | undefined {
+export function getDynamicProperty(element: Element,bpmnname:string): string | undefined {
   const businessObject = getBusinessObject(element);
 if (!businessObject) {
     return undefined;
   }
-  if (displayName === 'General Name'|| displayName === 'General Id') {
-    return businessObject.get(`${bpmnname}`);
+
+  if (standAloneTypes.includes(bpmnname)) {
+return businessObject.get(`${bpmnname}`);
   }
+
+  // if(bpmnname === 'overrideid') {
+  //   return businessObject.get(`id`);
+  // }
   return businessObject.get(`${prefix}:${bpmnname}`);
 }
 
 
 // 🔹 Set or update formKey value
-export function updateDynamicProperty(modeling:Modeling, element: Element, name:string,value: string) {
-  modeling?.updateProperties(element, {
+export function updateDynamicProperty(modeling:Modeling, element: Element, name:string,value: string|boolean) {
+  if (standAloneTypes.includes(name)) {
+
+    modeling?.updateProperties(element, {
+      [name]: value
+    });
+    return;
+  }
+    modeling?.updateProperties(element, {
     [`${prefix}:${name}`]: value
   });
 }
@@ -30,6 +46,9 @@ export function updateDynamicProperty(modeling:Modeling, element: Element, name:
 export function removeDynamicProperty(modeling:Modeling,element: Element,name:string) {
   modeling?.updateProperties(element, {
     [`${prefix}:${name}`]: undefined
+  });
+  modeling?.updateProperties(element, {
+    [`${name}`]: undefined
   });
 }
 

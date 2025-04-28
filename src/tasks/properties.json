@@ -1,0 +1,2162 @@
+{
+  "title": "BPMN.TITLE",
+  "namespace": "http://b3mn.org/stencilset/bpmn2.0#",
+  "description": "BPMN.DESCRIPTION",
+  "propertyPackages": [
+    {
+      "name": "process_idpackage",
+      "properties": [
+        {
+          "id": "id",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_IDPACKAGE.PROCESS_ID.TITLE",
+          "value": "process",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_IDPACKAGE.PROCESS_ID.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "overrideidpackage",
+      "properties": [
+        {
+          "id": "id",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.OVERRIDEIDPACKAGE.OVERRIDEID.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.OVERRIDEIDPACKAGE.OVERRIDEID.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "namepackage",
+      "properties": [
+        {
+          "id": "name",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.NAMEPACKAGE.NAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.NAMEPACKAGE.NAME.DESCRIPTION",
+          "popular": true,
+          "refToView": "text_name"
+        }
+      ]
+    },
+    {
+      "name": "documentationpackage",
+      "properties": [
+        {
+          "id": "documentation",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.DOCUMENTATIONPACKAGE.DOCUMENTATION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.DOCUMENTATIONPACKAGE.DOCUMENTATION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "categorypackage",
+      "properties": [
+        {
+          "id": "category",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.CATEGORYPACKAGE.CATEGORYDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CATEGORYPACKAGE.CATEGORYDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "process_authorpackage",
+      "properties": [
+        {
+          "id": "author",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_AUTHORPACKAGE.PROCESS_AUTHOR.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_AUTHORPACKAGE.PROCESS_AUTHOR.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "process_versionpackage",
+      "properties": [
+        {
+          "id": "version",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_VERSIONPACKAGE.PROCESS_VERSION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_VERSIONPACKAGE.PROCESS_VERSION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "process_historylevelpackage",
+      "properties": [
+        {
+          "id": "historyLevel",
+          "type": "flowable-processhistorylevel",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_HISTORYLEVELPACKAGE.PROCESS_HISTORYLEVEL.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_HISTORYLEVELPACKAGE.PROCESS_HISTORYLEVEL.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "isexecutablepackage",
+      "properties": [
+        {
+          "id": "isExecutable",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.ISEXECUTABLEPACKAGE.ISEXECUTABLE.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.ISEXECUTABLEPACKAGE.ISEXECUTABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "process_potentialstarteruserpackage",
+      "properties": [
+        {
+          "id": "potentialStarterUser",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_POTENTIALSTARTERUSERPACKAGE.PROCESS_POTENTIALSTARTERUSER.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_POTENTIALSTARTERUSERPACKAGE.PROCESS_POTENTIALSTARTERUSER.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "process_potentialstartergrouppackage",
+      "properties": [
+        {
+          "id": "potentialStarterGroup",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_POTENTIALSTARTERGROUPPACKAGE.PROCESS_POTENTIALSTARTERGROUP.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_POTENTIALSTARTERGROUPPACKAGE.PROCESS_POTENTIALSTARTERGROUP.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "process_namespacepackage",
+      "properties": [
+        {
+          "id": "namespace",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_NAMESPACEPACKAGE.PROCESS_NAMESPACE.TITLE",
+          "value": "http://www.flowable.org/processdef",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_NAMESPACEPACKAGE.PROCESS_NAMESPACE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "process_iseagerexecutionfetchpackage",
+      "properties": [
+        {
+          "id": "isEagerExecutionFetch",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.PROCESS_ISEAGEREXECUTIONFETCHPACKAGE.ISEAGEREXECUTIONFETCH.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.PROCESS_ISEAGEREXECUTIONFETCHPACKAGE.ISEAGEREXECUTIONFETCH.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "asynchronousdefinitionpackage",
+      "properties": [
+        {
+          "id": "async",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.ASYNCHRONOUSDEFINITIONPACKAGE.ASYNCHRONOUSDEFINITION.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.ASYNCHRONOUSDEFINITIONPACKAGE.ASYNCHRONOUSDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "datapropertiespackage",
+      "properties": [
+        {
+          "id": "dataProperties",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.DATAPROPERTIESPACKAGE.DATAPROPERTIES.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.DATAPROPERTIESPACKAGE.DATAPROPERTIES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "exclusivedefinitionpackage",
+      "properties": [
+        {
+          "id": "exclusive",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.EXCLUSIVEDEFINITIONPACKAGE.EXCLUSIVEDEFINITION.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.EXCLUSIVEDEFINITIONPACKAGE.EXCLUSIVEDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "executionlistenerspackage",
+      "properties": [
+        {
+          "id": "executionListeners",
+          "type": "multiplecomplex",
+          "title": "BPMN.PROPERTYPACKAGES.EXECUTIONLISTENERSPACKAGE.EXECUTIONLISTENERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EXECUTIONLISTENERSPACKAGE.EXECUTIONLISTENERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "tasklistenerspackage",
+      "properties": [
+        {
+          "id": "taskListeners",
+          "type": "multiplecomplex",
+          "title": "BPMN.PROPERTYPACKAGES.TASKLISTENERSPACKAGE.TASKLISTENERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.TASKLISTENERSPACKAGE.TASKLISTENERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventlistenerspackage",
+      "properties": [
+        {
+          "id": "eventListeners",
+          "type": "multiplecomplex",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTLISTENERSPACKAGE.EVENTLISTENERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTLISTENERSPACKAGE.EVENTLISTENERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "usertaskassignmentpackage",
+      "properties": [
+        {
+          "id": "assignee",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.USERTASKASSIGNMENTPACKAGE.USERTASKASSIGNMENT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.USERTASKASSIGNMENTPACKAGE.USERTASKASSIGNMENT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "taskidvariablenamepackage",
+      "properties": [
+        {
+          "id": "taskIdVariableName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.TASKIDVARIABLENAMEPACKAGE.TASKIDVARIABLENAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.TASKIDVARIABLENAMEPACKAGE.TASKIDVARIABLENAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "formpropertiespackage",
+      "properties": [
+        {
+          "id": "formProperties",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.FORMPROPERTIESPACKAGE.FORMPROPERTIES.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.FORMPROPERTIESPACKAGE.FORMPROPERTIES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "formkeydefinitionpackage",
+      "properties": [
+        {
+          "id": "formKey",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.FORMKEYDEFINITIONPACKAGE.FORMKEYDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.FORMKEYDEFINITIONPACKAGE.FORMKEYDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "formfieldvalidationpackage",
+      "properties": [
+        {
+          "id": "formFieldValidation",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.FORMFIELDVALIDATIONPACKAGE.FORMFIELDVALIDATION.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.FORMFIELDVALIDATIONPACKAGE.FORMFIELDVALIDATION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "duedatedefinitionpackage",
+      "properties": [
+        {
+          "id": "dueDate",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.DUEDATEDEFINITIONPACKAGE.DUEDATEDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.DUEDATEDEFINITIONPACKAGE.DUEDATEDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "prioritydefinitionpackage",
+      "properties": [
+        {
+          "id": "priority",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.PRIORITYDEFINITIONPACKAGE.PRIORITYDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.PRIORITYDEFINITIONPACKAGE.PRIORITYDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskclasspackage",
+      "properties": [
+        {
+          "id": "class",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKCLASSPACKAGE.SERVICETASKCLASS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKCLASSPACKAGE.SERVICETASKCLASS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskexpressionpackage",
+      "properties": [
+        {
+          "id": "expression",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKEXPRESSIONPACKAGE.SERVICETASKEXPRESSION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKEXPRESSIONPACKAGE.SERVICETASKEXPRESSION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskdelegateexpressionpackage",
+      "properties": [
+        {
+          "id": "delegateExpression",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKDELEGATEEXPRESSIONPACKAGE.SERVICETASKDELEGATEEXPRESSION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKDELEGATEEXPRESSIONPACKAGE.SERVICETASKDELEGATEEXPRESSION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskfailedjobretrytimecyclepackage",
+      "properties": [
+        {
+          "id": "failedJobRetryTimeCycle",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKFAILEDJOBRETRYTIMECYCLEPACKAGE.SERVICETASKFAILEDJOBRETRYTIMECYCLE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKFAILEDJOBRETRYTIMECYCLEPACKAGE.SERVICETASKFAILEDJOBRETRYTIMECYCLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskfieldspackage",
+      "properties": [
+        {
+          "id": "field",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKFIELDSPACKAGE.SERVICETASKFIELDS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKFIELDSPACKAGE.SERVICETASKFIELDS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskexceptionspackage",
+      "properties": [
+        {
+          "id": "mapException",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKEXCEPTIONSPACKAGE.SERVICETASKEXCEPTIONS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKEXCEPTIONSPACKAGE.SERVICETASKEXCEPTIONS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskresultvariablepackage",
+      "properties": [
+        {
+          "id": "resultVariableName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKRESULTVARIABLEPACKAGE.SERVICETASKRESULTVARIABLE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKRESULTVARIABLEPACKAGE.SERVICETASKRESULTVARIABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskresultvariableUseLocalScopepackage",
+      "properties": [
+        {
+          "id": "useLocalScopeForResultVariable",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKRESULTVARIABLEPACKAGE.SERVICETASKUSELOCALSCOPEFORRESULTVARIABLE.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKRESULTVARIABLEPACKAGE.SERVICETASKUSELOCALSCOPEFORRESULTVARIABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetasktriggerablepackage",
+      "properties": [
+        {
+          "id": "triggerable",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKTRIGGERABLEPACKAGE.SERVICETASKTRIGGERABLE.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKTRIGGERABLEPACKAGE.SERVICETASKTRIGGERABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "servicetaskstoreresultvariabletransientpackage",
+      "properties": [
+        {
+          "id": "storeResultVariableAsTransient",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.SERVICETASKSTORERESULTVARIABLETRANSIENTPACKAGE.SERVICETASKSTORERESULTVARIABLETRANSIENT.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.SERVICETASKSTORERESULTVARIABLETRANSIENTPACKAGE.SERVICETASKSTORERESULTVARIABLETRANSIENT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "scriptformatpackage",
+      "properties": [
+        {
+          "id": "scriptFormat",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.SCRIPTFORMATPACKAGE.SCRIPTFORMAT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SCRIPTFORMATPACKAGE.SCRIPTFORMAT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "scripttextpackage",
+      "properties": [
+        {
+          "id": "script",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SCRIPTTEXTPACKAGE.SCRIPTTEXT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SCRIPTTEXTPACKAGE.SCRIPTTEXT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "scriptautostorevariablespackage",
+      "properties": [
+        {
+          "id": "autoStoreVariables",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.SCRIPTAUTOSTOREVARIABLESPACKAGE.SCRIPTAUTOSTOREVARIABLES.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.SCRIPTAUTOSTOREVARIABLESPACKAGE.SCRIPTAUTOSTOREVARIABLES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellcommandpackage",
+      "properties": [
+        {
+          "id": "command",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLCOMMANDPACKAGE.SHELLCOMMAND.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLCOMMANDPACKAGE.SHELLCOMMAND.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellarg1package",
+      "properties": [
+        {
+          "id": "arg1",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLARG1PACKAGE.SHELLARG1.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLARG1PACKAGE.SHELLARG1.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellarg2package",
+      "properties": [
+        {
+          "id": "arg2",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLARG2PACKAGE.SHELLARG2.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLARG2PACKAGE.SHELLARG2.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellarg3package",
+      "properties": [
+        {
+          "id": "arg3",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLARG3PACKAGE.SHELLARG3.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLARG3PACKAGE.SHELLARG3.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellarg4package",
+      "properties": [
+        {
+          "id": "arg4",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLARG4PACKAGE.SHELLARG4.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLARG4PACKAGE.SHELLARG4.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellarg5package",
+      "properties": [
+        {
+          "id": "arg5",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLARG5PACKAGE.SHELLARG5.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLARG5PACKAGE.SHELLARG5.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellwaitpackage",
+      "properties": [
+        {
+          "id": "wait",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLWAITPACKAGE.SHELLWAIT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLWAITPACKAGE.SHELLWAIT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shelloutputvariablepackage",
+      "properties": [
+        {
+          "id": "outputVariable",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLOUTPUTVARIABLEPACKAGE.SHELLOUTPUTVARIABLE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLOUTPUTVARIABLEPACKAGE.SHELLOUTPUTVARIABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellerrorcodevariablepackage",
+      "properties": [
+        {
+          "id": "errorCodeVariable",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLERRORCODEVARIABLEPACKAGE.SHELLERRORCODEVARIABLE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLERRORCODEVARIABLEPACKAGE.SHELLERRORCODEVARIABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellredirecterrorpackage",
+      "properties": [
+        {
+          "id": "redirectError",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLREDIRECTERRORPACKAGE.SHELLREDIRECTERROR.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLREDIRECTERRORPACKAGE.SHELLREDIRECTERROR.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shellcleanenvpackage",
+      "properties": [
+        {
+          "id": "cleanEnv",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLCLEANENVPACKAGE.SHELLCLEANENV.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLCLEANENVPACKAGE.SHELLCLEANENV.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "shelldirectorypackage",
+      "properties": [
+        {
+          "id": "directory",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.SHELLDIRECTORYPACKAGE.SHELLDIRECTORY.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SHELLDIRECTORYPACKAGE.SHELLDIRECTORY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "ruletask_rulespackage",
+      "properties": [
+        {
+          "id": "rules",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.RULETASK_RULESPACKAGE.RULETASK_RULES.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.RULETASK_RULESPACKAGE.RULETASK_RULES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "ruletask_variables_inputpackage",
+      "properties": [
+        {
+          "id": "inputVariables",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.RULETASK_VARIABLES_INPUTPACKAGE.RULETASK_VARIABLES_INPUT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.RULETASK_VARIABLES_INPUTPACKAGE.RULETASK_VARIABLES_INPUT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "ruletask_excludepackage",
+      "properties": [
+        {
+          "id": "exclude",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.RULETASK_EXCLUDEPACKAGE.RULETASK_EXCLUDE.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.RULETASK_EXCLUDEPACKAGE.RULETASK_EXCLUDE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "ruletask_resultpackage",
+      "properties": [
+        {
+          "id": "resultVariable",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.RULETASK_RESULTPACKAGE.RULETASK_RESULT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.RULETASK_RESULTPACKAGE.RULETASK_RESULT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtaskheaderspackage",
+      "properties": [
+        {
+          "id": "headers",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKHEADERSPACKAGE.MAILTASKHEADERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKHEADERSPACKAGE.MAILTASKHEADERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtasktopackage",
+      "properties": [
+        {
+          "id": "to",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKTOPACKAGE.MAILTASKTO.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKTOPACKAGE.MAILTASKTO.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtaskfrompackage",
+      "properties": [
+        {
+          "id": "from",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKFROMPACKAGE.MAILTASKFROM.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKFROMPACKAGE.MAILTASKFROM.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtasksubjectpackage",
+      "properties": [
+        {
+          "id": "subject",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKSUBJECTPACKAGE.MAILTASKSUBJECT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKSUBJECTPACKAGE.MAILTASKSUBJECT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtaskccpackage",
+      "properties": [
+        {
+          "id": "cc",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKCCPACKAGE.MAILTASKCC.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKCCPACKAGE.MAILTASKCC.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtaskbccpackage",
+      "properties": [
+        {
+          "id": "bcc",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKBCCPACKAGE.MAILTASKBCC.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKBCCPACKAGE.MAILTASKBCC.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtasktextpackage",
+      "properties": [
+        {
+          "id": "text",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKTEXTPACKAGE.MAILTASKTEXT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKTEXTPACKAGE.MAILTASKTEXT.DESCRIPTION",
+          "popular": true
+        },
+        {
+          "id": "textVar",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKTEXTPACKAGE.MAILTASKTEXTVAR.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKTEXTPACKAGE.MAILTASKTEXTVAR.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtaskhtmlpackage",
+      "properties": [
+        {
+          "id": "html",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKHTMLPACKAGE.MAILTASKHTML.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKHTMLPACKAGE.MAILTASKHTML.DESCRIPTION",
+          "popular": true
+        },
+        {
+          "id": "htmlVar",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKHTMLPACKAGE.MAILTASKHTMLVAR.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKHTMLPACKAGE.MAILTASKHTMLVAR.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "mailtaskcharsetpackage",
+      "properties": [
+        {
+          "id": "charset",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MAILTASKCHARSETPACKAGE.MAILTASKCHARSET.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MAILTASKCHARSETPACKAGE.MAILTASKCHARSET.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskrequestmethodpackage",
+      "properties": [
+        {
+          "id": "requestMethod",
+          "type": "flowable-http-request-method",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTMETHODPACKAGE.HTTPTASKREQUESTMETHOD.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTMETHODPACKAGE.HTTPTASKREQUESTMETHOD.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskrequesturlpackage",
+      "properties": [
+        {
+          "id": "requestUrl",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTURLPACKAGE.HTTPTASKREQUESTURL.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTURLPACKAGE.HTTPTASKREQUESTURL.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskrequestheaderspackage",
+      "properties": [
+        {
+          "id": "requestHeaders",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTHEADERSPACKAGE.HTTPTASKREQUESTHEADERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTHEADERSPACKAGE.HTTPTASKREQUESTHEADERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskrequestbodypackage",
+      "properties": [
+        {
+          "id": "requestBody",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTBODYPACKAGE.HTTPTASKREQUESTBODYPACKAGE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTBODYPACKAGE.HTTPTASKREQUESTBODYPACKAGE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskrequestbodyencodingpackage",
+      "properties": [
+        {
+          "id": "requestBodyEncoding",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTBODYENCODINGPACKAGE.HTTPTASKREQUESTBODYENCODING.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTBODYENCODINGPACKAGE.HTTPTASKREQUESTBODYENCODING.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskrequesttimeoutpackage",
+      "properties": [
+        {
+          "id": "requestTimeout",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTTIMEOUTPACKAGE.HTTPTASKREQUESTTIMEOUT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKREQUESTTIMEOUTPACKAGE.HTTPTASKREQUESTTIMEOUT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskdisallowredirectspackage",
+      "properties": [
+        {
+          "id": "disallowRedirects",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKDISALLOWREDIRECTSPACKAGE.HTTPTASKDISALLOWREDIRECTS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKDISALLOWREDIRECTSPACKAGE.HTTPTASKDISALLOWREDIRECTS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskfailstatuscodespackage",
+      "properties": [
+        {
+          "id": "failStatusCodes",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKFAILSTATUSCODESPACKAGE.HTTPTASKFAILSTATUSCODES.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKFAILSTATUSCODESPACKAGE.HTTPTASKFAILSTATUSCODES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskhandlestatuscodespackage",
+      "properties": [
+        {
+          "id": "handleStatusCodes",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKHANDLESTATUSCODESPACKAGE.HTTPTASKHANDLESTATUSCODES.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKHANDLESTATUSCODESPACKAGE.HTTPTASKHANDLESTATUSCODES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskignoreexceptionpackage",
+      "properties": [
+        {
+          "id": "ignoreException",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKIGNOREEXCEPTIONPACKAGE.HTTPTASKIGNOREEXCEPTION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKIGNOREEXCEPTIONPACKAGE.HTTPTASKIGNOREEXCEPTION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptasksaveresponseparameterstransientpackage",
+      "properties": [
+        {
+          "id": "saveResponseParametersTransient",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVERESPONSEPARAMETERSTRANSIENTPACKAGE.HTTPTASKSAVERESPONSEPARAMETERSTRANSIENT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVERESPONSEPARAMETERSTRANSIENTPACKAGE.HTTPTASKSAVERESPONSEPARAMETERSTRANSIENT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptasksaveresponseasjsonpackage",
+      "properties": [
+        {
+          "id": "saveResponseAsJson",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVERESPONSEASJSONPACKAGE.HTTPTASKSAVERESPONSEASJSON.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVERESPONSEASJSONPACKAGE.HTTPTASKSAVERESPONSEASJSON.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskparallelinsametransactionpackage",
+      "properties": [
+        {
+          "id": "parallelInSameTransaction",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKPARALLELINSAMETRANSACTIONPACKAGE.HTTPTASKPARALLELINSAMETRANSACTION.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKPARALLELINSAMETRANSACTIONPACKAGE.HTTPTASKPARALLELINSAMETRANSACTION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "skipexpressionpackage",
+      "properties": [
+        {
+          "id": "skipExpression",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.SKIPEXPRESSIONPACKAGE.SKIPEXPRESSION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SKIPEXPRESSIONPACKAGE.SKIPEXPRESSION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskresponsevariablenamepackage",
+      "properties": [
+        {
+          "id": "responseVariableName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKRESPONSEVARIABLENAMEPACKAGE.HTTPTASKRESPONSEVARIABLENAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKRESPONSEVARIABLENAMEPACKAGE.HTTPTASKRESPONSEVARIABLENAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptasksaverequestvariablespackage",
+      "properties": [
+        {
+          "id": "saveRequestVariables",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVEREQUESTVARIABLESPACKAGE.HTTPTASKSAVEREQUESTVARIABLES.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVEREQUESTVARIABLESPACKAGE.HTTPTASKSAVEREQUESTVARIABLES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptasksaveresponseparameterspackage",
+      "properties": [
+        {
+          "id": "saveResponseParameters",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVERESPONSEPARAMETERSPACKAGE.HTTPTASKSAVERESPONSEPARAMETERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKSAVERESPONSEPARAMETERSPACKAGE.HTTPTASKSAVERESPONSEPARAMETERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "httptaskresultvariableprefixpackage",
+      "properties": [
+        {
+          "id": "resultVariablePrefix",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.HTTPTASKRESULTVARIABLEPREFIXPACKAGE.HTTPTASKRESULTVARIABLEPREFIX.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.HTTPTASKRESULTVARIABLEPREFIXPACKAGE.HTTPTASKRESULTVARIABLEPREFIX.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivitycalledelementpackage",
+      "properties": [
+        {
+          "id": "calledElement",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYCALLEDELEMENTPACKAGE.CALLACTIVITYCALLEDELEMENT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYCALLEDELEMENTPACKAGE.CALLACTIVITYCALLEDELEMENT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivitycalledelementtypepackage",
+      "properties": [
+        {
+          "id": "calledElementType",
+          "type": "flowable-calledelementtype",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYCALLEDELEMENTTYPEPACKAGE.CALLACTIVITYCALLEDELEMENTTYPE.TITLE",
+          "value": "key",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYCALLEDELEMENTTYPEPACKAGE.CALLACTIVITYCALLEDELEMENTTYPE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityinparameterspackage",
+      "properties": [
+        {
+          "id": "inParameters",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYINPARAMETERSPACKAGE.CALLACTIVITYINPARAMETERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYINPARAMETERSPACKAGE.CALLACTIVITYINPARAMETERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityoutparameterspackage",
+      "properties": [
+        {
+          "id": "outParameters",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYOUTPARAMETERSPACKAGE.CALLACTIVITYOUTPARAMETERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYOUTPARAMETERSPACKAGE.CALLACTIVITYOUTPARAMETERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityinheritvariablespackage",
+      "properties": [
+        {
+          "id": "inheritVariables",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYINHERITVARIABLESPACKAGE.CALLACTIVITYINHERITVARIABLES.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYINHERITVARIABLESPACKAGE.CALLACTIVITYINHERITVARIABLES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivitysamedeploymentpackage",
+      "properties": [
+        {
+          "id": "sameDeployment",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYSAMEDEPLOYMENTPACKAGE.CALLACTIVITYSAMEDEPLOYMENT.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYSAMEDEPLOYMENTPACKAGE.CALLACTIVITYSAMEDEPLOYMENT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityfallbacktodefaulttenantpackage",
+      "properties": [
+        {
+          "id": "fallbackToDefaultTenant",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYFALLBACKTODEFAULTTENANTPACKAGE.CALLACTIVITYFALLBACKTODEFAULTTENANT.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYFALLBACKTODEFAULTTENANTPACKAGE.CALLACTIVITYFALLBACKTODEFAULTTENANT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityidvariablenamepackage",
+      "properties": [
+        {
+          "id": "idVariableName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYIDVARIABLENAMEPACKAGE.CALLACTIVITYIDVARIABLENAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYIDVARIABLENAMEPACKAGE.CALLACTIVITYIDVARIABLENAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityprocessinstancenamepackage",
+      "properties": [
+        {
+          "id": "processInstanceName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYPROCESSINSTANCENAMEPACKAGE.CALLACTIVITYPROCESSINSTANCENAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYPROCESSINSTANCENAMEPACKAGE.CALLACTIVITYPROCESSINSTANCENAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityinheritbusinesskeypackage",
+      "properties": [
+        {
+          "id": "inheritBusinessKey",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYINHERITBUSINESSKEYPACKAGE.CALLACTIVITYINHERITBUSINESSKEY.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYINHERITBUSINESSKEYPACKAGE.CALLACTIVITYINHERITBUSINESSKEY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivityuselocalscopeforoutparameterspackage",
+      "properties": [
+        {
+          "id": "useLocalScopeForOutParameters",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYUSELOCALSCOPEFOROUTPARAMETERSPACKAGE.CALLACTIVITYUSELOCALSCOPEFOROUTPARAMETERS.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYUSELOCALSCOPEFOROUTPARAMETERSPACKAGE.CALLACTIVITYUSELOCALSCOPEFOROUTPARAMETERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivitybusinesskeypackage",
+      "properties": [
+        {
+          "id": "businessKey",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYBUSINESSKEYPACKAGE.CALLACTIVITYBUSINESSKEY.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYBUSINESSKEYPACKAGE.CALLACTIVITYBUSINESSKEY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "callactivitycompleteasyncpackage",
+      "properties": [
+        {
+          "id": "completeAsync",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CALLACTIVITYCOMPLETEASYNCPACKAGE.CALLACTIVITYCOMPLETEASYNC.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CALLACTIVITYCOMPLETEASYNCPACKAGE.CALLACTIVITYCOMPLETEASYNC.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "cameltaskcamelcontextpackage",
+      "properties": [
+        {
+          "id": "camelContext",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.CAMELTASKCAMELCONTEXTPACKAGE.CAMELTASKCAMELCONTEXT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CAMELTASKCAMELCONTEXTPACKAGE.CAMELTASKCAMELCONTEXT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "muletaskendpointurlpackage",
+      "properties": [
+        {
+          "id": "endpointUrl",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MULETASKENDPOINTURLPACKAGE.MULETASKENDPOINTURL.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULETASKENDPOINTURLPACKAGE.MULETASKENDPOINTURL.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "muletasklanguagepackage",
+      "properties": [
+        {
+          "id": "language",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MULETASKLANGUAGEPACKAGE.MULETASKLANGUAGE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULETASKLANGUAGEPACKAGE.MULETASKLANGUAGE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "muletaskpayloadexpressionpackage",
+      "properties": [
+        {
+          "id": "payloadExpression",
+          "type": "Text",
+          "title": "BPMN.PROPERTYPACKAGES.MULETASKPAYLOADEXPRESSIONPACKAGE.MULETASKPAYLOADEXPRESSION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULETASKPAYLOADEXPRESSIONPACKAGE.MULETASKPAYLOADEXPRESSION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "muletaskresultvariablepackage",
+      "properties": [
+        {
+          "id": "resultVariable",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MULETASKRESULTVARIABLEPACKAGE.MULETASKRESULTVARIABLE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULETASKRESULTVARIABLEPACKAGE.MULETASKRESULTVARIABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "conditionsequenceflowpackage",
+      "properties": [
+        {
+          "id": "conditionExpression",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.CONDITIONSEQUENCEFLOWPACKAGE.CONDITIONSEQUENCEFLOWPACKAGE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CONDITIONSEQUENCEFLOWPACKAGE.CONDITIONSEQUENCEFLOWPACKAGE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "defaultflowpackage",
+      "properties": [
+        {
+          "id": "default",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.DEFAULTFLOWPACKAGE.DEFAULTFLOW.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.DEFAULTFLOWPACKAGE.DEFAULTFLOW.DESCRIPTION",
+          "popular": true,
+          "refToView": "default"
+        }
+      ]
+    },
+    {
+      "name": "conditionalflowpackage",
+      "properties": [
+        {
+          "id": "conditional",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CONDITIONALFLOWPACKAGE.CONDITIONALFLOW.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.CONDITIONALFLOWPACKAGE.CONDITIONALFLOW.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "timercycledefinitionpackage",
+      "properties": [
+        {
+          "id": "timeCycle",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.TIMERCYCLEDEFINITIONPACKAGE.TIMERCYCLEDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.TIMERCYCLEDEFINITIONPACKAGE.TIMERCYCLEDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "timerdatedefinitionpackage",
+      "properties": [
+        {
+          "id": "timeDate",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.TIMERDATEDEFINITIONPACKAGE.TIMERDATEDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.TIMERDATEDEFINITIONPACKAGE.TIMERDATEDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "timerdurationdefinitionpackage",
+      "properties": [
+        {
+          "id": "timeDuration",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.TIMERDURATIONDEFINITIONPACKAGE.TIMERDURATIONDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.TIMERDURATIONDEFINITIONPACKAGE.TIMERDURATIONDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "timerenddatedefinitionpackage",
+      "properties": [
+        {
+          "id": "timeEndDate",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.TIMERENDDATEDEFINITIONPACKAGE.TIMERENDDATEDEFINITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.TIMERENDDATEDEFINITIONPACKAGE.TIMERENDDATEDEFINITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "messagerefpackage",
+      "properties": [
+        {
+          "id": "messageRef",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MESSAGEREFPACKAGE.MESSAGEREF.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MESSAGEREFPACKAGE.MESSAGEREF.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "messageexpressionpackage",
+      "properties": [
+        {
+          "id": "messageExpression",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MESSAGEEXPRESSIONPACKAGE.MESSAGEEXPRESSION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MESSAGEEXPRESSIONPACKAGE.MESSAGEEXPRESSION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "signalrefpackage",
+      "properties": [
+        {
+          "id": "signalRef",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.SIGNALREFPACKAGE.SIGNALREF.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SIGNALREFPACKAGE.SIGNALREF.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "signalexpressionpackage",
+      "properties": [
+        {
+          "id": "signalExpression",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.SIGNALEXPRESSIONPACKAGE.SIGNALEXPRESSION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SIGNALEXPRESSIONPACKAGE.SIGNALEXPRESSION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "errorrefpackage",
+      "properties": [
+        {
+          "id": "errorRef",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.ERRORREFPACKAGE.ERRORREF.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.ERRORREFPACKAGE.ERRORREF.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "errorvariablepackage",
+      "properties": [
+        {
+          "id": "errorVariableName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.ERRORVARIABLEPACKAGE.ERRORVARIABLENAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.ERRORVARIABLEPACKAGE.ERRORVARIABLENAME.DESCRIPTION",
+          "popular": true
+        },
+        {
+          "id": "errorVariableTransient",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.ERRORVARIABLEPACKAGE.ERRORVARIABLETRANSIENT.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.ERRORVARIABLEPACKAGE.ERRORVARIABLETRANSIENT.DESCRIPTION",
+          "popular": true
+        },
+        {
+          "id": "errorVariableLocalScope",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.ERRORVARIABLEPACKAGE.ERRORVARIABLELOCALSCOPE.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.ERRORVARIABLEPACKAGE.ERRORVARIABLELOCALSCOPE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistryeventpackage",
+      "properties": [
+        {
+          "id": "eventKey",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTKEY.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTKEY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistryeventnamepackage",
+      "properties": [
+        {
+          "id": "eventName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTNAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTNAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistryinparameterspackage",
+      "properties": [
+        {
+          "id": "inParameters",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTINPARAMETERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTINPARAMETERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistryoutparameterspackage",
+      "properties": [
+        {
+          "id": "outParameters",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTOUTPARAMETERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTOUTPARAMETERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrycorrelationpackage",
+      "properties": [
+        {
+          "id": "correlationParameters",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTCORRELATIONPARAMETERS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.EVENTCORRELATIONPARAMETERS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrychannelkeypackage",
+      "properties": [
+        {
+          "id": "channelKey",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELKEY.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELKEY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrychannelnamepackage",
+      "properties": [
+        {
+          "id": "channelName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELNAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELNAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrychanneltypepackage",
+      "properties": [
+        {
+          "id": "channelType",
+          "type": "flowable-channeltype",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELTYPE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELTYPE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrychanneldestinationpackage",
+      "properties": [
+        {
+          "id": "channelDestination",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELDESTINATION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.CHANNELDESTINATION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrytriggereventpackage",
+      "properties": [
+        {
+          "id": "triggerEventKey",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGEREVENTKEY.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGEREVENTKEY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrytriggereventnamepackage",
+      "properties": [
+        {
+          "id": "triggerEventName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGEREVENTNAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGEREVENTNAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrytriggerchannelkeypackage",
+      "properties": [
+        {
+          "id": "triggerChannelKey",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERCHANNELKEY.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERHANNELKEY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrytriggerchannelnamepackage",
+      "properties": [
+        {
+          "id": "triggerChannelName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERCHANNELNAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERCHANNELNAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrytriggerchanneltypepackage",
+      "properties": [
+        {
+          "id": "triggerChannelType",
+          "type": "flowable-channeltype",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERCHANNELTYPE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERCHANNELTYPE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrytriggerchanneldestinationpackage",
+      "properties": [
+        {
+          "id": "triggerChannelDestination",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERCHANNELDESTINATION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.TRIGGERCHANNELDESTINATION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrykeydetectionfixedvaluepackage",
+      "properties": [
+        {
+          "id": "keyDetectionFixedValue",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.KEYDETECTIONFIXEDVALUE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.KEYDETECTIONFIXEDVALUE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrykeydetectionjsonfieldpackage",
+      "properties": [
+        {
+          "id": "keyDetectionJsonField",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.KEYDETECTIONJSONFIELD.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.KEYDETECTIONJSONFIELD.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "eventregistrykeydetectionjsonpointerpackage",
+      "properties": [
+        {
+          "id": "keyDetectionJsonPointer",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.KEYDETECTIONJSONPOINTER.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EVENTREGISTRYPACKAGE.KEYDETECTIONJSONPOINTER.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "variablelistenervariablenamepackage",
+      "properties": [
+        {
+          "id": "variableName",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.VARIABLELISTENERPACKAGE.VARIABLENAME.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.VARIABLELISTENERPACKAGE.VARIABLENAME.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "variablelistenervariablechangetypepackage",
+      "properties": [
+        {
+          "id": "variableChangeType",
+          "type": "flowable-variablechangetype",
+          "title": "BPMN.PROPERTYPACKAGES.VARIABLELISTENERPACKAGE.VARIABLECHANGETYPE.TITLE",
+          "value": "all",
+          "description": "BPMN.PROPERTYPACKAGES.VARIABLELISTENERPACKAGE.VARIABLECHANGETYPE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "externalworkerjobpackage",
+      "properties": [
+        {
+          "id": "topic",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.EXTERNALWORKERJOBPACKAGE.TOPIC.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.EXTERNALWORKERJOBPACKAGE.TOPIC.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "escalationrefpackage",
+      "properties": [
+        {
+          "id": "escalationRef",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.ESCALATIONREFPACKAGE.ESCALATIONREF.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.ESCALATIONREFPACKAGE.ESCALATIONREF.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "cancelactivitypackage",
+      "properties": [
+        {
+          "id": "cancelActivity",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CANCELACTIVITYPACKAGE.CANCELACTIVITY.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.CANCELACTIVITYPACKAGE.CANCELACTIVITY.DESCRIPTION",
+          "popular": true,
+          "refToView": ["frame", "frame2"]
+        }
+      ]
+    },
+    {
+      "name": "conditionaleventpackage",
+      "properties": [
+        {
+          "id": "condition",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.CONDITIONALEVENTPACKAGE.CONDITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.CONDITIONALEVENTPACKAGE.CONDITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "initiatorpackage",
+      "properties": [
+        {
+          "id": "initiator",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.INITIATORPACKAGE.INITIATOR.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.INITIATORPACKAGE.INITIATOR.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "textpackage",
+      "properties": [
+        {
+          "id": "text",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.TEXTPACKAGE.TEXT.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.TEXTPACKAGE.TEXT.DESCRIPTION",
+          "popular": true,
+          "refToView": "text"
+        }
+      ]
+    },
+    {
+      "name": "multiinstance_typepackage",
+      "properties": [
+        {
+          "id": "multiInstanceType",
+          "type": "Select",
+          "options": [
+            {
+              "id": "none",
+              "name": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_TYPEPACKAGE.MULTIINSTANCE_TYPE.NONE"
+            },
+            {
+              "id": "parallel",
+              "name": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_TYPEPACKAGE.MULTIINSTANCE_TYPE.PARALLEL"
+            },
+            {
+              "id": "sequential",
+              "name": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_TYPEPACKAGE.MULTIINSTANCE_TYPE.SEQUENTIAL"
+            }
+          ],
+          "title": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_TYPEPACKAGE.MULTIINSTANCE_TYPE.TITLE",
+          "value": "None",
+          "description": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_TYPEPACKAGE.MULTIINSTANCE_TYPE.DESCRIPTION",
+          "popular": true,
+          "refToView": "multiinstance"
+        },
+        {
+          "id": "variableAggregations",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_TYPEPACKAGE.VARIABLE_AGGREGATIONS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_TYPEPACKAGE.VARIABLE_AGGREGATIONS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "multiinstance_cardinalitypackage",
+      "properties": [
+        {
+          "id": "multiInstanceCardinality",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_CARDINALITYPACKAGE.MULTIINSTANCE_CARDINALITY.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_CARDINALITYPACKAGE.MULTIINSTANCE_CARDINALITY.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "multiinstance_collectionpackage",
+      "properties": [
+        {
+          "id": "multiInstanceCollection",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_COLLECTIONPACKAGE.MULTIINSTANCE_COLLECTION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_COLLECTIONPACKAGE.MULTIINSTANCE_COLLECTION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "multiinstance_variablepackage",
+      "properties": [
+        {
+          "id": "multiInstanceVariable",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_VARIABLEPACKAGE.MULTIINSTANCE_VARIABLE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_VARIABLEPACKAGE.MULTIINSTANCE_VARIABLE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "multiinstance_conditionpackage",
+      "properties": [
+        {
+          "id": "multiInstanceCompletionCondition",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_CONDITIONPACKAGE.MULTIINSTANCE_CONDITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MULTIINSTANCE_CONDITIONPACKAGE.MULTIINSTANCE_CONDITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "isforcompensationpackage",
+      "properties": [
+        {
+          "id": "isForCompensation",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.ISFORCOMPENSATIONPACKAGE.ISFORCOMPENSATION.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.ISFORCOMPENSATIONPACKAGE.ISFORCOMPENSATION.DESCRIPTION",
+          "popular": true,
+          "refToView": "compensation"
+        }
+      ]
+    },
+    {
+      "name": "sequencefloworderpackage",
+      "properties": [
+        {
+          "id": "sequenceFlowOrder",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.SEQUENCEFLOWORDERPACKAGE.SEQUENCEFLOWORDER.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SEQUENCEFLOWORDERPACKAGE.SEQUENCEFLOWORDER.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "signaldefinitionspackage",
+      "properties": [
+        {
+          "id": "signalDefinitions",
+          "type": "multiplecomplex",
+          "title": "BPMN.PROPERTYPACKAGES.SIGNALDEFINITIONSPACKAGE.SIGNALDEFINITIONS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.SIGNALDEFINITIONSPACKAGE.SIGNALDEFINITIONS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "messagedefinitionspackage",
+      "properties": [
+        {
+          "id": "messageDefinitions",
+          "type": "multiplecomplex",
+          "title": "BPMN.PROPERTYPACKAGES.MESSAGEDEFINITIONSPACKAGE.MESSAGEDEFINITIONS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.MESSAGEDEFINITIONSPACKAGE.MESSAGEDEFINITIONS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "escalationdefinitionspackage",
+      "properties": [
+        {
+          "id": "escalationDefinitions",
+          "type": "multiplecomplex",
+          "title": "BPMN.PROPERTYPACKAGES.ESCALATIONDEFINITIONSPACKAGE.ESCALATIONDEFINITIONS.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.ESCALATIONDEFINITIONSPACKAGE.ESCALATIONDEFINITIONS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "istransactionpackage",
+      "properties": [
+        {
+          "id": "isTransaction",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.ISTRANSACTIONPACKAGE.ISTRANSACTION.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.ISTRANSACTIONPACKAGE.ISTRANSACTION.DESCRIPTION",
+          "popular": true,
+          "refToView": "border"
+        }
+      ]
+    },
+    {
+      "name": "formreferencepackage",
+      "properties": [
+        {
+          "id": "formReference",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.FORMREFERENCEPACKAGE.FORMREFERENCE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.FORMREFERENCEPACKAGE.FORMREFERENCE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "terminateAllpackage",
+      "properties": [
+        {
+          "id": "terminateAll",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.TERMINATEALLPACKAGE.TERMINATEALL.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.TERMINATEALLPACKAGE.TERMINATEALL.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "decisiontaskdecisiontablereferencepackage",
+      "properties": [
+        {
+          "id": "decisionTableReference",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.DECISIONTASKDECISIONTABLEREFERENCEPACKAGE.DECISIONTASKDECISIONTABLEREFERENCE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.DECISIONTASKDECISIONTABLEREFERENCEPACKAGE.DECISIONTASKDECISIONTABLEREFERENCE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "decisiontaskdecisionservicereferencepackage",
+      "properties": [
+        {
+          "id": "decisionServiceReference",
+          "type": "Complex",
+          "title": "BPMN.PROPERTYPACKAGES.DECISIONTASKDECISIONSERVICEREFERENCEPACKAGE.DECISIONTASKDECISIONSERVICEREFERENCE.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.DECISIONTASKDECISIONSERVICEREFERENCEPACKAGE.DECISIONTASKDECISIONSERVICEREFERENCE.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "decisiontaskthrowerroronnohitspackage",
+      "properties": [
+        {
+          "id": "throwErrorOnNoHits",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.DECISIONTASKTHROWERRORONNOHITSPACKAGE.DECISIONTASKTHROWERRORONNOHITS.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.DECISIONTASKTHROWERRORONNOHITSPACKAGE.DECISIONTASKTHROWERRORONNOHITS.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "decisiontaskfallbacktodefaulttenantpackage",
+      "properties": [
+        {
+          "id": "fallbackToDefaultTenant",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.DECISIONTASKFALLBACKTODEFAULTTENANTPACKAGE.DECISIONTASKFALLBACKTODEFAULTTENANT.TITLE",
+          "value": "false",
+          "description": "BPMN.PROPERTYPACKAGES.DECISIONTASKFALLBACKTODEFAULTTENANTPACKAGE.DECISIONTASKFALLBACKTODEFAULTTENANT.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "interruptingpackage",
+      "properties": [
+        {
+          "id": "interrupting",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.INTERRUPTINGPACKAGE.INTERRUPTING.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.INTERRUPTINGPACKAGE.INTERRUPTING.DESCRIPTION",
+          "popular": true,
+          "refToView": ["frame"]
+        }
+      ]
+    },
+    {
+      "name": "completionconditionpackage",
+      "properties": [
+        {
+          "id": "completionCondition",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.COMPLETIONCONDITIONPACKAGE.COMPLETIONCONDITION.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.COMPLETIONCONDITIONPACKAGE.COMPLETIONCONDITION.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "orderingpackage",
+      "properties": [
+        {
+          "id": "ordering",
+          "type": "flowable-ordering",
+          "title": "BPMN.PROPERTYPACKAGES.ORDERINGPACKAGE.ORDERING.TITLE",
+          "value": "Parallel",
+          "description": "BPMN.PROPERTYPACKAGES.ORDERINGPACKAGE.ORDERING.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "cancelremaininginstancespackage",
+      "properties": [
+        {
+          "id": "cancelRemainingInstances",
+          "type": "Boolean",
+          "title": "BPMN.PROPERTYPACKAGES.CANCELREMAININGINSTANCESPACKAGE.CANCELREMAININGINSTANCES.TITLE",
+          "value": "true",
+          "description": "BPMN.PROPERTYPACKAGES.CANCELREMAININGINSTANCESPACKAGE.CANCELREMAININGINSTANCES.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    },
+    {
+      "name": "compensationactivityrefpackage",
+      "properties": [
+        {
+          "id": "activityRef",
+          "type": "String",
+          "title": "BPMN.PROPERTYPACKAGES.COMPENSATIONACTIVITYREFPACKAGE.COMPENSATIONACTIVITYREF.TITLE",
+          "value": "",
+          "description": "BPMN.PROPERTYPACKAGES.COMPENSATIONACTIVITYREFPACKAGE.COMPENSATIONACTIVITYREF.DESCRIPTION",
+          "popular": true
+        }
+      ]
+    }
+  ]
+}

@@ -4,10 +4,11 @@ import { Route, Routes } from "react-router-dom";
 // import RequireAuth from "../hooks/RequireAuth.tsx";
 import routes from "./routes.tsx";
 import Layout from "../layout/layout.tsx";
+import Preloader from "../components/preloader/index.tsx";
 
 const Index = () => {
   return (
-    <Suspense fallback={<p>Loading ....</p>}>
+    <Suspense fallback={<Preloader />}>
       <Routes>
         {routes.map((route, idx) => {
           const RouteElement = <Layout children={route.element}></Layout>;

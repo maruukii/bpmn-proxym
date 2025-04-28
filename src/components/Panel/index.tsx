@@ -1,16 +1,15 @@
-import { useEffect, useRef, useState, JSX, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { throttle } from "lodash";
-import {
-  setElement,
-  setNewDiagramStatus,
-} from "../../store/modeler/modelerSlice";
+import { setElement } from "../../store/modeler/modelerSlice";
 import { RootState } from "../../store/store";
 import { Connection, Label, Shape } from "bpmn-js/lib/model/Types";
 import BpmnIcon from "../Common/BpmnIcon";
 import getBpmnIconType from "../bpmn-icons/getIconType";
 import bpmnIcons from "../bpmn-icons";
 import flowable from "../../tasks/tasks.json";
+import stencils from "../../tasks/stencils.json";
+import properties from "../../tasks/properties.json";
 import DynamicProperty from "./components/DynamicProperty";
 import { withTranslation } from "react-i18next";
 import { getDynamicProperty } from "../../utils/dynamicPropertyUtil";
@@ -31,58 +30,103 @@ export function PropertiesPanel({ t }: { t: any }) {
     bpmnElementName: "",
   });
 
+  // const tagNames = useMemo(() => {
+  //   const extractTagsWithProperties = (types: any[]) => {
+  //     const result: Record<string, any[]> = {};
+  //     const generalType = types.find((type) => type.name === "General");
+  //     const generalProps = generalType?.properties || [];
+
+  //     types.forEach((type) => {
+  //       if (
+  //         (type?.extends && type.properties) ||
+  //         (type?.meta?.allowedIn && type.properties)
+  //       ) {
+  //         type?.extends?.forEach((extendType: string) => {
+  //           const tagName = extendType.split(":")[1];
+  //           result[tagName] = result[tagName] || [];
+  //           type.properties.forEach((prop: any) => {
+  //             if (
+  //               !result[tagName].some((existing) => existing.name === prop.name)
+  //             ) {
+  //               result[tagName].push(prop);
+  //             }
+  //           });
+  //         });
+
+  //         type?.meta?.allowedIn?.forEach((allowedInType: string) => {
+  //           const tagName = allowedInType
+  //             ? allowedInType.split(":")[1]
+  //             : type.name;
+  //           result[tagName] = result[tagName] || [];
+  //           type.properties.forEach((prop: any) => {
+  //             if (
+  //               !result[tagName].some((existing) => existing.name === prop.name)
+  //             ) {
+  //               result[tagName].push(prop);
+  //             }
+  //           });
+  //         });
+  //       }
+  //     });
+
+  //     Object.keys(result).forEach((tagName) => {
+  //       result[tagName] = [...generalProps, ...result[tagName]];
+  //     });
+
+  //     return result;
+  //   };
+
+  //   return extractTagsWithProperties(flowable.types);
+  // }, []);
+
   const tagNames = useMemo(() => {
-    const extractTagsWithProperties = (types: any[]) => {
-      const result: Record<string, any[]> = {};
-      const generalType = types.find((type) => type.name === "General");
-      const generalProps = generalType?.properties || [];
+    const extractTagsWithProperties = (stencils: any[]) => {
+      const result: Record<string, any> = {};
 
-      types.forEach((type) => {
-        if (
-          (type?.extends && type.properties) ||
-          (type?.meta?.allowedIn && type.properties)
-        ) {
-          type?.extends?.forEach((extendType: string) => {
-            const tagName = extendType.split(":")[1];
-            result[tagName] = result[tagName] || [];
-            type.properties.forEach((prop: any) => {
-              if (
-                !result[tagName].some((existing) => existing.name === prop.name)
-              ) {
-                result[tagName].push(prop);
-              }
-            });
-          });
+      stencils.forEach((stencil) => {
+        const tagName = stencil.id;
 
-          type?.meta?.allowedIn?.forEach((allowedInType: string) => {
-            const tagName = allowedInType
-              ? allowedInType.split(":")[1]
-              : type.name;
-            result[tagName] = result[tagName] || [];
-            type.properties.forEach((prop: any) => {
-              if (
-                !result[tagName].some((existing) => existing.name === prop.name)
-              ) {
-                result[tagName].push(prop);
-              }
-            });
-          });
-        }
-      });
+        // Init result with shallow copy
+        result[tagName] = { ...stencil };
 
-      Object.keys(result).forEach((tagName) => {
-        result[tagName] = [...generalProps, ...result[tagName]];
+        // Get full property objects
+        const populatedPackages = (stencil.propertyPackages || [])
+          .map((pkgName: string) =>
+            properties.propertyPackages.find((p: any) => p.name === pkgName)
+          )
+          .filter(Boolean); // remove any that weren't found
+
+        // Sort logic
+        const sortPriority = [
+          "namepackage",
+          "overrideidpackage",
+          "documentationpackage",
+        ];
+        const sortedPackages = [
+          ...sortPriority
+            .map((priority) =>
+              populatedPackages.find((p: any) => p.name === priority)
+            )
+            .filter(Boolean),
+          ...populatedPackages
+            .filter((p: any) => !sortPriority.includes(p.name))
+            .sort((a: any, b: any) => a.name.localeCompare(b.name)),
+        ];
+
+        // Assign sorted property packages
+        result[tagName].propertyPackages = sortedPackages;
       });
 
       return result;
     };
 
-    return extractTagsWithProperties(flowable.types);
-  }, []);
+    return extractTagsWithProperties(stencils.stencils);
+  }, [stencils, properties]);
 
   const setCurrentElement = throttle(
     (element: Shape | Element | Connection | Label | null) => {
       let activatedElement: BpmnElement | undefined = element;
+
       if (!activatedElement) {
         activatedElement =
           elementRegistry?.find((el: any) => el.type === "bpmn:Process") ||
@@ -106,8 +150,7 @@ export function PropertiesPanel({ t }: { t: any }) {
         panelTitle: "Properties Panel",
         bpmnIconName: iconName,
         bpmnElement: activatedElementTypeName,
-        bpmnElementName:
-          getDynamicProperty(activatedElement, "name", "General name") || "",
+        bpmnElementName: getDynamicProperty(activatedElement, "name") || "",
       });
     },
     100,
@@ -130,23 +173,27 @@ export function PropertiesPanel({ t }: { t: any }) {
 
   const renderProperties = () => {
     if (!activeElement || !modeling) return [];
-
     const tag = tagNames[activeElement.type.split(":")[1]];
     if (!tag || !modeler) return [];
-    return tag.map((item) => {
-      const propName = item.name.split(":")[1];
-      return (
-        <DynamicProperty
-          key={propName}
-          bpmnName={propName}
-          inputType={item.type}
-          displayName={item.displayName}
-          activeElement={activeElement}
-          modeling={modeling}
-          modeler={modeler}
-        />
-      );
-    });
+    return (
+      <DynamicProperty
+        tags={tag.propertyPackages}
+        activeElement={activeElement}
+        modeling={modeling}
+        modeler={modeler}
+      />
+    );
+    // tag.propertyPackages.flatMap((item: any) =>
+    //   item?.properties.map((prop: any) => (
+    // <div
+    //   key={prop.id}
+    //   className="property-wrapper"
+    //   title={t(`${prop.description}`)}
+    // >
+
+    // </div>
+    //   ))
+    // );
   };
 
   return (
@@ -170,7 +217,7 @@ export function PropertiesPanel({ t }: { t: any }) {
         {activeElement ? (
           renderProperties()
         ) : (
-          <div className="text-gray-400">No element selected</div>
+          <div className="text-gray-400">{t("No element selected")}</div>
         )}
       </div>
     </div>

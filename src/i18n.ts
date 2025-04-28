@@ -28,7 +28,6 @@ i18n
     lng: localStorage.getItem("I18N_LANGUAGE") || "en_US",
     fallbackLng: "fr_FR",
 
-    keySeparator: false,
 
     interpolation: {
       escapeValue: false,
