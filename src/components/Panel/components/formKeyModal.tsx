@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { withTranslation } from "react-i18next";
 import SingleForm from "../../UI/SingleForm";
 import {
-  thumbnailsQuery,
   useFormsQuery,
+  useThumbnailMutation,
 } from "../../../hooks/queries/useFormsQuery";
 
 const FormKeyModal: React.FC<FormKeyModalProps> = ({
@@ -19,195 +19,46 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
   const [selectedItem, setSelectedItem] = useState<FormMetadata | null>(null);
   const [forms, setForms] = useState<FormMetadata[] | null>([]);
 
-  const { data, isLoading, error } = useFormsQuery({
-    filter: "processes",
-    includeHistoryModels: "modifiedDesc",
-    modelType: 0,
+  const { mutate } = useThumbnailMutation();
+  const { data } = useFormsQuery({
+    filter: "",
+    includeHistoryModels: "true",
+    modelType: 2,
     page: 1,
     limit: 10,
   });
-  console.log(data);
 
-  const items: FormMetadata[] = [
-    {
-      id: "4afa912c-ab3b-11ef-9068-36082d5d396d",
-      name: "Onboarding Agent Request Validation",
-      key: "onboarding_agent_request_validation",
-      description: "onboarding_agent_request_validation",
-      createdBy: "bkdev bkdev",
-      lastUpdatedBy: "bkdev bkdev",
-      lastUpdated: 1735923140968,
-      latestVersion: true,
-      version: 2,
-      comment:
-        "'Increment Model Version' strategy applied for key: onboarding_agent_request_validation, version: 1 and latest existing version 1",
-      modelType: 2,
-      tenantId: "",
-      historyModels: [
-        {
-          id: "193f9de0-c9f3-11ef-9c94-26dadc833c71",
-          name: "Onboarding Agent Request Validation",
-          key: "onboarding_agent_request_validation",
-          description: "onboarding_agent_request_validation",
-          createdBy: "bkdev bkdev",
-          lastUpdatedBy: "bkdev bkdev",
-          lastUpdated: 1733398359001,
-          latestVersion: false,
-          version: 1,
-          comment: "",
-          modelType: 2,
-          tenantId: "",
-        },
-      ],
-    },
-    {
-      id: "0ccf84f6-ad9a-11ef-a491-26feeb862f9e",
-      name: "Claim Customer Request",
-      key: "claim-customer-request",
-      description: "",
-      createdBy: "bkdev bkdev",
-      lastUpdatedBy: "bkdev bkdev",
-      lastUpdated: 1734085245194,
-      latestVersion: true,
-      version: 1,
-      comment: "",
-      modelType: 2,
-      tenantId: "",
-      historyModels: [],
-    },
-    {
-      id: "4b4d6c1d-ab3b-11ef-9068-36082d5d396d",
-      name: "Onboarding prospect details",
-      key: "onboarding_prospect_details",
-      description: "",
-      createdBy: "bkdev bkdev",
-      lastUpdatedBy: "bkdev bkdev",
-      lastUpdated: 1737473095889,
-      latestVersion: true,
-      version: 2,
-      comment: "",
-      modelType: 2,
-      tenantId: "",
-      historyModels: [
-        {
-          id: "1943e3a1-c9f3-11ef-9c94-26dadc833c71",
-          name: "Onboarding prospect details",
-          key: "onboarding_prospect_details",
-          description: "",
-          createdBy: "bkdev bkdev",
-          lastUpdatedBy: "bkdev bkdev",
-          lastUpdated: 1733760079342,
-          latestVersion: false,
-          version: 1,
-          comment: "",
-          modelType: 2,
-          tenantId: "",
-        },
-      ],
-    },
-    {
-      id: "0cc21774-ad9a-11ef-a491-26feeb862f9e",
-      name: "Claim Agent Request Handling",
-      key: "claim-agent-request-handling",
-      description: "",
-      createdBy: "bkdev bkdev",
-      lastUpdatedBy: "bkdev bkdev",
-      lastUpdated: 1733406791751,
-      latestVersion: true,
-      version: 1,
-      comment: "",
-      modelType: 2,
-      tenantId: "",
-      historyModels: [],
-    },
-    {
-      id: "0ccb8d55-ad9a-11ef-a491-26feeb862f9e",
-      name: "Claim Request Agent Response",
-      key: "claim-request-agent-response",
-      description: "",
-      createdBy: "bkdev bkdev",
-      lastUpdatedBy: "bkdev bkdev",
-      lastUpdated: 1733405664129,
-      latestVersion: true,
-      version: 1,
-      comment: "",
-      modelType: 2,
-      tenantId: "",
-      historyModels: [],
-    },
-    {
-      id: "e44ebf3b-c9c9-11ef-9c94-26dadc833c71",
-      name: "testing",
-      key: "testing",
-      description: "testing",
-      createdBy: "bkdev bkdev",
-      lastUpdatedBy: "bkdev bkdev",
-      lastUpdated: 1735905442775,
-      latestVersion: true,
-      version: 1,
-      modelType: 2,
-      tenantId: "",
-      historyModels: [],
-    },
-    {
-      id: "4acbb8fb-ab3b-11ef-9068-36082d5d396d",
-      name: "Onboarding Prospect Additional  Details",
-      key: "onboarding_prospect_additional_details",
-      description: "",
-      createdBy: "bkdev bkdev",
-      lastUpdatedBy: "bkdev bkdev",
-      lastUpdated: 1735923140940,
-      latestVersion: true,
-      version: 2,
-      comment:
-        "'Increment Model Version' strategy applied for key: onboarding_prospect_additional_details, version: 1 and latest existing version 1",
-      modelType: 2,
-      tenantId: "",
-      historyModels: [
-        {
-          id: "193abbdf-c9f3-11ef-9c94-26dadc833c71",
-          name: "Onboarding Prospect Additional  Details",
-          key: "onboarding_prospect_additional_details",
-          description: "",
-          createdBy: "bkdev bkdev",
-          lastUpdatedBy: "bkdev bkdev",
-          lastUpdated: 1734631147005,
-          latestVersion: false,
-          version: 1,
-          comment: "",
-          modelType: 2,
-          tenantId: "",
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    if (data) setForms(data);
+  }, [data]);
+
   useEffect(() => {
     if (selectedItem) {
-      setModalValue(selectedItem.id + "::" + selectedItem.version);
+      setModalValue(`${selectedItem.key}::${selectedItem.version}`);
       setExpandedItems((prev) => {
         const next = new Set(prev);
         next.add(selectedItem.name);
         return next;
       });
     } else if (modalValue) {
-      const [formId, version] = modalValue.split("::");
+      const [key, version] = modalValue.split("::");
 
       const findItem = (
-        formId: string,
+        key: string,
         version: number | string,
         items: FormMetadata[],
-        parentNames: string[] = []
-      ): { item: FormMetadata | undefined; parents: string[] } => {
+        parents: string[] = []
+      ): { item?: FormMetadata; parents: string[] } => {
         for (const item of items) {
-          const newParents = [...parentNames, item.name];
+          const newParents = [...parents, item.name];
 
-          if (item.id === formId && item.version === version) {
+          if (item.key === key && String(item.version) === version) {
             return { item, parents: newParents };
           }
 
-          if (item?.historyModels) {
+          if (item.historyModels?.length) {
             const result = findItem(
-              formId,
+              key,
               version,
               item.historyModels,
               newParents
@@ -218,23 +69,55 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
         return { item: undefined, parents: [] };
       };
 
-      const { item: foundItem, parents } = findItem(formId, version, items);
+      if (forms) {
+        const { item: foundItem, parents } = findItem(key, version, forms);
+        setSelectedItem(foundItem || null);
 
-      setSelectedItem(foundItem || null);
-
-      if (foundItem) {
-        setExpandedItems((prev) => {
-          const next = new Set(prev);
-          parents.forEach((name) => next.add(name));
-          return next;
-        });
+        if (foundItem) {
+          mutate(foundItem.id, {
+            onSuccess: (data) => {
+              setSelectedItem((prevItem) =>
+                prevItem
+                  ? { ...prevItem, thumbnail: data || prevItem.thumbnail }
+                  : null
+              );
+            },
+            onError: (error) => {
+              console.error("Error fetching thumbnail:", error);
+            },
+          });
+          setExpandedItems((prev) => {
+            const next = new Set(prev);
+            parents.forEach((name) => next.add(name));
+            return next;
+          });
+        }
       }
     }
-  }, [selectedItem, modalValue]);
-  const handleSelectedFormThumbnail = async (item: FormMetadata) => {
-    // const { data, isLoading, error } = thumbnailsQuery(item.id);
-    // item.thumbnail = data;
+  }, [selectedItem, modalValue, forms]);
+
+  useEffect(() => {
+    return () => {
+      if (selectedItem?.thumbnail) {
+        URL.revokeObjectURL(selectedItem.thumbnail);
+      }
+    };
+  }, [selectedItem?.thumbnail]);
+
+  const handleSelectedFormThumbnail = (item: FormMetadata) => {
     setSelectedItem(item);
+    mutate(item.id, {
+      onSuccess: (data) => {
+        setSelectedItem((prevItem) =>
+          prevItem
+            ? { ...prevItem, thumbnail: data || prevItem.thumbnail }
+            : null
+        );
+      },
+      onError: (error) => {
+        console.error("Error fetching thumbnail:", error);
+      },
+    });
   };
 
   const toggleExpand = (name: string) => {
@@ -250,48 +133,68 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
       .filter((item) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      .map((item) => (
-        <div
-          key={item.name}
-          className="ml-[10px]"
-          style={{ marginLeft: depth * 12 }}
-        >
+      .map((item) => {
+        const hasChildren = item.historyModels?.length > 0;
+        const isExpanded = expandedItems.has(item.name);
+        return (
           <div
-            className={`flex justify-between items-center p-2 hover:bg-blue-100 cursor-pointer ${
-              selectedItem?.name === item.name ? "bg-gray-100" : ""
-            }`}
-            onClick={() => handleSelectedFormThumbnail(item)}
+            key={item.id}
+            className="ml-[10px]"
+            style={{ marginLeft: depth * 12 }}
           >
-            <div className="flex items-center gap-1">
-              {item?.historyModels && (
-                <button
-                  className="text-xs text-gray-500"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleExpand(item.name);
-                  }}
-                >
-                  {expandedItems.has(item.name) ? "▼" : "▶"}
-                </button>
-              )}
-              <span>{item.name}</span>
+            <div
+              className={`flex justify-between items-center p-2 cursor-pointer ${
+                selectedItem?.id === item.id
+                  ? "bg-gray-200 hover:bg-gray-300"
+                  : "hover:bg-gray-100"
+              }`}
+              onClick={() => handleSelectedFormThumbnail(item)}
+            >
+              <div className="flex items-center gap-2 overflow-hidden w-full">
+                {hasChildren && (
+                  <button
+                    className="text-lg text-gray-500 w-4 shrink-0"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpand(item.name);
+                    }}
+                  >
+                    {isExpanded ? "▼" : "▶"}
+                  </button>
+                )}
+                {/* Name with ellipsis */}
+                <div className="truncate text-xl max-w-[95%]">{item.name}</div>
+              </div>
+              {/* Version badge */}
+              <div className="flex-shrink-0 ml-2">
+                <span className="text-sm bg-blue-400 text-white px-2 py-0.5 rounded">
+                  {item.latestVersion ? "latest" : item.version}
+                </span>
+              </div>
             </div>
-            <span className="text-xs bg-gray-300 px-1 rounded">
-              {item.version}
-            </span>
+
+            <div
+              className={`transition-all duration-300 ease-in-out overflow-hidden`}
+              style={{
+                maxHeight: isExpanded ? "1000px" : "0px",
+                opacity: isExpanded ? 1 : 0,
+              }}
+            >
+              {hasChildren &&
+                isExpanded &&
+                renderItems(item.historyModels, depth + 1)}
+            </div>
           </div>
-          {item?.historyModels &&
-            expandedItems.has(item.name) &&
-            renderItems(item?.historyModels, depth + 1)}
-        </div>
-      ));
+        );
+      });
   };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-100">
-      <div className="bg-white w-[1000px] max-h-[90vh] rounded-lg shadow-lg flex flex-col p-4">
-        <h2 className="text-lg font-semibold mb-4">
+      <div className="bg-white w-[1500px] max-h-[95vh] overflow-auto rounded-lg shadow-lg flex flex-col p-4">
+        <h2 className="text-3xl font-semibold mb-4">
           {`${t(prop.title)} - ${selectedItem?.name || ""} (${
-            selectedItem?.version || ""
+            selectedItem?.version || t("no form selected")
           })`}
         </h2>
         <div className="flex gap-4 flex-1 overflow-hidden">
@@ -299,22 +202,22 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
           <div className="w-[45%] border-r pr-4 flex flex-col">
             <input
               type="text"
-              className="border px-2 py-1 mb-2 text-sm rounded"
+              className="border px-2 py-1 mb-2 text-xl rounded"
               placeholder={t("Search")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <div className="overflow-auto flex-1 border rounded bg-gray-50 min-h-[200px] max-h-[300px]">
-              {renderItems(items)}
+            <div className="overflow-auto flex-1 border rounded bg-gray-50 min-h-[300px] max-h-[500px] p-2">
+              {forms ? renderItems(forms) : null}
             </div>
           </div>
 
           {/* Right Column */}
-          <div className="w-[55%] pl-4">
+          <div className="w-[55%] pl-4 max-h-[900px] overflow-auto">
             {selectedItem ? (
               <SingleForm form={selectedItem} />
             ) : (
-              <div className="text-gray-500 text-sm">
+              <div className="text-gray-500 text-xl">
                 {t("GENERAL.ACTION.SELECT-FORM")}
               </div>
             )}
@@ -325,21 +228,20 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
         <div className="flex justify-end gap-2 mt-4">
           <button
             onClick={onCancel}
-            className="bg-gray-200 text-gray-800 px-4 py-1 rounded text-sm"
+            className="bg-gray-200 text-gray-800 px-4 py-1 rounded text-2xl cursor-pointer"
           >
             {t("Cancel")}
           </button>
-          <button
-            onClick={onSave}
+          {/* <button
             disabled={!selectedItem}
             className="bg-blue-500 text-white px-4 py-1 rounded text-sm disabled:opacity-50 cursor-pointer"
           >
             {t("Open")}
-          </button>
+          </button> */}
           <button
-            // onClick={() => selectedItem && onSelect(selectedItem)}
             disabled={!selectedItem}
-            className="bg-green-600 text-white px-4 py-1 rounded text-sm disabled:opacity-50"
+            onClick={onSave}
+            className="bg-green-600 text-white px-4 py-1 rounded text-2xl disabled:opacity-50 cursor-pointer"
           >
             {t("Select")}
           </button>

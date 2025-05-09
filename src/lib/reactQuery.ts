@@ -5,7 +5,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
         gcTime: 1000 * 60 * 60 * 24, // Garbage Collection time
-        // staleTime: 1000 * 60,        // 1 minute before re-fetch
+        staleTime: 1000 * 60,        // 1 minute before re-fetch
   
     },
   },

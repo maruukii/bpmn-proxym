@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getForms,getThumbnail } from '../../api/formsApi';
 
   
@@ -9,10 +9,15 @@ import { getForms,getThumbnail } from '../../api/formsApi';
     });
   };
   // Fetch thumbnails based on the forms' IDs
-  export const thumbnailsQuery = ( formId : string) => {
-    return useQuery({
-      queryKey: ["thumbnail",formId], 
-      queryFn: () => getThumbnail(formId),   
-      enabled: !!formId, });
-  };
+ export const useThumbnailMutation = () => {
+  return useMutation({
+    mutationFn:async  (formId: string):Promise<string> => {
+     
+     const blob = await getThumbnail(formId); 
+      return URL.createObjectURL(blob);
+}, 
+  });
+};
+
+
 

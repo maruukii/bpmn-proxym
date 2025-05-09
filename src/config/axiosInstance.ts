@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: "",
   headers: {
     'Content-Type': 'application/json',
@@ -19,4 +19,9 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export const axiosImage = axios.create({
+  baseURL: "",
+  headers: {
+Accept: "image/png"  },
+});
+
