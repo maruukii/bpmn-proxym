@@ -1,4 +1,4 @@
-import axiosInstance from "../config/axiosInstance";
+import {axiosInstance} from "../config/axiosInstance";
 type loginJson={
     redirectUrl:string,
     provider:string

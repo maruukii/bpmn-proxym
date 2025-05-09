@@ -14,6 +14,7 @@ import {
 } from "../../store/file/fileSlice";
 import { withTranslation } from "react-i18next";
 import Designer from "../../components/Designer";
+import { clearLoginError, clearLogoutError } from "../../store/user/userSlice";
 
 interface Bpmnhome {
   t: any;
@@ -31,6 +32,9 @@ const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
     fileError,
     newDiagramCreationSuccess,
   } = useSelector((state: RootState) => state.file);
+  const { isLoggedIn, userName, loginError, logoutError } = useSelector(
+    (state: RootState) => state.user
+  );
   // Restore the file content and filename from local storage if available
   // const savedXMLContent = localStorage.getItem("bpmnFileContent");
   // const savedXMLFileName = localStorage.getItem("bpmnFileName");
@@ -58,6 +62,12 @@ const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
       ? toast.success(filename + t("BPMNCOPYSUCCESS")) &&
         dispatch(clearFileContentCopySuccess())
       : null
+    : isLoggedIn
+    ? toast.success(userName + t("CONNECTSUCCESS"))
+    : loginError
+    ? toast.error(loginError) && dispatch(clearLoginError())
+    : loginError
+    ? toast.error(logoutError) && dispatch(clearLogoutError())
     : null;
   return (
     <div>
