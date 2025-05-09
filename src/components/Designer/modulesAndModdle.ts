@@ -1,14 +1,10 @@
-import {
-    BpmnPropertiesPanelModule,
-    BpmnPropertiesProviderModule,
-  } from 'bpmn-js-properties-panel'
+
   import flowableModdleDescriptors from '../../tasks/tasks.json'
   import GridLineModule from 'diagram-js-grid-bg'
   import type { ModuleDeclaration } from 'didi'
   import minimapModule from 'diagram-js-minimap'
   import BpmnColorPickerModule from 'bpmn-js-color-picker'
   import lintModule from 'bpmn-js-bpmnlint'
-  import CustomPropertiesProvider from '../CustomPropertiesProvider'
 
   export type ModulesAndModdles = [
     ModuleDeclaration[],
@@ -22,11 +18,11 @@ import {
   
   
     // 配置模板选择弹窗（会影响默认 popupmenu）
-    modules.push(
-        BpmnPropertiesPanelModule,
-        BpmnPropertiesProviderModule,
-        CustomPropertiesProvider()
-      );
+    // modules.push(
+    //     BpmnPropertiesPanelModule,
+    //     BpmnPropertiesProviderModule,
+    //     CustomPropertiesProvider()
+    //   );
       
 
 

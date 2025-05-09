@@ -2,10 +2,52 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import svgr from 'vite-plugin-svgr';
-// https://vite.dev/config/
+
 export default defineConfig({
   plugins: [react(),    tailwindcss(),svgr()
   ],
   assetsInclude: ["**/*.xml","**/*.bpmn"],
+  server:{
+    host: '0.0.0.0',
+    proxy: {
+      '/authorization': {
+        target: 'http://platform-studio-dev.pres.proxym-it.net',
+        changeOrigin: true,
+        xfwd: true,
+      },
+      '/oauth2': {
+        target: 'http://platform-studio-dev.pres.proxym-it.net',
+        changeOrigin: true,
+        xfwd: true,
+      },
+
+      '/configuration': {
+          target: "http://platform-studio-dev.pres.proxym-it.net",
+          changeOrigin: true,
+          xfwd: true,
+        },
+        '/public': {
+          target: "http://platform-studio-dev.pres.proxym-it.net",
+          changeOrigin: true,
+          xfwd: true,
+        },
+        '/gw': {
+          target: "http://platform-studio-dev.pres.proxym-it.net",
+          changeOrigin: true,
+          xfwd: true,
+        },
+        '/secured': {
+          target: "http://platform-studio-dev.pres.proxym-it.net",
+          changeOrigin: true,
+          xfwd: true,
+        },
+    
+        '/secure': {
+          target: "http://platform-studio-dev.pres.proxym-it.net",
+          changeOrigin: true,
+          xfwd: true,
+        },
+  }
+}
   
 })

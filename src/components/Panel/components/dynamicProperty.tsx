@@ -16,6 +16,7 @@ import DynamicPropertyModal from "./DynamicPropertyModal";
 import { ModdleElement } from "bpmn-moddle";
 import { all } from "axios";
 import { getExceptions } from "../../../utils/ExceptionElementUtil";
+import FormKeyModal from "./formKeyModal";
 
 interface BPMNPropertyPanelProps {
   activeElement: BpmnElement;
@@ -52,6 +53,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   const [modalValue, setModalValue] = useState<string>("");
   const [extendedFields, setExtendedFields] = useState<any[]>([]);
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [formKeyEditing, setFormKeyEditing] = useState(false);
   useEffect(() => {
     if (!activeElement) return;
     const newProps: Record<string, string | boolean> = {};
@@ -99,6 +101,12 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
 
     if (type === "Text") {
       setModalValue((dynamicProperties[id] as string) ?? "");
+      setCurrentId(id);
+    } else if (type === "FormKey") {
+      setCurrentId(id);
+      setModalValue((dynamicProperties[id] as string) ?? "");
+      setFormKeyEditing(true);
+      return;
     } else if (id in extendedProperties) {
       const props = (extendedProperties as ExtendedProperties)[id] ?? [];
       setCurrentId(id);
@@ -111,23 +119,20 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   };
 
   const saveModalChange = () => {
-    if (modalEditingId) {
+    if ((modalEditingId || formKeyEditing) && currentId) {
       setDynamicProperties((prev) => ({
         ...prev,
-        [modalEditingId]: modalValue,
+        [currentId as string]: modalValue,
       }));
-      if (modalEditingId === "documentation") {
+      if (currentId === "documentation") {
         setDocumentValue(activeElement, modeler, modeling, modalValue);
       } else {
-        updateDynamicProperty(
-          modeling,
-          activeElement,
-          modalEditingId,
-          modalValue
-        );
+        updateDynamicProperty(modeling, activeElement, currentId, modalValue);
       }
     }
     setModalEditingId(null);
+    setFormKeyEditing(false);
+    setCurrentId(null);
     setModalValue("");
     setExtendedFields([]);
   };
@@ -136,6 +141,8 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     setModalEditingId(null);
     setModalValue("");
     setExtendedFields([]);
+    setFormKeyEditing(false);
+    setCurrentId(null);
   };
   const handleSelectCheckboxChange = (id: string, value: string | boolean) => {
     setDynamicProperties((prev) => ({
@@ -152,7 +159,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   const allProperties = tags.flatMap((tag: any) => tag.properties);
   // console.log(allProperties[10].options);
   return (
-    <div className="grid grid-cols-4 gap-2 text-xs">
+    <div className="grid grid-cols-4 gap-2 text-lg">
       {allProperties.map((prop: any) => {
         const { id, title, type, description } = prop;
         const value = dynamicProperties[id];
@@ -232,7 +239,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
         );
       })}
 
-      {modalEditingId && (
+      {modalEditingId ? (
         <DynamicPropertyModal
           prop={allProperties.find((p: any) => p.id === modalEditingId) || {}}
           modalValue={modalValue}
@@ -244,7 +251,16 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
           extendedFields={extendedFields}
           id={currentId}
         />
-      )}
+      ) : formKeyEditing && currentId ? (
+        <FormKeyModal
+          prop={allProperties.find((p: any) => p.id === currentId) || {}}
+          onCancel={cancelEdit}
+          onSave={saveModalChange}
+          setModalValue={setModalValue}
+          modalValue={modalValue}
+          // onSelect={handleSelectCheckboxChange}
+        />
+      ) : null}
     </div>
   );
 };

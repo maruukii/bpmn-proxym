@@ -27,6 +27,7 @@ export default{
             "CONFIRM": "Confirmer",
             "CONFIRM-AND-CLOSE": "Confirmer et fermer",
             "NEW-FORM": "Nouveau formulaire",
+            "SELECT-FORM": "Sélectionner un formulaire",
             "CREATE-FORM": "Créer un formulaire",
             "NEW-DECISION-TABLE": "Nouvelle table de décision",
             "CREATE-DECISION-TABLE": "Créer une table de décision"
@@ -1078,7 +1079,7 @@ export default{
               "TITLE" : "Tâche de réception",
               "DESCRIPTION" : "Une tâche qui attend un signal"
             },
-            "RECEIVEVENTTASK" : {
+            "RECEIVEEVENTTASK" : {
               "TITLE" : "Tâche de réception d'événement",
               "DESCRIPTION" : "Une tâche qui reçoit un événement"
             },

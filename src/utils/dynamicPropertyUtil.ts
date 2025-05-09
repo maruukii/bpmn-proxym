@@ -8,7 +8,7 @@ const standAloneTypes = [
   "name","isForCompensation", "isExecutable", "scriptFormat", "script","id"
 ]
 
-const prefix = import.meta.env.VITE_PROCESS_ENGINE;
+const prefix = import.meta.env.VITE_PROCESS_ENGINE; 
 
 // 🔹 Get formKey value from element
 export function getDynamicProperty(element: Element,bpmnname:string): string | undefined {

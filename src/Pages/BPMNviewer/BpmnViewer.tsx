@@ -11,6 +11,7 @@ import {
   openJsonPreview,
   openXMLPreview,
 } from "../../utils/previewContentUtils";
+import ContextPad from "../../components/ContextPad";
 
 interface BpmnEditorProps {
   filename: string | null;
@@ -88,7 +89,7 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
     const updateTitle = () => {
       const commandStack: any = modeler?.get("commandStack");
       if (commandStack?.canUndo()) {
-        document.title = `* ${originalTitle}`; // Add an asterisk before the title
+        document.title = `*${originalTitle}`; // Add an asterisk before the title
       } else {
         document.title = originalTitle; // Reset to the original title
       }
@@ -158,15 +159,24 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
       </div>
 
       {/* BPMN Editor Container */}
-      <div className="flex flex-col w-full h-[80vh] border border-gray-300 rounded-lg shadow-md">
-        {/* BPMN Modeler (Right) */}
-        <div ref={designer} className="h-3/4 w-full" />
-        {/* Properties Panel (Left) */}
-        <div
-          // ref={propertiesRef}
-          className="h-1/4 p-4 w-full bg-gray-100 border-r border-gray-300 rounded-l-lg shadow-md overflow-auto"
-        >
-          <Property />
+      <div className="flex w-full h-[80vh] border border-gray-300 rounded-lg shadow-md">
+        {/* Left Column (1/4 Width, Full Height) */}
+        <div className="relative inset-1 w-1/5 h-full border-r border-gray-300 overflow-auto">
+          <ContextPad modeler={modeler} />
+        </div>
+
+        {/* Right Column (3/4 Width, Full Height) */}
+        <div className="flex flex-col w-4/5 h-full">
+          {/* BPMN Modeler (3/4 Height) */}
+          <div
+            ref={designer}
+            className="h-3/5 w-full border-b border-gray-300"
+          />
+
+          {/* Properties Panel (1/4 Height) */}
+          <div className="h-2/5 p-4 bg-gray-100 border-gray-300 rounded-b-lg shadow-md overflow-auto">
+            <Property />
+          </div>
         </div>
       </div>
 

@@ -5,14 +5,13 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Protected: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen">
-      {" "}
       <Navbar />
       <main className="p-4"> {children}</main>
     </div>
   );
 };
 
-export default Layout;
+export default Protected;

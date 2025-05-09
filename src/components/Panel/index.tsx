@@ -98,8 +98,8 @@ export function PropertiesPanel({ t }: { t: any }) {
 
         // Sort logic
         const sortPriority = [
-          "namepackage",
           "overrideidpackage",
+          "namepackage",
           "documentationpackage",
         ];
         const sortedPackages = [
@@ -183,22 +183,11 @@ export function PropertiesPanel({ t }: { t: any }) {
         modeler={modeler}
       />
     );
-    // tag.propertyPackages.flatMap((item: any) =>
-    //   item?.properties.map((prop: any) => (
-    // <div
-    //   key={prop.id}
-    //   className="property-wrapper"
-    //   title={t(`${prop.description}`)}
-    // >
-
-    // </div>
-    //   ))
-    // );
   };
 
   return (
     <div ref={panelRef} className="properties-panel p-4 overflow-auto">
-      <h2 className="text-xl font-bold mb-4">{t(elementState.panelTitle)}</h2>
+      <h2 className="text-3xl font-bold mb-4">{t(elementState.panelTitle)}</h2>
 
       <div className="panel-header flex items-center mb-4">
         {elementState?.bpmnIconName !== "" ? (
@@ -206,8 +195,8 @@ export function PropertiesPanel({ t }: { t: any }) {
         ) : undefined}
         <div className="flex items-start flex-col">
           {" "}
-          <h2 className="text-sm font-semibold">{elementState?.bpmnElement}</h2>
-          <h2 className="text-sm font-light">
+          <h2 className="text-lg font-semibold">{elementState?.bpmnElement}</h2>
+          <h2 className="text-lg font-light">
             {elementState?.bpmnElementName}
           </h2>
         </div>

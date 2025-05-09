@@ -28,6 +28,7 @@ export default {
             "CONFIRM-AND-CLOSE": "Confirm and close",
             "NEW-FORM": "New form",
             "CREATE-FORM": "Create form",
+            "SELECT-FORM": "Select form",
             "NEW-DECISION-TABLE": "New Decision Table",
             "CREATE-DECISION-TABLE": "Create Decision Table",
             "NEW-DECISION-SERVICE": "New Decision Service",

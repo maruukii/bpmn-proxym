@@ -1,15 +1,5 @@
 import { withTranslation } from "react-i18next";
-
-interface ProcessMetadata {
-  name: string;
-  createdBy: string;
-  lastModified: string;
-  description: string;
-}
-interface SingleProcessMetadata {
-  process: ProcessMetadata;
-  t: any;
-}
+import { formatTimestamp } from "../../../utils/tools";
 
 export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
   return (
@@ -21,7 +11,7 @@ export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
       <div className="relative h-80 bg-gray-200">
         {/* You can replace this div with your actual diagram canvas */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xl text-gray-500">Canvas View</span>
+          <span className="text-xl text-gray-500">{process?.thumbnail}</span>
         </div>
       </div>
 
@@ -34,7 +24,12 @@ export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
 
         {/* Process Metadata (Created By, Last Modified) */}
         <div className="text-sm text-gray-500 mt-1">{process.createdBy}</div>
-        <div className="text-sm text-gray-500 mt-1">{process.lastModified}</div>
+        <div className="text-sm text-gray-500 mt-1">
+          {formatTimestamp(
+            process.lastUpdated,
+            localStorage.getItem("I18N_LANGUAGE") || "en_US"
+          )}
+        </div>
 
         {/* Description - Shows when hovered */}
         <div className="text-sm text-gray-500 mt-1 line-clamp-2 group-hover:block hidden">

@@ -1,3 +1,28 @@
+export const formatTimestamp = (timestamp: number, language?: string) => {
+  const date = new Date(timestamp);
+  const timeZone = "Africa/Tunis";
+
+  try {
+    // Validate and normalize locale
+    const locale = Intl.getCanonicalLocales(language || 'en_US')[0];
+
+    return new Intl.DateTimeFormat(locale, {
+      dateStyle: "long",
+      timeStyle: "short",
+      timeZone,
+    }).format(date);
+  } catch (error) {
+    console.warn(`Invalid locale '${language}' - falling back to 'en-US'`, error);
+
+    // Fallback with default locale
+    return new Intl.DateTimeFormat('en-US', {
+      dateStyle: "long",
+      timeStyle: "short",
+      timeZone,
+    }).format(date);
+  }
+};
+
 /** Empty function */
 export function noop(): void {}
 

@@ -1,41 +1,75 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileUploadButton from "../../components/Buttons/fileUpload";
 import NewDiagram from "../../components/Buttons/newDiagram";
-import { SingleProcess } from "../../components/UI/SingleProcess"; // Assuming SingleProcess is in the same folder
+import { SingleProcess } from "../../components/UI/SingleProcess";
+import { useProcessesQuery } from "../../hooks/queries/useProcessesQuery";
 
 export const Processes = () => {
   const [xml, setXml] = useState<string | null>(null);
   const [modelOpen, setModelOpen] = useState<boolean>(false);
+  const [processes, setProcesses] = useState<ProcessMetadata[] | null>([]);
+
+  // const { data, isLoading, error } = useProcessesQuery({
+  //   filter: "processes",
+  //   modelType: 0,
+  //   sort: "modifiedDesc",
+  //   page: 1,
+  //   limit: 10,
+  // });
+  // console.log(data);
+
+  useEffect(() => {
+    fetch(
+      "/configuration/modeler/rest/models?filter=processes&modelType=0&sort=modifiedDesc"
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  }, []);
+
   const processData = [
     {
-      name: "Process 1",
-      createdBy: "John",
-      lastModified: "2025-04-26",
-      description: "Short description",
+      id: "6f7915e4-a8c3-11ef-ac2e-ee55f3875c74",
+      name: "onboarding-process",
+      key: "onboarding-process",
+      description: "",
+      createdBy: "bkdev bkdev",
+      lastUpdatedBy: "bkdev bkdev",
+      lastUpdated: 1742223785233,
+      latestVersion: true,
+      version: 12,
+      modelType: 0,
+      tenantId: "",
     },
     {
-      name: "Process 2",
-      createdBy: "Alice",
-      lastModified: "2025-04-27",
-      description: "Another process description",
+      id: "01e21fea-c9b3-11ef-9c94-26dadc833c71",
+      name: "testing-process",
+      key: "testing-process",
+      description: "",
+      createdBy: "bkdev bkdev",
+      lastUpdatedBy: "bkdev bkdev",
+      lastUpdated: 1735895612981,
+      latestVersion: true,
+      version: 1,
+      modelType: 0,
+      tenantId: "",
     },
     {
-      name: "Process 3",
-      createdBy: "Bob",
-      lastModified: "2025-04-28",
-      description: "More details about this process",
-    },
-    {
-      name: "Process 4",
-      createdBy: "Charlie",
-      lastModified: "2025-04-29",
-      description: "Details for process 4",
-    },
-    {
-      name: "Process 5",
-      createdBy: "David",
-      lastModified: "2025-04-30",
-      description: "Details for process 5",
+      id: "0d0ded87-ad9a-11ef-a491-26feeb862f9e",
+      name: "claim-request",
+      key: "claim-request",
+      description: "",
+      createdBy: "bkdev bkdev",
+      lastUpdatedBy: "bkdev bkdev",
+      lastUpdated: 1734087783374,
+      latestVersion: true,
+      version: 1,
+      comment: "",
+      modelType: 0,
+      tenantId: "",
     },
   ];
 
