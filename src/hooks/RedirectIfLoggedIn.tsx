@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import axiosInstance from "../config/axiosInstance";
+import { axiosInstance } from "../config/axiosInstance";
 import { ReactNode, useEffect, useState } from "react";
 import Preloader from "../components/preloader";
 

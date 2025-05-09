@@ -1,6 +1,6 @@
 import { useLocation, Navigate } from "react-router-dom";
 import { useState, useEffect, ReactNode } from "react";
-import axiosInstance from "../config/axiosInstance";
+import { axiosInstance } from "../config/axiosInstance";
 import Preloader from "../components/preloader";
 
 interface RequireAuthProps {
