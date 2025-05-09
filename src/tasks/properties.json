@@ -295,7 +295,7 @@
       "properties": [
         {
           "id": "formKey",
-          "type": "String",
+          "type": "FormKey",
           "title": "BPMN.PROPERTYPACKAGES.FORMKEYDEFINITIONPACKAGE.FORMKEYDEFINITION.TITLE",
           "value": "",
           "description": "BPMN.PROPERTYPACKAGES.FORMKEYDEFINITIONPACKAGE.FORMKEYDEFINITION.DESCRIPTION",
