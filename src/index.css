@@ -4,6 +4,9 @@
 .bjs-powered-by {
   display: none;
 }
+.djs-palette {
+  display: none;
+}
 * {
   box-sizing: border-box;
 }
