@@ -1,28 +1,41 @@
-// import { useLocation, Navigate } from "react-router-dom";
-// import useAuth from "./useAuth";
-// import { useState, useEffect } from "react";
+import { useLocation, Navigate } from "react-router-dom";
+import { useState, useEffect, ReactNode } from "react";
+import axiosInstance from "../config/axiosInstance";
+import Preloader from "../components/preloader";
 
-// const RequireAuth = (props) => {
-//   const { auth } = useAuth();
-//   const location = useLocation();
-//   const [isLoading, setIsLoading] = useState(true);
+interface RequireAuthProps {
+  children: ReactNode;
+}
 
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//       setIsLoading(false);
-//     }, 500);
+const RequireAuth: React.FC<RequireAuthProps> = ({ children }) => {
+  const location = useLocation();
+  const [connected, setConnected] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const isConnected = async () => {
+      try {
+        const response = await axiosInstance.get(
+          import.meta.env.VITE_CONNECTED_USER
+        );
+        setConnected(response?.data?.userApp ? true : false);
+      } catch (error) {
+        console.error(error);
+        setConnected(false);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-//     return () => clearTimeout(timer);
-//   }, [auth]);
-//   if (!isLoading) {
-//     return props.allowedRole.includes(auth?.user?.Role) ? (
-//       props.children
-//     ) : auth?.accessToken ? (
-//       <Navigate to="/" state={{ from: location }} replace />
-//     ) : (
-//       <Navigate to="/login" state={{ from: location }} replace />
-//     );
-//   }
-// };
+    isConnected();
+  }, []);
 
-// export default RequireAuth;
+  return loading ? (
+    <Preloader />
+  ) : connected ? (
+    children
+  ) : (
+    <Navigate to="/landingpage" state={{ from: location }} replace />
+  );
+};
+
+export default RequireAuth;

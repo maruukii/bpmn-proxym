@@ -1,4 +1,6 @@
 import { lazy } from "react";
+import PathParms from "../hooks/PathParams";
+import RedirectIfLoggedIn from "../hooks/RedirectIfLoggedIn";
 
 // Lazy load the components
 const Home = lazy(() => import("../Pages/BPMNhome/bpmnHome"));
@@ -9,8 +11,12 @@ const Login = lazy(() => import("../Pages/Login"));
 const routes = [
   // Public Routes
   {
-    path: "/login",
-    element: <Login />,
+    path: "/landingpage",
+    element: (
+      <RedirectIfLoggedIn>
+        <Login />
+      </RedirectIfLoggedIn>
+    ),
     type: "public",
   },
   // Protected Routes
@@ -19,6 +25,16 @@ const routes = [
   {
     path: "/*",
     element: <Error404 />,
+    type: "public",
+  },
+  // {
+  //   path: "/login/oauth2/code/bankerise-studio",
+  //   element: <PathParms />,
+  //   type: "public",
+  // },
+  {
+    path: "/front",
+    element: <PathParms />,
     type: "public",
   },
 ];

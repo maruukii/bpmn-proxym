@@ -6,6 +6,7 @@ import routes from "./routes.tsx";
 import Protected from "../layout/protectedLayout.tsx";
 import Public from "../layout/publicLayout.tsx";
 import Preloader from "../components/preloader/index.tsx";
+import RequireAuth from "../hooks/RequireAuth.tsx";
 
 const Index = () => {
   return (
@@ -16,7 +17,9 @@ const Index = () => {
             route.type === "public" ? (
               <Public>{route.element}</Public>
             ) : (
-              <Protected>{route.element}</Protected>
+              <RequireAuth>
+                <Protected>{route.element}</Protected>
+              </RequireAuth>
             );
 
           return <Route key={idx} path={route.path} element={RouteElement} />;

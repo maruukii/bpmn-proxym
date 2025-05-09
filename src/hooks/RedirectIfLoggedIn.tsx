@@ -1,23 +1,44 @@
-// import React, { useEffect } from "react";
-// import { Navigate, useLocation } from "react-router-dom";
-// import useAuth from "./useAuth";
+import { Navigate, useLocation } from "react-router-dom";
+import axiosInstance from "../config/axiosInstance";
+import { ReactNode, useEffect, useState } from "react";
+import Preloader from "../components/preloader";
 
-// const RedirectIfLoggedIn = ({ children }) => {
-//   const { auth } = useAuth();
-//   const location = useLocation();
-//   useEffect(() => {
-//     const timer = setTimeout(() => {}, 1000);
+interface RedirectIfLoggedInProps {
+  children: ReactNode;
+}
 
-//     return () => clearTimeout(timer);
-//   }, []);
+const RedirectIfLoggedIn: React.FC<RedirectIfLoggedInProps> = ({
+  children,
+}) => {
+  const location = useLocation();
+  const [connected, setConnected] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
 
-//   const isAuthEmpty = Object.keys(auth).length === 0;
-//   if (!isAuthEmpty) {
-//     const previousLocation = location.state?.from?.pathname || "/";
-//     return <Navigate to={previousLocation} />;
-//   }
+  useEffect(() => {
+    const isConnected = async () => {
+      try {
+        const response = await axiosInstance.get(
+          import.meta.env.VITE_CONNECTED_USER
+        );
+        setConnected(response?.data?.userApp ? true : false);
+      } catch (error) {
+        console.error(error);
+        setConnected(false);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-//   return children;
-// };
+    isConnected();
+  }, []);
 
-// export default RedirectIfLoggedIn;
+  return loading || connected === null ? (
+    <Preloader />
+  ) : connected ? (
+    <Navigate to={location.state?.from?.pathname || "/"} replace />
+  ) : (
+    children
+  );
+};
+
+export default RedirectIfLoggedIn;

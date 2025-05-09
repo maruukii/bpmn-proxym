@@ -11,39 +11,44 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/authorization': {
-        target: 'http://platform-studio-dev.pres.proxym-it.net',
+        target: 'http://admin-gw.platform-dev.pres.proxym-it.net',
         changeOrigin: true,
         xfwd: true,
       },
       '/oauth2': {
-        target: 'http://platform-studio-dev.pres.proxym-it.net',
+        target: 'http://admin-gw.platform-dev.pres.proxym-it.net',
         changeOrigin: true,
         xfwd: true,
       },
 
       '/configuration': {
-          target: "http://platform-studio-dev.pres.proxym-it.net",
+          target: "http://admin-gw.platform-dev.pres.proxym-it.net",
           changeOrigin: true,
           xfwd: true,
         },
         '/public': {
-          target: "http://platform-studio-dev.pres.proxym-it.net",
+          target: "http://admin-gw.platform-dev.pres.proxym-it.net",
           changeOrigin: true,
           xfwd: true,
         },
         '/gw': {
-          target: "http://platform-studio-dev.pres.proxym-it.net",
+          target: "http://admin-gw.platform-dev.pres.proxym-it.net",
           changeOrigin: true,
           xfwd: true,
         },
         '/secured': {
-          target: "http://platform-studio-dev.pres.proxym-it.net",
+          target: "http://admin-gw.platform-dev.pres.proxym-it.net",
           changeOrigin: true,
           xfwd: true,
         },
     
         '/secure': {
-          target: "http://platform-studio-dev.pres.proxym-it.net",
+          target: "http://admin-gw.platform-dev.pres.proxym-it.net",
+          changeOrigin: true,
+          xfwd: true,
+        },
+        '/login': {
+          target: "http://admin-gw.platform-dev.pres.proxym-it.net",
           changeOrigin: true,
           xfwd: true,
         },
