@@ -144,16 +144,27 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     setFormKeyEditing(false);
     setCurrentId(null);
   };
-  const handleSelectCheckboxChange = (id: string, value: string | boolean) => {
+  const handleSelectCheckboxChange = (
+    name: string,
+    value: string | boolean
+  ) => {
     setDynamicProperties((prev) => ({
       ...prev,
-      [id]: value,
+      [name]: value,
     }));
+    if (name === "default") {
+      if (value === "false") {
+        removeDynamicProperty(modeling, activeElement, name);
+        return;
+      }
+      updateDynamicProperty(modeling, activeElement, name, "");
+    }
     if (value === "false") {
-      removeDynamicProperty(modeling, activeElement, id);
+      removeDynamicProperty(modeling, activeElement, name);
       return;
     }
-    updateDynamicProperty(modeling, activeElement, id, value);
+
+    updateDynamicProperty(modeling, activeElement, name, value);
   };
 
   const allProperties = tags.flatMap((tag: any) => tag.properties);

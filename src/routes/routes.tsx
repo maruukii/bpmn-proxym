@@ -4,7 +4,7 @@ import { lazy } from "react";
 const Home = lazy(() => import("../Pages/BPMNhome/bpmnHome"));
 const Processes = lazy(() => import("../Pages/Processes"));
 const Error404 = lazy(() => import("../Pages/Utility/Error404"));
-const Login = lazy(() => import("../Pages/login"));
+const Login = lazy(() => import("../Pages/Login"));
 
 const routes = [
   // Public Routes

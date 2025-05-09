@@ -1,16 +1,40 @@
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
-import type  { Element } from 'bpmn-js/lib/model/Types';
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling';
 import type { Moddle } from 'bpmn-moddle';
+import type  { Element } from 'bpmn-js/lib/model/Types';
 
 
 const standAloneTypes = [
-  "name","isForCompensation", "isExecutable", "scriptFormat", "script","id"
+  "name","isForCompensation", "isExecutable", "scriptFormat", "script","id","default"
 ]
 
 const prefix = import.meta.env.VITE_PROCESS_ENGINE; 
+function getDefaultFlow(element:Element):string|undefined{
+  const businessObject = getBusinessObject(element);
+  console.log(businessObject)
 
-// 🔹 Get formKey value from element
+  if (!businessObject) return;
+
+  const source = businessObject.sourceRef;
+  const sourceBo=getBusinessObject(source)
+  console.log(sourceBo)
+  console.log(sourceBo?.get('default'))
+  if(sourceBo?.get('default')?.id===element?.id) return "true"
+  return "false"
+    
+}
+function getSourceElement(element:Element):{SourceBO:any,source:Element}|undefined{
+
+
+  const sourceElement = element.source;
+
+  if (!sourceElement || !sourceElement.di) {
+    console.warn("Source element is not a valid shape:", sourceElement);
+    return;
+  }
+
+ return { SourceBO: getBusinessObject(sourceElement), source: sourceElement };
+}
 export function getDynamicProperty(element: Element,bpmnname:string): string | undefined {
   const businessObject = getBusinessObject(element);
 if (!businessObject) {
@@ -18,6 +42,10 @@ if (!businessObject) {
   }
 
   if (standAloneTypes.includes(bpmnname)) {
+    if(bpmnname==="default"){
+      const value:string|undefined =getDefaultFlow(element)
+      return value
+    }
 return businessObject.get(`${bpmnname}`);
   }
 
@@ -31,7 +59,19 @@ return businessObject.get(`${bpmnname}`);
 // 🔹 Set or update formKey value
 export function updateDynamicProperty(modeling:Modeling, element: Element, name:string,value: string|boolean) {
   if (standAloneTypes.includes(name)) {
+if(name==="default"){
+  const bo = getBusinessObject(element);
+ const sourceElement=getSourceElement(element)
+  // Only unset if this sequence flow is the default flow
+  console.log(sourceElement?.SourceBO?.default?.id===bo.id)
+  if (sourceElement?.SourceBO&&sourceElement?.source) {
+    modeling.updateProperties(sourceElement.source, {
+      default: element,
+    });
+  }
+    return;
 
+}
     modeling?.updateProperties(element, {
       [name]: value
     });
@@ -43,14 +83,33 @@ export function updateDynamicProperty(modeling:Modeling, element: Element, name:
 }
 
 // 🔹 Remove formKey value
-export function removeDynamicProperty(modeling:Modeling,element: Element,name:string) {
-  modeling?.updateProperties(element, {
+export function removeDynamicProperty(modeling: Modeling, element: Element, name: string) {
+  
+  if (name === "default") {
+    const bo = getBusinessObject(element);
+ const sourceElement=getSourceElement(element)
+  // Only unset if this sequence flow is the default flow
+  if (sourceElement?.SourceBO?.default?.id === bo.id&&sourceElement?.source) {
+    modeling.updateProperties(sourceElement.source, {
+      default: undefined,
+    });
+  }
+  return
+  }
+
+  if (standAloneTypes.includes(name)) {
+    modeling.updateProperties(element, {
+      [name]: undefined
+    });
+    return;
+  }
+
+  modeling.updateProperties(element, {
     [`${prefix}:${name}`]: undefined
   });
-  modeling?.updateProperties(element, {
-    [`${name}`]: undefined
-  });
 }
+
+
 
 // 🔹 Check if element is allowed to have a formKey
 // export function isExecutable(element: Element): boolean {

@@ -7,7 +7,7 @@ import { store } from "./store/store.ts";
 import { BrowserRouter } from "react-router-dom";
 import "./i18n";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./lib/reactQuerry.ts";
+import { queryClient } from "./lib/reactQuery.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

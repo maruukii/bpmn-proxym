@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Routes from "./routes";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { queryClient, persister } from "./lib/reactQuerry";
+import { queryClient, persister } from "./lib/reactQuery";
 
 const App: React.FC = () => {
   // useEffect(() => {
