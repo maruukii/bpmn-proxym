@@ -13,7 +13,10 @@ axiosInstance.interceptors.response.use(
   response => response,
   error => {
     if (error.response.status === 401) {
-      console.error('Unauthorized! Redirecting to login...');
+      if(window.location.pathname!=="/landingpage"){      
+        console.error('Unauthorized! Redirecting to login...');
+        window.location.href="/landingpage";  
+      }
     }
     return Promise.reject(error);
   }
@@ -24,4 +27,11 @@ export const axiosImage = axios.create({
   headers: {
 Accept: "image/png"  },
 });
+export const axiosFormData =axios.create({
+  baseURL:"",
 
+     headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                  },
+
+})

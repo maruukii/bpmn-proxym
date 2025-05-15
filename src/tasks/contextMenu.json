@@ -1,0 +1,32 @@
+{
+  "elements": [
+    {
+      "actionName": "StartEvent",
+      "label": "BPMN.STENCILS.STARTNONEEVENT.TITLE",
+      "description": "BPMN.STENCILS.STARTNONEEVENT.DESCRIPTION",
+      "target": {"type":"bpmn:StartEvent"},
+      "className": "bpmn-icon-start-event-none"
+    },
+    {
+      "actionName": "UserTask",
+      "label": "BPMN.STENCILS.USERTASK.TITLE",
+      "description": "BPMN.STENCILS.USERTASK.DESCRIPTION",
+      "target": {"type":"bpmn:UserTask"},
+      "className": "bpmn-icon-user-task"
+    },
+    {
+      "actionName": "ServiceTask",
+      "label": "BPMN.STENCILS.SERVICETASK.TITLE",
+      "description": "BPMN.STENCILS.SERVICETASK.DESCRIPTION",
+      "target": {"type":"bpmn:ServiceTask"},
+      "className": "bpmn-icon-service-task"
+    },
+    {
+      "actionName": "ScriptTask",
+      "label": "BPMN.STENCILS.SCRIPTTASK.TITLE",
+      "description": "BPMN.STENCILS.SCRIPTTASK.DESCRIPTION",
+      "target": {"type":"bpmn:ScriptTask"},
+      "className": "bpmn-icon-script-task"
+    }
+  ]
+}

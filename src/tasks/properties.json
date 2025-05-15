@@ -216,8 +216,8 @@
       "name": "executionlistenerspackage",
       "properties": [
         {
-          "id": "executionListeners",
-          "type": "multiplecomplex",
+          "id": "executionListener",
+          "type": "Complex",
           "title": "BPMN.PROPERTYPACKAGES.EXECUTIONLISTENERSPACKAGE.EXECUTIONLISTENERS.TITLE",
           "value": "",
           "description": "BPMN.PROPERTYPACKAGES.EXECUTIONLISTENERSPACKAGE.EXECUTIONLISTENERS.DESCRIPTION",

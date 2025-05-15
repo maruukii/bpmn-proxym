@@ -5,9 +5,8 @@ import { SingleProcess } from "../../components/UI/SingleProcess";
 import { useProcessesQuery } from "../../hooks/queries/useProcessesQuery";
 
 export const Processes = () => {
-  const [xml, setXml] = useState<string | null>(null);
-  const [modelOpen, setModelOpen] = useState<boolean>(false);
-  const [processes, setProcesses] = useState<ProcessMetadata[] | null>([]);
+  // const [xml, setXml] = useState<string | null>(null);
+  // const [modelOpen, setModelOpen] = useState<boolean>(false);
 
   const { data, isLoading, error } = useProcessesQuery({
     filter: "processes",
@@ -16,11 +15,12 @@ export const Processes = () => {
     page: 1,
     limit: 10,
   });
-  useEffect(() => {
-    if (data) {
-      setProcesses(data);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setProcesses(data);
+  //   }
+  // }, [data]);
+
   // useEffect(() => {
   //   // fetch(
   //   //   "/configuration/modeler/rest/models?filter=processes&modelType=0&sort=modifiedDesc"
@@ -77,28 +77,29 @@ export const Processes = () => {
   // ];
 
   return (
-    <div className="grid grid-cols-8 h-screen">
+    <div className="grid grid-cols-8 h-screen overflow-hidden">
+      {/* Left Section */}
       <div className="col-span-1 flex flex-col items-start space-y-4 p-4"></div>
 
-      <div className="col-span-6 flex flex-col items-center justify-start">
-        <div className="flex flex-wrap  gap-4 w-full">
-          {processes?.length
-            ? processes?.map((process, index) => (
-                <SingleProcess key={index} process={process} />
+      {/* ✅ Scrollable Processes Section with Dynamic Height */}
+      <div className="col-span-7 flex flex-col items-center justify-start overflow-y-auto p-4 h-[calc(100vh-110px)]">
+        <div className="flex flex-wrap gap-5 w-full justify-start">
+          {data?.length
+            ? data?.map((process, index) => (
+                <div key={index} className="w-[300px]">
+                  <SingleProcess process={process} />
+                </div>
               ))
             : undefined}
+          <NewDiagram />
+          <FileUploadButton />
         </div>
       </div>
 
-      {/* Right section (third div) */}
-      <div className="col-span-1 flex flex-col items-end ">
-        <NewDiagram
-          setXml={setXml}
-          setModelOpen={setModelOpen}
-          modelOpen={modelOpen}
-        />
-        <FileUploadButton setXml={setXml} />
-      </div>
+      {/* Right Section */}
+      {/* <div className="col-span-1 flex flex-col items-end p-4">
+        
+      </div> */}
     </div>
   );
 };

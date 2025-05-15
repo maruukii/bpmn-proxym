@@ -50,6 +50,30 @@
             "type": "String"
           }
         ]
+      },{
+        
+        "name": "executionListener",
+        "properties": [
+          {
+            "name": "event",
+            "isAttr": true,
+            "type": "Select"
+          },
+          {
+            "name": "class",
+            "isAttr": true,
+            "type": "Select"
+          },
+          {
+            "name": "expression",
+            "isAttr": true,
+            "type": "String"
+          },{
+            "name": "delegateExpression",
+            "isAttr": true,
+            "type": "String"
+          }
+        ]
       },
       {
         "name": "InOutBinding",

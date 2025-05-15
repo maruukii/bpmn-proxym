@@ -1,20 +1,28 @@
+import { NavigateFunction } from "react-router-dom";
+
 declare interface ProcessMetadata {
     id: string;
     name: string;
     key: string;    
-    description: string;
+    description?: string;
     createdBy: string;
     lastUpdatedBy: string;
     lastUpdated: number;
     latestVersion: boolean;
     version:number;
     modelType: number;
-    tenantId: string;
-    thumbnail?:any;
-
+    tenantId?: string;
+xml?:string
+comment?:string
   }
  declare interface SingleProcessMetadata {
     process: ProcessMetadata;
+    t: any;
+  }
+  declare interface ProcessHistoryProps {
+    history: ProcessMetadata[];
+    setHistoryOpen:React.Dispatch<React.SetStateAction<boolean>>;
+    navigate:NavigateFunction
     t: any;
   }
   declare interface UseProcessesQueryProps {
@@ -24,3 +32,28 @@ declare interface ProcessMetadata {
     page?: number;
     limit?: number;
   }
+
+  declare interface SaveAndDuplicateModalProps {
+  process?: ProcessMetadata;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  // handleChange: (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => void;
+  // setProcess: React.Dispatch<React.SetStateAction<ProcessMetadata>>;
+    navigate?: NavigateFunction;
+    action:string
+}
+
+declare interface DeleteModalProps {
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  navigate: NavigateFunction;
+  id:string;
+  modelName:string
+}
+// declare interface ProcessCrudProps{
+//   description: string;
+// key: string;
+// modelType: number;
+// name: string;
+// comment?:string
+// }

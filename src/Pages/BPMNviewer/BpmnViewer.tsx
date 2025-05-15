@@ -12,6 +12,20 @@ import {
   openXMLPreview,
 } from "../../utils/previewContentUtils";
 import ContextPad from "../../components/ContextPad";
+import ActionButton from "../../components/UI/components/actionButton";
+import {
+  ArrowUturnLeftIcon, // Undo
+  ArrowUturnRightIcon, // Redo
+  CloudArrowDownIcon, // Export
+  CodeBracketIcon,
+  DocumentArrowDownIcon, // Preview as XML
+  DocumentTextIcon,
+  XCircleIcon, // Preview as JSON
+} from "@heroicons/react/24/outline";
+import ContextMenu from "../../components/ContextMenu";
+import SaveAndDuplicate from "../../components/modals/saveAndDuplicate";
+import { clearProcessData } from "../../store/process/processSlice";
+import { useNavigate } from "react-router-dom";
 
 interface BpmnEditorProps {
   filename: string | null;
@@ -27,17 +41,36 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
   t,
 }) => {
   const { modeler } = useSelector((state: RootState) => state.modeler);
+  const process = useSelector((state: RootState) => state.process);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const moddle = new BpmnModdle();
 
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState({
     json: false,
     xml: false,
   });
+  const commandStack: any = modeler?.get("commandStack");
   const [previewData, setPreviewData] = useState<string | null>(null);
   const [previewType, setPreviewType] = useState<"xml" | "json" | null>(null);
+  const [saveModal, setSaveModal] = useState<boolean>(false);
+  const [canRedo, setCanRedo] = useState<boolean>(false);
+  const [canUndo, setCanUndo] = useState<boolean>(false);
+  useEffect(() => {
+    if (!modeler) return;
 
+    const eventBus: any = modeler?.get("eventBus");
+
+    const updateUndoRedoState = () => {
+      setCanRedo(commandStack?.canRedo());
+      setCanUndo(commandStack?.canUndo());
+    };
+    eventBus.on("commandStack.changed", updateUndoRedoState);
+
+    return () => {
+      eventBus.off("commandStack.changed", updateUndoRedoState);
+    };
+  }, [modeler]);
   const openPreviewModal = (data: string, type: "xml" | "json") => {
     setPreviewData(data);
     setPreviewType(type);
@@ -87,7 +120,6 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
     };
 
     const updateTitle = () => {
-      const commandStack: any = modeler?.get("commandStack");
       if (commandStack?.canUndo()) {
         document.title = `*${originalTitle}`; // Add an asterisk before the title
       } else {
@@ -109,29 +141,45 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
       document.title = originalTitle; // Reset the title on component unmount
     };
   }, [modeler]);
+  const handleClose = () => {
+    dispatch(clearProcessData());
+    navigate("/processes");
+  };
+
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 ">
       {/* Toolbar */}
-      <div className="flex justify-center gap-4 p-2 bg-gray-800 text-white rounded-lg shadow-md">
-        <button
+      <div className="flex justify-center gap-4 p-2 bg-gray-300 text-white rounded-lg shadow-md">
+        <ActionButton
+          icon={<DocumentArrowDownIcon className="w-5 h-5" />}
+          onClick={() => setSaveModal(true)}
+          label={t("Save")}
+        />
+        <ActionButton
+          icon={<ArrowUturnLeftIcon className="w-5 h-5" />}
           onClick={undo}
-          className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-md"
-        >
-          ↩️ {t("Undo")}
-        </button>
-        <button
+          label={t("Undo")}
+          disabled={!canUndo}
+        />
+
+        {/* ✅ Redo */}
+        <ActionButton
+          icon={<ArrowUturnRightIcon className="w-5 h-5" />}
           onClick={redo}
-          className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md"
-        >
-          ↪️ {t("Redo")}
-        </button>
-        <button
+          label={t("Redo")}
+          disabled={!canRedo}
+        />
+
+        {/* ✅ Export */}
+        <ActionButton
+          icon={<CloudArrowDownIcon className="w-5 h-5" />}
           onClick={handleExport}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md"
-        >
-          💾 {t("Export")}
-        </button>
-        <button
+          label={t("Export")}
+        />
+
+        {/* ✅ Preview as XML */}
+        <ActionButton
+          icon={<CodeBracketIcon className="w-5 h-5" />}
           onClick={() => {
             isPreviewModalOpen.xml
               ? closePreviewModal()
@@ -139,11 +187,12 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
               ? openXMLPreview({ modeler, openPreviewModal })
               : undefined;
           }}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md"
-        >
-          📝 {t("Preview as XML")}
-        </button>
-        <button
+          label={t("Preview as XML")}
+        />
+
+        {/* ✅ Preview as JSON */}
+        <ActionButton
+          icon={<DocumentTextIcon className="w-5 h-5" />}
           onClick={() => {
             isPreviewModalOpen.json
               ? closePreviewModal()
@@ -152,28 +201,32 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
               ? openJsonPreview({ modeler, moddle, openPreviewModal })
               : undefined;
           }}
-          className="px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-md"
-        >
-          📝 {t("Preview as JSON")}
-        </button>
+          label={t("Preview as JSON")}
+        />
+        <ActionButton
+          icon={<XCircleIcon className="w-5 h-5" />}
+          onClick={handleClose}
+          label={t("Close")}
+        />
       </div>
 
       {/* BPMN Editor Container */}
       <div className="flex w-full h-[80vh] border border-gray-300 rounded-lg shadow-md">
-        {/* Left Column (1/4 Width, Full Height) */}
+        {/* ContextPad  */}
         <div className="relative inset-1 w-1/5 h-full border-r border-gray-300 overflow-auto">
           <ContextPad modeler={modeler} />
         </div>
 
         {/* Right Column (3/4 Width, Full Height) */}
-        <div className="flex flex-col w-4/5 h-full">
-          {/* BPMN Modeler (3/4 Height) */}
+        <div className="flex flex-col w-4/5 h-full m-2">
+          {/* BPMN Modeler */}
+          <ContextMenu modeler={modeler} />
           <div
             ref={designer}
             className="h-3/5 w-full border-b border-gray-300"
           />
 
-          {/* Properties Panel (1/4 Height) */}
+          {/* Properties Panel */}
           <div className="h-2/5 p-4 bg-gray-100 border-gray-300 rounded-b-lg shadow-md overflow-auto">
             <Property />
           </div>
@@ -186,6 +239,13 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
           previewType={previewType}
           previewData={previewData}
           closePreviewModal={closePreviewModal}
+        />
+      )}
+      {saveModal && (
+        <SaveAndDuplicate
+          process={process}
+          setModalOpen={setSaveModal}
+          action={"Save"}
         />
       )}
     </div>

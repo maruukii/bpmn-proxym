@@ -3,17 +3,20 @@
       {
         "label": "Error Code",
         "key": "errorCode",
-        "type": "String"
+        "type": "String",
+        "isDisplayed":true
       },
       {
         "label": "Class",
         "key": "class",
         "type": "String",
-        "isValue": true
+        "isBody": true,
+        "isDisplayed":true
       },{
         "label": "Include child exceptions",
         "key": "includeChildExceptions",
-        "type": "Boolean"
+        "type": "Boolean",
+        "isDisplayed":false
       }
     ],
     "field":[
@@ -26,7 +29,8 @@
         "label": "String value",
         "key": "string",
         "type": "String"
-              },{
+              },
+              {
         "label": "Expression",
         "key": "expression",
         "type": "String"
@@ -35,6 +39,46 @@
         "key": "stringDescription",
         "type": "Text"
       }
+    ],"executionListener" :[
+      {
+      "label":"Event",
+      "key":"event",
+      "isDisplayed":true,
+      "type":"Select",
+      "options": [
+            {
+              "id": "start",
+              "name": "BPMN.PROPERTYPACKAGES.EXECUTIONLISTENERSPACKAGE.EXECUTIONLISTENERS.EVENT.START"
+            },
+            {
+              "id": "end",
+              "name": "BPMN.PROPERTYPACKAGES.EXECUTIONLISTENERSPACKAGE.EXECUTIONLISTENERS.EVENT.END"
+            },
+            {
+              "id": "take",
+              "name": "BPMN.PROPERTYPACKAGES.EXECUTIONLISTENERSPACKAGE.EXECUTIONLISTENERS.EVENT.TAKE"
+            }
+          ]
+    },{
+      
+      "label":"Class",
+      "key":"class",
+      "isDisplayed":true,
+      "type":"String"
+    },
+    {
+      "label":"Expression",
+      "key":"expression",
+      "isDisplayed":false,
+      "type":"String"
+    },
+    {
+      "label":"Delegate expression",
+      "key":"delegateExpression",
+      "isDisplayed":false,
+      "type":"String"
+    }
+
     ]
   }
   
