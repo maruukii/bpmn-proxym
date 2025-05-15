@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Mirage } from "ldrs/react";
 import "ldrs/react/Mirage.css";
 

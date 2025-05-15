@@ -19,8 +19,8 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<{ userName: string;accessToken:string}>) => {
-      state.userName = action.payload.userName;
+    setUserData: (state, action: PayloadAction<string>) => {
+      state.userName = action.payload;
       state.isLoggedIn = true;
     },
     clearUserData: (state) => {

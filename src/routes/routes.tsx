@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import PathParms from "../hooks/PathParams";
 import RedirectIfLoggedIn from "../hooks/RedirectIfLoggedIn";
+import Manage from "../Pages/Processes/Manage";
 
 // Lazy load the components
 const Home = lazy(() => import("../Pages/BPMNhome/bpmnHome"));
@@ -22,6 +23,13 @@ const routes = [
   // Protected Routes
   { path: "/", element: <Home />, type: "protected" },
   { path: "/processes", element: <Processes />, type: "protected" },
+  { path: "/process/:lastVersionId", element: <Manage />, type: "protected" },
+  {
+    path: "/process/:lastVersionId/history/:oldVersionId",
+    element: <Manage />,
+    type: "protected",
+  },
+
   {
     path: "/*",
     element: <Error404 />,

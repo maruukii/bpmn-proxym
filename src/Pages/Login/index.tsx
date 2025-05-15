@@ -1,6 +1,5 @@
 import { Mirage } from "ldrs/react";
 import { useState } from "react";
-import "ldrs/react/Mirage.css";
 
 const login = () => {
   const [logginIn, setLoggingIn] = useState<boolean | null>(false);

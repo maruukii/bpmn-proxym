@@ -150,7 +150,11 @@ export default{
             "EXECUTIONLISTENERSPACKAGE" : {
               "EXECUTIONLISTENERS" : {
                 "TITLE" : "Écouteurs d'exécution",
-                "DESCRIPTION" : "Écouteurs pour une activité, un processus, un flux séquentiel, un événement de début et de fin."
+                "DESCRIPTION" : "Écouteurs pour une activité, un processus, un flux séquentiel, un événement de début et de fin.",
+                "EVENT":{
+            "START":"début",
+            "END":"fin",
+            "TAKE":"prendre"}
               }
             },
             "TASKLISTENERSPACKAGE" : {
@@ -1952,6 +1956,7 @@ export default{
     "ACTION.CANCEL" : "Annuler",
     "ACTION.SELECT" : "Sélectionner",
     "ACTION.ADD" : "Ajouter",
+    "NEW_ENTRY":"Ajouter une nouvelle entrée ",
     "ACTION.REMOVE" : "Retirer",
     "ACTION.MOVE.UP" : "Déplacer l'entrée vers le haut",
     "ACTION.MOVE.DOWN" : "Déplacer l'entrée vers le base",

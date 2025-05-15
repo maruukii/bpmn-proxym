@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Moddle } from 'moddle'
+import type { Moddle } from 'bpmn-moddle'
 import type Modeler from 'bpmn-js/lib/Modeler'
 import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
 import type Canvas from 'diagram-js/lib/core/Canvas'

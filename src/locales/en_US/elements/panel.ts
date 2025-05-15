@@ -153,7 +153,11 @@ export default {
         "EXECUTIONLISTENERSPACKAGE" : {
           "EXECUTIONLISTENERS" : {
             "TITLE" : "Execution listeners",
-            "DESCRIPTION" : "Listeners for an activity, process, sequence flow, start and end event."
+            "DESCRIPTION" : "Listeners for an activity, process, sequence flow, start and end event.",
+            "EVENT":{
+            "START":"start",
+            "END":"end",
+            "TAKE":"take"}
           }
         },
         "TASKLISTENERSPACKAGE" : {
@@ -1021,6 +1025,12 @@ export default {
           "SWIMLANES" : "Swimlanes",
           "CONNECTINGOBJECTS" : "Connecting Objects",
           "ARTIFACTS" : "Artifacts"
+        },
+        "CUSTOM":{
+"MYSQL":{
+   "TITLE" : "MySQL Task",
+          "DESCRIPTION" : "An automatic mysql task with service logic"
+}
         },
         "BPMNDIAGRAM" : {
           "TITLE" : "BPMN-Diagram",
@@ -2004,6 +2014,7 @@ export default {
     "ACTION.CANCEL" : "Cancel",
     "ACTION.SELECT" : "Select",
     "ACTION.ADD" : "Add",
+    "NEW_ENTRY":"Add new entry",
     "ACTION.REMOVE" : "Remove",
     "ACTION.MOVE.UP" : "Move entry up",
     "ACTION.MOVE.DOWN" : "Move entry down",
