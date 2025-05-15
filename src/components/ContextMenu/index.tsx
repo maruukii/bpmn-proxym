@@ -1,10 +1,14 @@
-import { useEffect, useCallback, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Element } from "diagram-js/lib/model/Types";
-import BpmnReplaceOptions from "../../utils/BpmnReplaceOptions";
-import { isAppendAction } from "../../utils/BpmnDesignerUtils";
-import EventEmitter from "../../utils/EventEmitter";
-import contextMenuActions from "./contextMenuActions";
+import BpmnReplaceOptions from "../../utils/bpmnReplaceOptions";
+import { isAppendAction } from "../../utils/bpmnDesignerUtils";
+import contextMenuElements from "../../tasks/contextMenu.json";
+import useBpmnActions from "./contextMenuActions";
 import { withTranslation } from "react-i18next";
+import {
+  PencilIcon, // Modify
+  PlusCircleIcon, // Create
+} from "@heroicons/react/24/outline";
 
 interface ContextMenuEntry {
   actionName: string;
@@ -13,11 +17,12 @@ interface ContextMenuEntry {
   target: any;
 }
 
-interface Bpmncontextmenu {
+interface BpmnContextMenuProps {
   t: any;
+  modeler: any;
 }
 
-const BpmnContextMenu: React.FC<Bpmncontextmenu> = ({ t }) => {
+const BpmnContextMenu: React.FC<BpmnContextMenuProps> = ({ t, modeler }) => {
   const [showPopover, setShowPopover] = useState(false);
   const position = useRef({ x: 0, y: 0 });
   const currentReplaceOptions = useRef<any[]>([]);
@@ -25,7 +30,7 @@ const BpmnContextMenu: React.FC<Bpmncontextmenu> = ({ t }) => {
   const isAppend = useRef(false);
   const contextMenuTitle = useRef("Context Menu");
 
-  const { appendAction, replaceAction } = contextMenuActions();
+  const { appendAction, replaceAction } = useBpmnActions();
 
   const handleTriggerAction = (
     entry: ContextMenuEntry,
@@ -43,60 +48,90 @@ const BpmnContextMenu: React.FC<Bpmncontextmenu> = ({ t }) => {
     }
   };
 
-  const initEventCallback = useCallback(
-    (event: MouseEvent, element?: Element) => {
-      position.current = { x: event.clientX, y: event.clientY };
-      currentElement.current = element || null;
-      isAppend.current = isAppendAction(element);
-      currentReplaceOptions.current = BpmnReplaceOptions(element) || [];
-      contextMenuTitle.current = isAppendAction(element)
-        ? "Create Element"
-        : "Change Element";
-      setShowPopover(true);
-    },
-    []
-  );
-
-  const handleClosePopover = () => {
-    setShowPopover(false);
-  };
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    EventEmitter.on("show-contextmenu", initEventCallback);
-    document.body.addEventListener("click", handleClosePopover);
+    if (!modeler) {
+      console.error("Modeler is not available");
+      return;
+    }
+
+    const handleContextMenu = (event: MouseEvent) => {
+      event.preventDefault();
+
+      const elementRegistry = modeler.get("elementRegistry");
+      const targetElement = event.target as HTMLElement;
+      const element = elementRegistry.get(
+        targetElement.closest(".djs-element")
+      );
+
+      position.current = { x: event.clientX, y: event.clientY };
+      currentElement.current = element;
+
+      if (element) {
+        isAppend.current = false;
+        currentReplaceOptions.current = BpmnReplaceOptions(element) || [];
+        contextMenuTitle.current = "Modify Element";
+      } else {
+        isAppend.current = true;
+        currentReplaceOptions.current = contextMenuElements?.elements;
+        contextMenuTitle.current = "Create Element";
+      }
+
+      setShowPopover(true);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowPopover(false);
+      }
+    };
+
+    const canvasContainer = modeler.get("canvas").getContainer();
+    canvasContainer.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      EventEmitter.removeListener("show-contextmenu", initEventCallback);
-      document.body.removeEventListener("click", handleClosePopover);
+      canvasContainer.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("click", handleClickOutside);
     };
-  }, [initEventCallback]);
-  console.log();
+  }, [modeler]);
   return (
     <div>
       {showPopover && (
         <div
-          className="popover"
+          className="absolute bg-white shadow-lg rounded-md p-2"
           style={{
             position: "fixed",
             top: position.current.y,
             left: position.current.x,
             zIndex: 9999,
           }}
+          ref={menuRef}
         >
-          <div className="bpmn-context-menu">
-            <div className="context-menu_header">
-              {contextMenuTitle.current}
-            </div>
-            <div className="context-menu_body">
-              {currentReplaceOptions.current.map((item) => (
-                <div key={item.actionName} className="context-menu_item">
-                  <i className={`context-menu_item_icon ${item.className}`}></i>
-                  <span onClick={(e) => handleTriggerAction(item, e)}>
-                    {t(item.label)}
-                  </span>
-                </div>
-              ))}
-            </div>
+          <div className="font-bold flex flex-row text-gray-700 text-xl gap-2">
+            {contextMenuTitle.current === "Create Element" ? (
+              <PlusCircleIcon className="w-7 h-7" />
+            ) : (
+              <PencilIcon className="w-7 h-7" />
+            )}
+            {contextMenuTitle.current}
+          </div>
+          <div className="mt-2">
+            {currentReplaceOptions.current.map((item) => (
+              <div
+                key={item.actionName}
+                className="flex items-center gap-2 p-2 hover:bg-gray-200 cursor-pointer"
+                onClick={(e) => handleTriggerAction(item, e)}
+                title={t(item?.description)}
+              >
+                <i
+                  className={`context-menu_item_icon ${item?.className} text-xl`}
+                ></i>
+
+                <span>{t(item.label)}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}

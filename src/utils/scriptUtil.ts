@@ -1,10 +1,8 @@
-import { useSelector } from 'react-redux';
-import { RootState } from './../store/store';
 import { ModdleElement } from 'bpmn-moddle'
+import type  { Moddle } from 'bpmn-moddle';
 
-export function createScript(props: ScriptForm): ModdleElement {
+export function createScript(props: ScriptForm,moddle:Moddle): ModdleElement {
   const prefix = "flowable"
-  const {moddle} = useSelector((state: RootState) => state.modeler)
   const { scriptFormat, value, resource } = props
 
   return moddle!.create(`${prefix}:Script`, { scriptFormat, value, resource })

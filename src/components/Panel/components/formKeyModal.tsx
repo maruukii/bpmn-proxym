@@ -104,21 +104,21 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
     };
   }, [selectedItem?.thumbnail]);
 
-  const handleSelectedFormThumbnail = (item: FormMetadata) => {
-    setSelectedItem(item);
-    mutate(item.id, {
-      onSuccess: (data) => {
-        setSelectedItem((prevItem) =>
-          prevItem
-            ? { ...prevItem, thumbnail: data || prevItem.thumbnail }
-            : null
-        );
-      },
-      onError: (error) => {
-        console.error("Error fetching thumbnail:", error);
-      },
-    });
-  };
+  // const handleSelectedFormThumbnail = (item: FormMetadata) => {
+  //   setSelectedItem(item);
+  //   mutate(item.id, {
+  //     onSuccess: (data) => {
+  //       // setSelectedItem((prevItem) =>
+  //       //   prevItem
+  //       //     ? { ...prevItem, thumbnail: data || prevItem.thumbnail }
+  //       //     : null
+  //       // );
+  //     },
+  //     onError: (error) => {
+  //       console.error("Error fetching thumbnail:", error);
+  //     },
+  //   });
+  // };
 
   const toggleExpand = (name: string) => {
     setExpandedItems((prev) => {
@@ -148,7 +148,7 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
                   ? "bg-gray-200 hover:bg-gray-300"
                   : "hover:bg-gray-100"
               }`}
-              onClick={() => handleSelectedFormThumbnail(item)}
+              onClick={() => setSelectedItem(item)}
             >
               <div className="flex items-center gap-2 overflow-hidden w-full">
                 {hasChildren && (

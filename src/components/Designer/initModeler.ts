@@ -2,9 +2,8 @@ import Modeler from 'bpmn-js/lib/Modeler';
 
 import { setModeler } from '../../store/modeler/modelerSlice'; 
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer';
-import "diagram-js-minimap/assets/diagram-js-minimap.css";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
+import type Canvas from 'diagram-js/lib/core/Canvas'
+
 
 /**
  * Initialize BPMN Modeler

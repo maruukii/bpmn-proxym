@@ -13,6 +13,7 @@ import properties from "../../tasks/properties.json";
 import DynamicProperty from "./components/DynamicProperty";
 import { withTranslation } from "react-i18next";
 import { getDynamicProperty } from "../../utils/dynamicPropertyUtil";
+import { getBusinessObject } from "bpmn-js/lib/util/ModelUtil";
 export function PropertiesPanel({ t }: { t: any }) {
   const dispatch = useDispatch();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -20,7 +21,7 @@ export function PropertiesPanel({ t }: { t: any }) {
   const { elementRegistry, modeler, activeElement, modeling } = useSelector(
     (state: RootState) => state.modeler
   );
-
+  const [icon, setIcon] = useState<string | null>(null);
   const [elementState, setElementState] = useState({
     currentElementId: "",
     currentElementType: "",
@@ -150,7 +151,8 @@ export function PropertiesPanel({ t }: { t: any }) {
         panelTitle: "Properties Panel",
         bpmnIconName: iconName,
         bpmnElement: activatedElementTypeName,
-        bpmnElementName: getDynamicProperty(activatedElement, "name") || "",
+        bpmnElementName: (getDynamicProperty(activatedElement, "name") ||
+          "") as string,
       });
     },
     100,
@@ -164,17 +166,57 @@ export function PropertiesPanel({ t }: { t: any }) {
       setCurrentElement(newSelection[0] || null);
     });
 
-    modeler.on("element.changed", ({ element }: any) => {
-      if (element?.id === elementState.currentElementId) {
-        setCurrentElement(element);
-      }
-    });
+    // modeler.on("element.changed", ({ element }: any) => {
+    //   if (element?.id === elementState.currentElementId) {
+    //     setCurrentElement(element);
+    //   }
+    // });
   }, [modeler, elementRegistry, elementState.currentElementId]);
+  const tag = useMemo(() => {
+    if (!activeElement) return null;
+
+    const bo = getBusinessObject(activeElement);
+    if (!bo || !modeler) return null;
+
+    let computedTag = tagNames[activeElement.type.split(":")[1]];
+
+    if (activeElement.type.split(":")[1] === "Collaboration") {
+      computedTag = tagNames["Process"];
+    }
+
+    if (bo?.eventDefinitions) {
+      const matchedTag = Object.values(tagNames).find((item: any) => {
+        return (
+          item?.eventDefinitionType?.split(":")[1] ===
+            bo.eventDefinitions[0]?.$type?.split(":")[1] &&
+          bo?.$type === item.bpmnType
+        );
+      });
+      if (matchedTag) {
+        computedTag = matchedTag;
+      }
+    }
+
+    if (bo?.type) {
+      const matchedTag = Object.values(tagNames).find((item: any) => {
+        return bo?.type === item?.flowableType;
+      });
+      if (matchedTag) {
+        computedTag = matchedTag;
+      }
+    }
+    return computedTag;
+  }, [activeElement, modeler, tagNames]);
+
+  // ✅ Now we update the state only when the tag changes
+  useEffect(() => {
+    if (tag) {
+      setIcon(tag?.icon);
+    }
+    console.log(tag);
+  }, [tag]);
 
   const renderProperties = () => {
-    if (!activeElement || !modeling) return [];
-    const tag = tagNames[activeElement.type.split(":")[1]];
-    if (!tag || !modeler) return [];
     return (
       <DynamicProperty
         tags={tag.propertyPackages}
@@ -184,26 +226,28 @@ export function PropertiesPanel({ t }: { t: any }) {
       />
     );
   };
-
   return (
     <div ref={panelRef} className="properties-panel p-4 overflow-auto">
       <h2 className="text-3xl font-bold mb-4">{t(elementState.panelTitle)}</h2>
-
       <div className="panel-header flex items-center mb-4">
-        {elementState?.bpmnIconName !== "" ? (
-          <BpmnIcon name={elementState.bpmnIconName} />
-        ) : undefined}
+        {icon ? (
+          <img src={`/icons/${icon}`} alt="" className="w-8 h-8 mr-2" />
+        ) : (
+          <BpmnIcon name={elementState?.bpmnIconName} />
+        )}
         <div className="flex items-start flex-col">
           {" "}
-          <h2 className="text-lg font-semibold">{elementState?.bpmnElement}</h2>
-          <h2 className="text-lg font-light">
+          <h2 className="text-lg font-semibold">
+            {tag?.title ? t(tag.title) : elementState?.bpmnElement}
+          </h2>
+          <h2 className="text-lg font-light truncate">
             {elementState?.bpmnElementName}
           </h2>
         </div>
       </div>
 
       <div className="panel-body space-y-4">
-        {activeElement ? (
+        {activeElement && tag ? (
           renderProperties()
         ) : (
           <div className="text-gray-400">{t("No element selected")}</div>

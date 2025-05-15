@@ -2,28 +2,28 @@ import {
     getExtensionElementsList,
     addExtensionElements,
     removeExtensionElements,
-  } from './BpmnExtensionElementsUtil';
+  } from './bpmnExtensionElementsUtil';
   
   import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
   import type { Element, Moddle } from 'bpmn-js/lib/model/Types';
   import { ModdleElement } from 'bpmn-moddle';
   import type Modeling from 'bpmn-js/lib/features/modeling/Modeling';
   
-  const prefix: string = 'flowable';
+ const prefix = import.meta.env.VITE_PROCESS_ENGINE; 
 
   
   // Get all exceptions
-  export function getExceptions(element: Element,id:string): ModdleElement[] {
-    const businessObject = getExceptionsContainer(element);
+  export function getValues(element: Element,id:string): ModdleElement[] {
+    const businessObject = getPropertyContainer(element);
     
 
     return getExtensionElementsList(businessObject, `${prefix}:${id}`);
   }
  
   
-  export function getMappedException(
+  export function getMappedProperty(
     moddleElement?: ModdleElement,
-    fields: string[] = []
+    fields: ExtendedField[] = []
   ): Record<string, any> | null {
     if (!moddleElement) return null;
   
@@ -31,56 +31,63 @@ import {
     const result: Record<string, any> = {};
   
     fields.forEach((field) => {
+      if(fields)
+
       // Dynamically access values from the moddleElement
-      result[field] = (moddleElement as any)[field];
+      result[field.key] = (moddleElement as any)[field.key];
     });
-  
+  // console.log(result)
+  // console.log(moddleElement)
     return result;
   }
   
   
   
   // Add an empty mapException
-  export function addEmptyException(
-    element: Element,
-    moddle: Moddle,
-    modeling: Modeling
-  ) {
-    const mapException = moddle.create(`${prefix}:mapException`, {
-      errorCode: '',
-      includeChildExceptions: false,
-      body: '',
-    });
+  // export function addEmptyException(
+  //   element: Element,
+  //   moddle: Moddle,
+  //   modeling: Modeling
+  // ) {
+  //   const mapException = moddle.create(`${prefix}:mapException`, {
+  //     errorCode: '',
+  //     includeChildExceptions: false,
+  //     body: '',
+  //   });
   
-    const businessObject = getExceptionsContainer(element);
-    addExtensionElements(element, businessObject, mapException, modeling,moddle);
-  }
+  //   const businessObject = getExceptionsContainer(element);
+  //   addExtensionElements(element, businessObject, mapException, modeling,moddle);
+  // }
   
   // Add a filled mapException
-  export function addException(
+  export function addProperty(
     element: Element,
     props: Record<string, string | boolean>,
     moddle: Moddle,
     modeling: Modeling,
     id: string,
-    fields: string[]
+    // fields: string[]
   ) {
-    const businessObject = getExceptionsContainer(element);
-    console.log(props);
+    const businessObject = getPropertyContainer(element);
   
     // Dynamically create object using fields
-    const dynamicProperties: Record<string, any> = {};
-    fields.filter((field)=>field !== "class").forEach((field) => {
-      dynamicProperties[field] = props[field];
-    });
-    debugger
-    const mapException = moddle?.create(`${prefix}:${id}`, dynamicProperties);
-  debugger
+    // const dynamicProperties: Record<string, any> = {};
+    // fields.forEach((field) => {
+      
+    //   dynamicProperties[field] = props[field];
+    // });
+    // handle if default value for select event type for execution listeners
+    if(id==="executionListener"&&!props["event"])
+      props["event"]="start"
+    const property = moddle?.create(`${prefix}:${id}`, props);
     // Set CDATA/class text
-    (mapException as any).$body =`<![CDATA[ ${props.class} ]]>` ;
+    // if(id===`mapException`){
+    // (property as any).$body =`<![CDATA[ ${props.class} ]]>` ;}
+
+
   // console.log(mapException)
     // Add the element
-    addExtensionElements(element, businessObject, mapException, modeling,moddle);
+    addExtensionElements(element, businessObject, property, modeling,moddle);
   }
   
   // Update existing mapException by replacing it
@@ -103,21 +110,21 @@ import {
   // }
   
   // Remove exception
-  export function removeException(
+  export function removeProperty(
     element: Element,
     listener: ModdleElement,
     modeling: Modeling
   ) {
     removeExtensionElements(
       element,
-      getExceptionsContainer(element),
+      getPropertyContainer(element),
       listener,
       modeling
     );
   }
   
   // Get root for extensions
-  export function getExceptionsContainer(element: Element): ModdleElement {
+  export function getPropertyContainer(element: Element): ModdleElement {
     const businessObject = getBusinessObject(element);
     return businessObject?.get('processRef') || businessObject;
   }
@@ -128,7 +135,7 @@ export function moveException(
   direction: 'up' | 'down',
   modeling: Modeling
 ) {
-  const container = getExceptionsContainer(element);
+  const container = getPropertyContainer(element);
   const list = getExtensionElementsList(container, `${prefix}:mapException`);
 
   const currentIndex = list.indexOf(listener);

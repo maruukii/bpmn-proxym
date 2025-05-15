@@ -1,19 +1,20 @@
 import { setNewDiagram } from '../store/file/fileSlice';
 import { setNewDiagramStatus } from '../store/modeler/modelerSlice';
 import { AppDispatch } from '../store/store';
-import EmptyXML from './EmptyXML'
+import EmptyXML from './emptyXML'
+import { setXml } from '../store/process/processSlice';
 // import { EditorSettings } from 'types/editor/settings'
 
 
-export const createNewDiagram = async function (setXml:(xml: string) => void
-,dispatch:AppDispatch, settings?:{id?:string,name?:string,description:string}) {
+export const createNewDiagram = async function (
+dispatch:AppDispatch, settings?:{key:string,name:string,description?:string}) {
   try {
-if (!settings?.id||!settings?.name) {
+if (!settings?.key||!settings?.name) {
   throw new Error('Modeler, dispatch, or settings are not available');}
-    const { id, name, description } = settings
-    const xmlString = EmptyXML(id, name, description)
-    setXml(xmlString)
-  dispatch(setNewDiagram({ filename: id, fileContent:xmlString }));
+    const { key, name, description } = settings
+    const xmlString = EmptyXML(key, name, description)
+   dispatch (setXml(xmlString))
+  dispatch(setNewDiagram({ filename: name, fileContent:xmlString }));
   // dispatch(setNewDiagramStatus());
    
   } catch (e) {

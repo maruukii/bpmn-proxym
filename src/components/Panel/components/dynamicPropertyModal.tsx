@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { withTranslation } from "react-i18next";
 import {
-  addException,
+  addProperty,
   moveException,
-  getExceptions,
-  getMappedException,
-  removeException,
-} from "../../../utils/ExceptionElementUtil";
+  getValues,
+  getMappedProperty,
+  removeProperty,
+} from "../../../utils/exceptionElementUtil";
 import { RootState } from "../../../store/store";
 import { useSelector } from "react-redux";
 import { ModdleElement } from "bpmn-moddle";
-interface ExtendedField {
-  label: string;
-  key: string;
-  type: string;
-}
 
 interface DynamicPropertyModalProps {
   prop: any;
@@ -47,14 +42,16 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
   const [newRow, setNewRow] = useState<Record<string, string | boolean>>({});
   useEffect(() => {
     if (activeElement && extendedFields.length > 0 && id) {
-      const existing = getExceptions(activeElement, id);
+      const existing = getValues(activeElement, id);
       setTableData(existing || []);
     }
   }, [activeElement]);
 
   const handleInputChange = (
     key: string,
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setNewRow((prev) => ({ ...prev, [key]: e.target.value }));
   };
@@ -70,7 +67,6 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
   }, [extendedFields]);
 
   const addRow = () => {
-    debugger;
     if (
       Object.keys(newRow).length > 0 &&
       modeling &&
@@ -79,17 +75,17 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
       extendedFieldNames.length > 0
     ) {
       // Add the exception
-      addException(
+      addProperty(
         activeElement,
         newRow,
         moddle,
         modeling,
-        id,
-        extendedFieldNames
+        id
+        // extendedFieldNames
       );
 
       // Refetch the exceptions and update the table data
-      const updatedExceptions = getExceptions(activeElement, id) || [];
+      const updatedExceptions = getValues(activeElement, id) || [];
       console.log(updatedExceptions);
       setTableData(updatedExceptions);
       setNewRow({});
@@ -99,7 +95,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
   const deleteRow = (index: number, exception: ModdleElement) => {
     const updatedData = tableData.filter((_, i) => i !== index);
     setTableData(updatedData);
-    if (modeling) removeException(activeElement, exception, modeling); // Pass index only
+    if (modeling) removeProperty(activeElement, exception, modeling); // Pass index only
   };
   const moveRow = (
     index: number,
@@ -121,7 +117,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
         }
 
         // Refetch the exceptions and update the table data
-        const updatedExceptions = getExceptions(activeElement, id) || [];
+        const updatedExceptions = getValues(activeElement, id) || [];
         setTableData(updatedExceptions);
       }
 
@@ -138,39 +134,43 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
               <table className="w-full table-auto border-collapse mb-4">
                 <thead>
                   <tr>
-                    {extendedFields.map((field) => (
-                      <th
-                        key={field.key}
-                        className="border px-2 py-1 text-left"
-                      >
-                        {field.label}
-                      </th>
-                    ))}
+                    {extendedFields.map(
+                      (field) =>
+                        field?.isDisplayed && (
+                          <th
+                            key={field.key}
+                            className="border px-2 py-1 text-left"
+                          >
+                            {field.label}
+                          </th>
+                        )
+                    )}
                     <th className="border px-2 py-1">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {tableData.map((exceptionEl, rowIndex) => {
-                    const parsed = getMappedException(
+                    const parsed = getMappedProperty(
                       exceptionEl,
-                      extendedFieldNames
+                      extendedFields
                     );
                     return (
                       <tr key={rowIndex}>
-                        {extendedFields.map((field) => (
-                          <td key={field.key} className="border px-2 py-1">
-                            {(() => {
-                              // Dynamically fetch the value from `parsed` using the field key
-                              const value = parsed?.[field.key];
-
-                              if (field.type === "Boolean") {
-                                return String(value ? true : false);
-                              }
-
-                              return value || ""; // Default to an empty string if value is undefined
-                            })()}
-                          </td>
-                        ))}
+                        {extendedFields.map(
+                          (field) =>
+                            field?.isDisplayed && (
+                              <td key={field.key} className="border px-2 py-1">
+                                {(() => {
+                                  // Dynamically fetch the value from `parsed` using the field key
+                                  const value = parsed?.[field.key];
+                                  if (field.type === "Boolean") {
+                                    return String(value ? true : false);
+                                  }
+                                  return value || ""; // Default to an empty string if value is undefined
+                                })()}
+                              </td>
+                            )
+                        )}
                         <td className="border px-2 py-1 space-x-1">
                           <button
                             onClick={() => moveRow(rowIndex, "up", exceptionEl)}
@@ -224,36 +224,54 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
             >
               {t("Cancel")}
             </button>
-            <button
-              onClick={saveModalChange}
-              className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
-            >
-              {t("Save")}
-            </button>
+            {extendedFields.length == 0 && (
+              <button
+                onClick={saveModalChange}
+                className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
+              >
+                {t("Save")}
+              </button>
+            )}
           </div>
         </div>
 
         {extendedFields.length > 0 && (
           <div className="w-1/3 border-l pl-4">
-            <h3 className="font-medium mb-2 text-sm">{t("Add New Entry")}</h3>
+            <h3 className="font-medium mb-2 text-sm">{t("NEW_ENTRY")}</h3>
             {extendedFields.map((field) => (
               <div key={field.key} className="mb-2">
                 <label className="block text-xs mb-1">{field.label}</label>
                 {field.type == "Boolean" ? (
                   <input
-                    type={field.type === "Boolean" ? "checkbox" : "text"}
+                    type={"checkbox"}
                     className="w-full border px-2 py-1 text-xs rounded"
                     checked={
                       newRow[field.key] === "true" || newRow[field.key] === true
                     }
                     onChange={(e) => {
-                      const checkedVal = e.target.checked ? "true" : "false";
+                      const checkedVal = e.target.checked ? true : false;
                       setNewRow((prev) => ({
                         ...prev,
                         [field.key]: checkedVal,
                       }));
                     }}
                   />
+                ) : field.type === "Select" &&
+                  Array.isArray(field.options) &&
+                  field.options.length > 0 ? (
+                  <select
+                    autoFocus
+                    id={`propertyInput-${id}`}
+                    defaultValue={field.options[0].id}
+                    onChange={(e) => handleInputChange(field.key, e)}
+                    className="border border-gray-300 rounded px-1 py-0.5 w-full text-xs"
+                  >
+                    {field.options.map((option: any) => (
+                      <option key={option.value} value={option.id}>
+                        {t(option.name)}
+                      </option>
+                    ))}
+                  </select>
                 ) : (
                   <input
                     type="text"

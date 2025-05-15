@@ -5,6 +5,7 @@
   import minimapModule from 'diagram-js-minimap'
   import BpmnColorPickerModule from 'bpmn-js-color-picker'
   import lintModule from 'bpmn-js-bpmnlint'
+import bpmnlint from '../Lint/bpmnlint'
 
   export type ModulesAndModdles = [
     ModuleDeclaration[],
@@ -31,11 +32,11 @@
       moddle['flowable'] = flowableModdleDescriptors
 
     // BPMN linting
-      modules.push(lintModule)
-    //   options['linting'] = {
-    //     active: true,
-    //     bpmnlint: bpmnlint
-    //   }
+      // modules.push(lintModule)
+      // options['linting'] = {
+      //   active: true,
+      //   bpmnlint: bpmnlint
+      // }
   
     // minimap
       modules.push(minimapModule)

@@ -14,27 +14,8 @@ import { withTranslation } from "react-i18next";
 import extendedProperties from "../../../tasks/extendedProperties.json";
 import DynamicPropertyModal from "./DynamicPropertyModal";
 import { ModdleElement } from "bpmn-moddle";
-import { all } from "axios";
-import { getExceptions } from "../../../utils/ExceptionElementUtil";
+import { getValues } from "../../../utils/exceptionElementUtil";
 import FormKeyModal from "./formKeyModal";
-
-interface BPMNPropertyPanelProps {
-  activeElement: BpmnElement;
-  modeling: Modeling;
-  modeler: Modeler;
-  tags: any;
-  t: any;
-}
-
-interface ExtendedProperty {
-  label: string;
-  key: string;
-  type: string;
-}
-
-interface ExtendedProperties {
-  [key: string]: ExtendedProperty[];
-}
 
 const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   activeElement,
@@ -98,7 +79,6 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
       setInlineEditingId(id);
       return;
     }
-
     if (type === "Text") {
       setModalValue((dynamicProperties[id] as string) ?? "");
       setCurrentId(id);
@@ -175,7 +155,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
         const { id, title, type, description } = prop;
         const value = dynamicProperties[id];
         const isEditingInline = inlineEditingId === id;
-        const numberOfValues = getExceptions(activeElement, id).length;
+        const numberOfValues = getValues(activeElement, id).length;
 
         return (
           <React.Fragment key={id}>
@@ -224,7 +204,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
                     onChange={(e) => handleInlineChange(e, id)}
                     onBlur={() => saveInlineChange(id)}
                     onKeyDown={(e) => e.key === "Enter" && saveInlineChange(id)}
-                    className="border border-gray-300 rounded px-1 py-0.5 w-full text-xs"
+                    className="border border-gray-300 rounded px-1 py-0.5 w-full text-xs truncate"
                   />
                 )
               ) : numberOfValues > 0 ? (
@@ -241,7 +221,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
                   No Value
                 </span>
               ) : (
-                <span onClick={() => openEditor(id, type)}>
+                <span className="truncate" onClick={() => openEditor(id, type)}>
                   {String(value)}
                 </span>
               )}

@@ -7,35 +7,54 @@ import type  { Element } from 'bpmn-js/lib/model/Types';
 const standAloneTypes = [
   "name","isForCompensation", "isExecutable", "scriptFormat", "script","id","default"
 ]
+const defaultFlowCapableTypes = [
+  "bpmn:ExclusiveGateway", // XOR gateway
+  "bpmn:InclusiveGateway", // OR gateway
+  "bpmn:Activity",          // Includes tasks and subprocesses
+  "bpmn:Task",              // Base task type (for completeness)
+  "bpmn:UserTask",
+  "bpmn:ServiceTask",
+  "bpmn:ScriptTask",
+  "bpmn:ManualTask",
+  "bpmn:BusinessRuleTask",
+  "bpmn:ReceiveTask",
+  "bpmn:SendTask",
+  "bpmn:SubProcess",
+  "bpmn:CallActivity"
+];
 
 const prefix = import.meta.env.VITE_PROCESS_ENGINE; 
-function getDefaultFlow(element:Element):string|undefined{
+function getDefaultFlow(element: Element): boolean | undefined {
   const businessObject = getBusinessObject(element);
-  console.log(businessObject)
-
   if (!businessObject) return;
 
   const source = businessObject.sourceRef;
-  const sourceBo=getBusinessObject(source)
-  console.log(sourceBo)
-  console.log(sourceBo?.get('default'))
-  if(sourceBo?.get('default')?.id===element?.id) return "true"
-  return "false"
-    
+  const sourceBo = getBusinessObject(source);
+  const defaultFlow = sourceBo?.get("default");
+  if (!defaultFlow || !defaultFlow?.id) return false;
+
+  return defaultFlow.id === element.id;
 }
-function getSourceElement(element:Element):{SourceBO:any,source:Element}|undefined{
 
-
-  const sourceElement = element.source;
-
-  if (!sourceElement || !sourceElement.di) {
-    console.warn("Source element is not a valid shape:", sourceElement);
+function getSourceElement(
+  element: Element
+): { SourceBO: any; source: Element } | undefined {
+  if (!element?.source || !element.source?.di) {
+    console.warn("Element has no valid source:", element);
     return;
   }
 
- return { SourceBO: getBusinessObject(sourceElement), source: sourceElement };
+  const source = element.source;
+  const sourceBO = getBusinessObject(source);
+  if (!sourceBO) {
+    console.warn("No businessObject on source element:", source);
+    return;
+  }
+
+  return { SourceBO: sourceBO, source };
 }
-export function getDynamicProperty(element: Element,bpmnname:string): string | undefined {
+
+export function getDynamicProperty(element: Element,bpmnname:string): boolean | undefined {
   const businessObject = getBusinessObject(element);
 if (!businessObject) {
     return undefined;
@@ -43,7 +62,7 @@ if (!businessObject) {
 
   if (standAloneTypes.includes(bpmnname)) {
     if(bpmnname==="default"){
-      const value:string|undefined =getDefaultFlow(element)
+      const value:boolean|undefined =getDefaultFlow(element)
       return value
     }
 return businessObject.get(`${bpmnname}`);
@@ -57,30 +76,64 @@ return businessObject.get(`${bpmnname}`);
 
 
 // 🔹 Set or update formKey value
-export function updateDynamicProperty(modeling:Modeling, element: Element, name:string,value: string|boolean) {
+export function updateDynamicProperty(
+  modeling: Modeling,
+  element: Element,
+  name: string,
+  value: string | boolean
+) {
+  try {
+    
+  
   if (standAloneTypes.includes(name)) {
-if(name==="default"){
-  const bo = getBusinessObject(element);
- const sourceElement=getSourceElement(element)
-  // Only unset if this sequence flow is the default flow
-  console.log(sourceElement?.SourceBO?.default?.id===bo.id)
-  if (sourceElement?.SourceBO&&sourceElement?.source) {
-    modeling.updateProperties(sourceElement.source, {
-      default: element,
-    });
-  }
-    return;
+    if (name === "default") {
+  const sourceElement = getSourceElement(element);
 
-}
-    modeling?.updateProperties(element, {
-      [name]: value
+  if (!sourceElement?.source || !element?.businessObject) {
+    console.warn("Missing source or target in default flow logic", {
+      sourceElement,
+      element,
     });
     return;
   }
-    modeling?.updateProperties(element, {
-    [`${prefix}:${name}`]: value
-  });
+
+  const sourceBO = sourceElement.source.businessObject;
+  if (!sourceBO) {
+    console.warn("Source businessObject missing:", sourceElement.source);
+    return;
+  }
+  if (!element?.businessObject || !element.businessObject.id) {
+  console.warn("Element businessObject is not ready:", element);
+  return;
 }
+
+
+  if ((!sourceBO.default || sourceBO.default?.id !== element.businessObject.id)&&defaultFlowCapableTypes.includes(sourceBO.$type)) {
+    modeling.updateProperties(sourceElement.source, {
+      default: element.businessObject,  
+    });
+  }
+
+  return;
+}
+
+
+    modeling?.updateProperties(element, { [name]: value });
+    return;
+  }
+
+  if (element?.businessObject) {
+    modeling?.updateProperties(element, {
+      [`${prefix}:${name}`]: value,
+    });
+  } else {
+    throw new Error("Invalid element when setting dynamic property:");
+  }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 
 // 🔹 Remove formKey value
 export function removeDynamicProperty(modeling: Modeling, element: Element, name: string) {

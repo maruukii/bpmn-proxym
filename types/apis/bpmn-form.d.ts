@@ -1,7 +1,5 @@
 declare interface FormMetadata extends ProcessMetadata {
-        comment?: string;
         historyModels: FormMetadata[]|[];
-        thumbnail?: string;
 
 }
 declare interface SingleFormMetadata {

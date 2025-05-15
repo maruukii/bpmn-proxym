@@ -2,19 +2,18 @@ import { withTranslation } from "react-i18next";
 import stencilConfig from "../../tasks/stencils.json";
 import { useEffect, useState } from "react";
 import { updateDynamicProperty } from "../../utils/dynamicPropertyUtil";
+import { generateFlowableId } from "../../utils/tools";
 
 function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
   const [expanded, setExpanded] = useState<string | null>(null);
+
   const groupedStencils = stencilConfig.stencils
     .filter((stencil) => stencil.type === "node")
     .reduce((acc: Record<string, any[]>, stencil) => {
       const category = stencil.groups;
-
       if (typeof category !== "string") return acc;
-
       if (!acc[category]) acc[category] = [];
       acc[category].push(stencil);
-
       return acc;
     }, {});
 
@@ -22,16 +21,14 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
     setExpanded((prev) => (prev === cat ? null : cat));
   };
 
-  const handleDragStart = (event: React.DragEvent, elementId: any) => {
-    // event.dataTransfer.setData("bpmn-type", stencil.type);
-    // event.dataTransfer.setData("stencil-data", JSON.stringify(stencil));
+  const handleDragStart = (event: React.DragEvent, elementId: string) => {
     event.dataTransfer.setData("elementId", elementId);
     event.dataTransfer.effectAllowed = "copy";
   };
+
   useEffect(() => {
     if (!modeler) return;
 
-    // Import your stencil configuration
     const elementRegistry = modeler.get("elementRegistry");
     const canvas = modeler.get("canvas");
     const elementFactory = modeler.get("elementFactory");
@@ -45,13 +42,11 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
       const elementId = event.dataTransfer?.getData("elementId");
       if (!elementId) return;
 
-      // Find the stencil element definition
       const stencilElement = stencilConfig.stencils.find(
-        (el: BpmnElement) => el.id === elementId
+        (el: any) => el.id === elementId
       );
       if (!stencilElement) return;
 
-      // Calculate position
       const container = canvas.getContainer();
       const rect = container.getBoundingClientRect();
       const viewbox = canvas.viewbox();
@@ -60,75 +55,79 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
       const diagramX = viewbox.x + (clientX / rect.width) * viewbox.width;
       const diagramY = viewbox.y + (clientY / rect.height) * viewbox.height;
 
-      // Find parent element (pool/lane)
-      const targetParent =
+      const findParentElement = (x: number, y: number) => {
+        const participants = elementRegistry.filter(
+          (el: any) => el.type === "bpmn:Participant"
+        );
+        return participants.find((part: any) => {
+          const { x: px, y: py, width, height } = part;
+          return x >= px && x <= px + width && y >= py && y <= py + height;
+        });
+      };
+
+      const parent =
         findParentElement(diagramX, diagramY) || canvas.getRootElement();
 
-      // Create the base shape
+      // Check if it's a Structural element
+      const isStructural = stencilElement.groups?.includes("Structural");
+
       const shape = elementFactory.createShape({
         type: stencilElement.bpmnType,
         x: diagramX,
         y: diagramY,
         width: stencilElement.width,
         height: stencilElement.height,
+        ...(isStructural && {
+          isExpanded: Boolean(stencilElement?.isExpanded),
+          triggeredByEvent: Boolean(stencilElement?.triggeredByEvent),
+        }),
       });
 
-      // Create element on canvas
       const element = modeling.createShape(
         shape,
         { x: diagramX, y: diagramY },
-        targetParent
+        parent
       );
 
-      // Add event definition if specified
-      if (stencilElement?.eventDefinitionType) {
-        addEventDefinition(element, stencilElement, bpmnFactory, modeling);
+      if (isStructural && element.di) {
+        element.businessObject.isExpanded = Boolean(stencilElement.isExpanded);
+        element.di.isExpanded = Boolean(stencilElement.isExpanded);
+        canvas.resized();
       }
-      if (stencilElement?.flowableType) {
-        updateDynamicProperty(
-          modeling,
-          element,
-          "type",
-          stencilElement.flowableType
-        );
-      }
-    };
 
-    // Helper functions
-    const findParentElement = (x: number, y: number) => {
-      const participants = elementRegistry.filter(
-        (el: BpmnElement) => el.type === "bpmn:Participant"
-      );
-      return participants.find((part: BpmnElement) => {
-        const { x: px, y: py, width, height } = part;
-        return x >= px && x <= px + width && y >= py && y <= py + height;
-      });
-    };
-
-    const addEventDefinition = (
-      element: any,
-      stencilEl: any,
-      bpmnFactory: any,
-      modeling: any
-    ) => {
-      const eventDefinition = bpmnFactory.create(stencilEl.eventDefinitionType);
-
-      modeling.updateProperties(element, {
-        eventDefinitions: [eventDefinition],
-      });
-
-      // Handle boundary event special cases
-      if (element.type === "bpmn:BoundaryEvent") {
+      if (stencilElement.eventDefinitionType) {
+        const eventDef = bpmnFactory.create(stencilElement.eventDefinitionType);
         modeling.updateProperties(element, {
-          cancelActivity: !stencilEl.eventDefinitionType.includes("Compensate"),
+          eventDefinitions: [eventDef],
         });
+
+        if (element.type === "bpmn:BoundaryEvent") {
+          modeling.updateProperties(element, {
+            cancelActivity:
+              !stencilElement.eventDefinitionType.includes("Compensate"),
+          });
+        }
       }
+
+      if (stencilElement.flowableType) {
+        setTimeout(() => {
+          updateDynamicProperty(
+            modeling,
+            element,
+            "type",
+            stencilElement.flowableType
+          );
+        }, 0);
+      }
+      const customId = generateFlowableId();
+      modeling.updateProperties(element, { id: customId });
     };
+
     const handleDragOver = (event: DragEvent) => {
       event.preventDefault();
       event.stopPropagation();
     };
-    // Event listeners setup
+
     const container = canvas.getContainer();
     container.addEventListener("drop", handleDrop);
     container.addEventListener("dragover", handleDragOver);
@@ -138,6 +137,7 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
       container.removeEventListener("dragover", handleDragOver);
     };
   }, [modeler]);
+
   return (
     <div className="custom-palette space-y-2">
       {Object.entries(groupedStencils).map(([category, stencils]) => {
