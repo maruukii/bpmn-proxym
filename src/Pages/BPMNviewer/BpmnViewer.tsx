@@ -212,25 +212,24 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
 
       {/* BPMN Editor Container */}
       <div className="flex w-full h-[80vh] border border-gray-300 rounded-lg shadow-md">
-        {/* ContextPad  */}
-        <div className="relative inset-1 w-1/5 h-full border-r border-gray-300 overflow-auto">
-          <ContextPad modeler={modeler} />
-        </div>
+        {/* <div className="relative inset-1 w-1/10 h-full border-r border-gray-300 overflow-auto"> */}
+        {/* </div> */}
 
-        {/* Right Column (3/4 Width, Full Height) */}
-        <div className="flex flex-col w-4/5 h-full m-2">
-          {/* BPMN Modeler */}
+        <div className="flex flex-col w-full h-full  ">
+          <ContextPad modeler={modeler} />
           <ContextMenu modeler={modeler} />
           <div
             ref={designer}
-            className="h-3/5 w-full border-b border-gray-300"
-          />
-
+            className="h-full w-full border-b border-gray-300"
+          />{" "}
           {/* Properties Panel */}
-          <div className="h-2/5 p-4 bg-gray-100 border-gray-300 rounded-b-lg shadow-md overflow-auto">
-            <Property />
-          </div>
+          <Property />
         </div>
+        {/* <div className="flex flex-col w-2/10 h-full ">
+          <div className=" p-4 bg-gray-100 border-gray-300 rounded-b-lg shadow-md overflow-auto">
+           
+          </div>
+        </div> */}
       </div>
 
       {/* Preview Modal */}

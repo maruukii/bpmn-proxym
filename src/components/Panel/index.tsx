@@ -14,6 +14,7 @@ import DynamicProperty from "./components/DynamicProperty";
 import { withTranslation } from "react-i18next";
 import { getDynamicProperty } from "../../utils/dynamicPropertyUtil";
 import { getBusinessObject } from "bpmn-js/lib/util/ModelUtil";
+import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 export function PropertiesPanel({ t }: { t: any }) {
   const dispatch = useDispatch();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -30,6 +31,7 @@ export function PropertiesPanel({ t }: { t: any }) {
     bpmnElement: "",
     bpmnElementName: "",
   });
+  const [isOpen, setIsOpen] = useState(false);
 
   // const tagNames = useMemo(() => {
   //   const extractTagsWithProperties = (types: any[]) => {
@@ -213,7 +215,6 @@ export function PropertiesPanel({ t }: { t: any }) {
     if (tag) {
       setIcon(tag?.icon);
     }
-    console.log(tag);
   }, [tag]);
 
   const renderProperties = () => {
@@ -227,32 +228,57 @@ export function PropertiesPanel({ t }: { t: any }) {
     );
   };
   return (
-    <div ref={panelRef} className="properties-panel p-4 overflow-auto">
-      <h2 className="text-3xl font-bold mb-4">{t(elementState.panelTitle)}</h2>
-      <div className="panel-header flex items-center mb-4">
-        {icon ? (
-          <img src={`/icons/${icon}`} alt="" className="w-8 h-8 mr-2" />
-        ) : (
-          <BpmnIcon name={elementState?.bpmnIconName} />
-        )}
-        <div className="flex items-start flex-col">
-          {" "}
-          <h2 className="text-lg font-semibold">
-            {tag?.title ? t(tag.title) : elementState?.bpmnElement}
-          </h2>
-          <h2 className="text-lg font-light truncate">
-            {elementState?.bpmnElementName}
-          </h2>
+    <div className="fixed h-full  right-0 z-[100]">
+      {/* Slide-in Panel */}
+      <div
+        ref={panelRef}
+        className={`properties-panel p-4 relative top-0 right-0 overflow-auto h-[79vh] bg-white shadow-lg border-l border-gray-300 
+        transition-transform duration-300 ease-in-out w-80
+        ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-3xl font-bold">{t(elementState.panelTitle)}</h2>
+          <button onClick={() => setIsOpen(false)}>
+            <ChevronDoubleRightIcon className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
+
+        {/* Panel Content */}
+        <div className="panel-header flex items-center mb-4">
+          {icon ? (
+            <img src={`/icons/${icon}`} alt="" className="w-8 h-8 mr-2" />
+          ) : (
+            <BpmnIcon name={elementState?.bpmnIconName} />
+          )}
+          <div className="flex items-start flex-col">
+            <h2 className="text-lg font-semibold">
+              {tag?.title ? t(tag.title) : elementState?.bpmnElement}
+            </h2>
+            <h2 className="text-lg font-light truncate">
+              {elementState?.bpmnElementName}
+            </h2>
+          </div>
+        </div>
+
+        <div className="panel-body space-y-4 overflow-hidden">
+          {activeElement && tag ? (
+            renderProperties()
+          ) : (
+            <div className="text-gray-400">{t("No element selected")}</div>
+          )}
         </div>
       </div>
 
-      <div className="panel-body space-y-4">
-        {activeElement && tag ? (
-          renderProperties()
-        ) : (
-          <div className="text-gray-400">{t("No element selected")}</div>
-        )}
-      </div>
+      {/* Open Button */}
+      {!isOpen && (
+        <div
+          onClick={() => setIsOpen(true)}
+          className="fixed top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white text-xs font-bold py-2 px-2 cursor-pointer rounded-l-2xl"
+          style={{ writingMode: "sideways-lr" }}
+        >
+          <div className="text-lg tracking-wide px-3 ">P r o p e r t i e s</div>
+        </div>
+      )}
     </div>
   );
 }
