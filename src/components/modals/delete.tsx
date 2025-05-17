@@ -1,12 +1,13 @@
 import { withTranslation } from "react-i18next";
 import { axiosInstance } from "../../config/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
   setModalOpen,
-  navigate,
   id,
   modelName,
 }) => {
+  const navigate = useNavigate();
   const handleDelete = async () => {
     try {
       await axiosInstance

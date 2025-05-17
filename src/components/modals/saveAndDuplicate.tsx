@@ -1,21 +1,27 @@
 import { withTranslation } from "react-i18next";
 import { axiosFormData, axiosInstance } from "../../config/axiosInstance";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProcessData, setXml } from "../../store/process/processSlice";
 import { ProcessMetadata } from "../../../types/apis/bpmn-process";
 import { createNewDiagram } from "../../utils/createNewDiagram";
 import { setNewDiagram } from "../../store/file/fileSlice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import {
+  openJsonPreview,
+  openXMLPreview,
+} from "../../utils/previewContentUtils";
+import { RootState } from "../../store/store";
 
 const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
   process,
   setModalOpen,
-  navigate,
   action,
 }) => {
+  const navigate = useNavigate();
   const { lastVersionId, oldVersionId } = useParams();
+  const { modeler, moddle } = useSelector((state: RootState) => state.modeler);
   const dispatch = useDispatch();
   const [model, setModel] = useState<ProcessMetadata>(
     process || { modelType: 0 }
@@ -32,79 +38,80 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
         alert("Model Name and Model Key are required!");
         return;
       }
-      action === "Duplicate" && navigate
-        ? await axiosInstance
-            .post(
-              `/configuration/modeler/rest/models/${model?.id}/clone`,
-              model
-            )
-            .then((data) => {
-              setModalOpen(false);
-              navigate(`/process/${data?.data?.id}`);
-            })
-        : action === "Create" && navigate
-        ? await axiosInstance
-            .post("/configuration/modeler/rest/models", model)
-            .then(async (data) => {
-              dispatch(setProcessData(data.data));
+      if (action === "Duplicate" && navigate) {
+        await axiosInstance
+          .post(`/configuration/modeler/rest/models/${model?.id}/clone`, model)
+          .then((data) => {
+            setModalOpen(false);
+            navigate(`/process/${data?.data?.id}`);
+          });
+      } else if (action === "Create" && navigate) {
+        await axiosInstance
+          .post("/configuration/modeler/rest/models", model)
+          .then(async (data) => {
+            dispatch(setProcessData(data.data));
+            await axiosInstance
+              .post(
+                `/configuration/modeler/rest/converter/convert-to-bpmn/${data?.data?.id}`,
+                {}
+              )
+              .then((data) => {
+                setModalOpen(false);
+                dispatch(setXml(data.data));
+                dispatch(
+                  setNewDiagram({
+                    filename: model?.name,
+                    fileContent: data.data,
+                  })
+                );
+                navigate("/");
+              });
+          });
+      } else if (action === "Use As New Version" && navigate) {
+        await axiosInstance
+          .post(
+            `/configuration/modeler/rest/models/${lastVersionId}/history/${oldVersionId}`,
+            { action: "useAsNewVersion", comment: model?.comment }
+          )
+          .then(() => {
+            navigate(`/process/${lastVersionId}`);
+            setModalOpen(false);
+          });
+      } else {
+        if (!modeler) return;
+        const xml = await openXMLPreview({ modeler });
+        const json = await axiosInstance.post(
+          "/configuration/modeler/rest/converter/convert-to-json",
+          {
+            value: xml,
+          }
+        );
 
-              await axiosInstance
-                .post(
-                  `/configuration/modeler/rest/converter/convert-to-bpmn/${data?.data?.id}`,
-                  {}
-                )
-                .then((data) => {
-                  setModalOpen(false);
-                  dispatch(setXml(data.data));
-                  dispatch(
-                    setNewDiagram({
-                      filename: model?.name,
-                      fileContent: data.data,
-                    })
-                  );
-                  navigate("/");
-                });
-            })
-        : action === "Use As New Version" && navigate
-        ? await axiosInstance
-            .post(
-              `/configuration/modeler/rest/models/${lastVersionId}/history/${oldVersionId}`,
-              { action: "useAsNewVersion", comment: model?.comment }
-            )
-            .then(() => {
-              navigate(`/process/${lastVersionId}`);
-              setModalOpen(false);
-            })
-        : await axiosInstance
-            .post("/configuration/modeler/rest/converter/convert-to-json", {
-              value: model?.xml,
-            })
-            .then(async (data) => {
-              const req = new URLSearchParams();
-              req.append("modeltype", "model");
-              req.append("json_xml", JSON.stringify(data?.data) || "");
-              req.append("name", model?.name || "");
-              req.append("key", model?.key || "");
-              req.append("description", model?.description || "");
-              req.append("newversion", String(newVersion));
-              req.append("comment", model?.comment || "");
-              req.append("lastUpdated", String(Date.now()));
+        const req = new URLSearchParams();
+        req.append("modeltype", "model");
+        req.append("json_xml", json?.data ? JSON.stringify(json.data) : "");
+        req.append("name", model?.name || "");
+        req.append("key", model?.key || "");
+        req.append("description", model?.description || "");
+        req.append("newversion", String(newVersion));
+        req.append("comment", model?.comment || "");
+        req.append("lastUpdated", String(Date.now()));
 
-              await axios.post(
-                `/configuration/modeler/rest/models/${model?.id}/editor/json`,
-                req.toString(),
-                {
-                  headers: {
-                    "Content-Type":
-                      "application/x-www-form-urlencoded; charset=UTF-8",
-                  },
-                }
-              );
-            })
-            .then((data) => {
-              dispatch(setProcessData(data));
-              setModalOpen(false);
-            });
+        await axios
+          .post(
+            `/configuration/modeler/rest/models/${model?.id}/editor/json`,
+            req.toString(),
+            {
+              headers: {
+                "Content-Type":
+                  "application/x-www-form-urlencoded; charset=UTF-8",
+              },
+            }
+          )
+          .then((data) => {
+            setModalOpen(false);
+          });
+      }
     } catch (error) {
       console.error("Error duplicating BPMN:", error);
     }

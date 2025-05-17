@@ -304,7 +304,6 @@ const Manage: FC<any> = ({ t }) => {
           process={process}
           setModalOpen={setDuplicateModalOpen}
           action={"Duplicate"}
-          navigate={navigate}
         />
       )}
       {newVersionModalOpen && (
@@ -312,13 +311,11 @@ const Manage: FC<any> = ({ t }) => {
           process={process}
           setModalOpen={setNewVersionModalOpen}
           action={"Use As New Version"}
-          navigate={navigate}
         />
       )}
       {deleteModalOpen && (
         <Delete
           setModalOpen={setDeleteModalOpen}
-          navigate={navigate}
           id={lastVersionId}
           modelName={process?.name}
         />
