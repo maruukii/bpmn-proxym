@@ -19,14 +19,6 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { withTranslation, WithTranslation } from "react-i18next";
 const App: React.FC<WithTranslation> = ({ t }) => {
-  // useEffect(() => {
-  //   const designer = document.getElementById("designer");
-  //   if (designer) {
-  //     designer.addEventListener("contextmenu", function (ev: PointerEvent) {
-  //       ev.preventDefault();
-  //     });
-  //   }
-  // }, []);
   const dispatch = useDispatch();
   const {
     filename,
@@ -68,6 +60,7 @@ const App: React.FC<WithTranslation> = ({ t }) => {
     fileExportSuccess,
     fileImportSuccess,
   ]);
+
   return (
     <PersistQueryClientProvider
       client={queryClient}
