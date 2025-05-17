@@ -40,13 +40,11 @@ comment?:string
   //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   // ) => void;
   // setProcess: React.Dispatch<React.SetStateAction<ProcessMetadata>>;
-    navigate?: NavigateFunction;
     action:string
 }
 
 declare interface DeleteModalProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  navigate: NavigateFunction;
   id:string;
   modelName:string
 }

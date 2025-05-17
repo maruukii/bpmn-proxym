@@ -34,7 +34,6 @@ const Designer: React.FC<DesignerProps> = ({ xml, filename }) => {
         await initModeler({
           designer,
           xml,
-          // propertiesRef,
           modelerModules,
           dispatch,
           modeler,

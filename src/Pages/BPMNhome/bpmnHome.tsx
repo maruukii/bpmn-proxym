@@ -14,7 +14,7 @@ interface Bpmnhome {
 const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
   document.title = "BPMN";
   const { filename } = useSelector((state: RootState) => state.file);
-  const { xml, key } = useSelector((state: RootState) => state.process);
+  const { xml, name } = useSelector((state: RootState) => state.process);
   // const { isLoggedIn, userName, loginError, logoutError } = useSelector(
   //   (state: RootState) => state.user
   // );
@@ -29,15 +29,18 @@ const bpmnHome: React.FC<Bpmnhome> = ({ t }) => {
   //       })
   //     )
   //   : null;
-
   return (
     <div>
-      <NewDiagram />
-      <FileUploadButton />
+      {!xml && (
+        <>
+          <NewDiagram />
+          <FileUploadButton />
+        </>
+      )}
 
       {xml ? (
         // <BpmnViewer xml={xml} filename={filename} />
-        <Designer xml={xml} filename={filename || key} />
+        <Designer xml={xml} filename={filename || name} />
       ) : (
         <p style={{ margin: "1rem" }}>{t("BPMNSTATUS")}</p>
       )}

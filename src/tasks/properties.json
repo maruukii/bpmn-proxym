@@ -57,11 +57,11 @@
       ]
     },
     {
-      "name": "categorypackage",
+      "name": "applicationpackage",
       "properties": [
         {
           "id": "category",
-          "type": "String",
+          "type": "Application",
           "title": "BPMN.PROPERTYPACKAGES.CATEGORYPACKAGE.CATEGORYDEFINITION.TITLE",
           "value": "",
           "description": "BPMN.PROPERTYPACKAGES.CATEGORYPACKAGE.CATEGORYDEFINITION.DESCRIPTION",

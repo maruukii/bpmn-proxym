@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Moddle } from 'bpmn-moddle'
+import type  BpmnModdle  from 'bpmn-moddle'
 import type Modeler from 'bpmn-js/lib/Modeler'
 import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
 import type Canvas from 'diagram-js/lib/core/Canvas'
@@ -10,7 +10,7 @@ interface ModelerState {
   activeElement: BpmnElement | undefined
   activeElementId: string | undefined
   modeler: Modeler | undefined
-  moddle: Moddle | undefined
+  moddle: BpmnModdle | undefined
   modeling: Modeling | undefined
   canvas: Canvas | undefined
   elementRegistry: ElementRegistry | undefined
@@ -38,7 +38,7 @@ const modelerSlice = createSlice({
         const modeler = action.payload
         state.modeling = modeler.get<Modeling>('modeling')
         state.newDiagramStatus = false
-        state.moddle = modeler.get<Moddle>('moddle')
+        state.moddle = modeler.get<BpmnModdle>('moddle')
         state.canvas = modeler.get<Canvas>('canvas')
         state.elementRegistry = modeler.get<ElementRegistry>('elementRegistry')
       } else {

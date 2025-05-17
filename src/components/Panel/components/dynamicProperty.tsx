@@ -8,14 +8,14 @@ import {
   setDocumentValue,
   getDynamicPropertyDocumentation,
 } from "../../../utils/documentationUtil";
-import type Modeling from "bpmn-js/lib/features/modeling/Modeling";
-import type Modeler from "bpmn-js/lib/Modeler";
+
 import { withTranslation } from "react-i18next";
 import extendedProperties from "../../../tasks/extendedProperties.json";
 import DynamicPropertyModal from "./DynamicPropertyModal";
 import { ModdleElement } from "bpmn-moddle";
 import { getValues } from "../../../utils/exceptionElementUtil";
 import FormKeyModal from "./formKeyModal";
+import ApplicationModal from "./applicationModal";
 
 const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   activeElement,
@@ -35,6 +35,8 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   const [extendedFields, setExtendedFields] = useState<any[]>([]);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [formKeyEditing, setFormKeyEditing] = useState(false);
+  const [categoryEditing, setCategoryEditing] = useState(false);
+
   useEffect(() => {
     if (!activeElement) return;
     const newProps: Record<string, string | boolean> = {};
@@ -79,6 +81,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
       setInlineEditingId(id);
       return;
     }
+    console.log(type);
     if (type === "Text") {
       setModalValue((dynamicProperties[id] as string) ?? "");
       setCurrentId(id);
@@ -86,6 +89,11 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
       setCurrentId(id);
       setModalValue((dynamicProperties[id] as string) ?? "");
       setFormKeyEditing(true);
+      return;
+    } else if (type === "Application") {
+      setCurrentId(id);
+      setModalValue((dynamicProperties[id] as string) ?? "");
+      setCategoryEditing(true);
       return;
     } else if (id in extendedProperties) {
       const props = (extendedProperties as ExtendedProperties)[id] ?? [];
@@ -99,7 +107,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   };
 
   const saveModalChange = () => {
-    if ((modalEditingId || formKeyEditing) && currentId) {
+    if ((modalEditingId || formKeyEditing || categoryEditing) && currentId) {
       setDynamicProperties((prev) => ({
         ...prev,
         [currentId as string]: modalValue,
@@ -107,11 +115,16 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
       if (currentId === "documentation") {
         setDocumentValue(activeElement, modeler, modeling, modalValue);
       } else {
-        updateDynamicProperty(modeling, activeElement, currentId, modalValue);
+        if (!modalValue) {
+          removeDynamicProperty(modeling, activeElement, currentId);
+        } else {
+          updateDynamicProperty(modeling, activeElement, currentId, modalValue);
+        }
       }
     }
     setModalEditingId(null);
     setFormKeyEditing(false);
+    setCategoryEditing(false);
     setCurrentId(null);
     setModalValue("");
     setExtendedFields([]);
@@ -122,6 +135,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     setModalValue("");
     setExtendedFields([]);
     setFormKeyEditing(false);
+    setCategoryEditing(false);
     setCurrentId(null);
   };
   const handleSelectCheckboxChange = (
@@ -148,9 +162,8 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   };
 
   const allProperties = tags.flatMap((tag: any) => tag.properties);
-  // console.log(allProperties[10].options);
   return (
-    <div className="grid grid-cols-4 gap-2 text-lg">
+    <div className="grid grid-cols-2 gap-3 text-md">
       {allProperties.map((prop: any) => {
         const { id, title, type, description } = prop;
         const value = dynamicProperties[id];
@@ -161,7 +174,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
           <React.Fragment key={id}>
             <label
               htmlFor={`propertyInput-${id}`}
-              className="text-right font-medium col-span-1"
+              className="text-left font-bold text-sm col-span-1"
               title={t(description)}
             >
               {t(title)}
@@ -221,7 +234,10 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
                   No Value
                 </span>
               ) : (
-                <span className="truncate" onClick={() => openEditor(id, type)}>
+                <span
+                  className="truncate text-md"
+                  onClick={() => openEditor(id, type)}
+                >
                   {String(value)}
                 </span>
               )}
@@ -250,6 +266,14 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
           setModalValue={setModalValue}
           modalValue={modalValue}
           // onSelect={handleSelectCheckboxChange}
+        />
+      ) : currentId && categoryEditing ? (
+        <ApplicationModal
+          prop={allProperties.find((p: any) => p.id === currentId) || {}}
+          onCancel={cancelEdit}
+          onSave={saveModalChange}
+          setModalValue={setModalValue}
+          modalValue={modalValue}
         />
       ) : null}
     </div>

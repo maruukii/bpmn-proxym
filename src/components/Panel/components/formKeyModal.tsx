@@ -17,7 +17,6 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [selectedItem, setSelectedItem] = useState<FormMetadata | null>(null);
-  const [forms, setForms] = useState<FormMetadata[] | null>([]);
 
   const { mutate } = useThumbnailMutation();
   const { data } = useFormsQuery({
@@ -27,10 +26,6 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
     page: 1,
     limit: 10,
   });
-
-  useEffect(() => {
-    if (data) setForms(data);
-  }, [data]);
 
   useEffect(() => {
     if (selectedItem) {
@@ -69,8 +64,8 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
         return { item: undefined, parents: [] };
       };
 
-      if (forms) {
-        const { item: foundItem, parents } = findItem(key, version, forms);
+      if (data) {
+        const { item: foundItem, parents } = findItem(key, version, data);
         setSelectedItem(foundItem || null);
 
         if (foundItem) {
@@ -94,7 +89,7 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
         }
       }
     }
-  }, [selectedItem, modalValue, forms]);
+  }, [selectedItem, modalValue, data]);
 
   useEffect(() => {
     return () => {
@@ -208,7 +203,7 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div className="overflow-auto flex-1 border rounded bg-gray-50 min-h-[300px] max-h-[500px] p-2">
-              {forms ? renderItems(forms) : null}
+              {data ? renderItems(data) : null}
             </div>
           </div>
 
@@ -228,7 +223,7 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
         <div className="flex justify-end gap-2 mt-4">
           <button
             onClick={onCancel}
-            className="bg-gray-200 text-gray-800 px-4 py-1 rounded text-2xl cursor-pointer"
+            className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xl cursor-pointer"
           >
             {t("Cancel")}
           </button>
@@ -241,7 +236,7 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
           <button
             disabled={!selectedItem}
             onClick={onSave}
-            className="bg-green-600 text-white px-4 py-1 rounded text-2xl disabled:opacity-50 cursor-pointer"
+            className="bg-green-600 text-white px-2 py-1 rounded text-xl disabled:opacity-50 cursor-pointer"
           >
             {t("Select")}
           </button>

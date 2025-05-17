@@ -77,8 +77,8 @@ export default{
             },
             "CATEGORYPACKAGE" : {
               "CATEGORYDEFINITION" : {
-                "TITLE" : "Catégorie",
-                "DESCRIPTION" : "Catégorie de l'élément BPMN."
+                "TITLE" : "Application",
+                "DESCRIPTION" : "Application de l'élément BPMN."
               }
             },
             "PROCESS_AUTHORPACKAGE" : {

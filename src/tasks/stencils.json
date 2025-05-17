@@ -180,7 +180,7 @@
       "width": 100,
       "height": 80,
       "eventDefinitionType": "",
-    "propertyPackages" : [ "overrideidpackage", "namepackage", "documentationpackage", "asynchronousdefinitionpackage", "exclusivedefinitionpackage", "executionlistenerspackage", "multiinstance_typepackage", "multiinstance_cardinalitypackage", "multiinstance_collectionpackage", "multiinstance_variablepackage", "multiinstance_conditionpackage", "isforcompensationpackage", "usertaskassignmentpackage", "formkeydefinitionpackage", "formreferencepackage", "formfieldvalidationpackage", "duedatedefinitionpackage", "prioritydefinitionpackage", "formpropertiespackage", "tasklistenerspackage", "skipexpressionpackage", "categorypackage", "taskidvariablenamepackage" ],
+    "propertyPackages" : [ "overrideidpackage", "namepackage", "documentationpackage", "asynchronousdefinitionpackage", "exclusivedefinitionpackage", "executionlistenerspackage", "multiinstance_typepackage", "multiinstance_cardinalitypackage", "multiinstance_collectionpackage", "multiinstance_variablepackage", "multiinstance_conditionpackage", "isforcompensationpackage", "usertaskassignmentpackage", "formkeydefinitionpackage", "formreferencepackage", "formfieldvalidationpackage", "duedatedefinitionpackage", "prioritydefinitionpackage", "formpropertiespackage", "tasklistenerspackage", "skipexpressionpackage", "applicationpackage", "taskidvariablenamepackage" ],
     "hiddenPropertyPackages" : [ ],
     "roles" : [ "Activity", "sequence_start", "sequence_end", "ActivitiesMorph", "all" ]
   }, {
