@@ -13,12 +13,13 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await logout().then(() => (window.location.href = "/landingpage"));
+      await logout().then(
+        (data) => (window.location.href = data?.data?.redirectUrl)
+      );
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <nav className="fixed top-0 left-0 w-full bg-gray-800 text-white px-6 py-3 flex items-center justify-between z-50 shadow-md">
       {/* Logo Section */}

@@ -2,9 +2,10 @@ import {axiosInstance} from "../config/axiosInstance";
 const useLogout = () => {
   const logout = async () => {
     try {
-      await axiosInstance.post("/gw/logout",
+      const response=await axiosInstance.post("/gw/logout",
         {},
-      );
+      )
+      return response;
     } catch (error) {
   }
   };

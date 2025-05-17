@@ -8,14 +8,13 @@ const useAuth = () => {
   const dispatch = useDispatch();
   const { userName } = useSelector((state: RootState) => state.user);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const isConnected = async () => {
       try {
         const response = await axiosInstance.get(import.meta.env.VITE_CONNECTED_USER);
-        const username = response?.data?.userApp?.user?.name;
-        if (username) {
-          dispatch(setUserData(username));
+        const user = response?.data?.userApp?.user?.name;
+        if (user) {
+          dispatch(setUserData(user));
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
