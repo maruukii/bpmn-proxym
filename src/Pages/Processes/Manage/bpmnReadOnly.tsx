@@ -1,15 +1,22 @@
 import BpmnViewer from "bpmn-js/lib/NavigatedViewer";
 import { useEffect, useRef } from "react";
+import CustomRenderer from "../../../components/Designer/CustomRenderer/customRenderer";
 
 const BpmnReadOnly = ({ xml }: { xml: string }) => {
   const viewerRef = useRef<HTMLDivElement>(null);
-  const viewerInstance = useRef<BpmnViewer | null>(null); // ✅ Store viewer instance
+  const viewerInstance = useRef<BpmnViewer | null>(null);
 
   useEffect(() => {
-    if (!xml || !viewerRef.current || viewerInstance.current) return; // ✅ Prevent multiple initializations
+    if (!xml || !viewerRef.current || viewerInstance.current) return;
 
     viewerInstance.current = new BpmnViewer({
       container: viewerRef.current,
+      additionalModules: [
+        {
+          __init__: ["customRenderer"],
+          customRenderer: ["type", CustomRenderer],
+        },
+      ],
     });
 
     const initViewer = async () => {

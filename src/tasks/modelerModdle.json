@@ -1,0 +1,32 @@
+{
+  "name": "modeler",
+  "uri": "http://flowable.org/modeler",
+  "prefix": "modeler",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "types": [
+    {
+      "name": "ActivitiIdmInitiator",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "value",
+          "type": "String",
+          "isBody": true
+        }
+      ]
+    },
+    {
+      "name": "InitiatorCanComplete",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "value",
+          "type": "String",
+          "isBody": true
+        }
+      ]
+    }
+  ]
+}

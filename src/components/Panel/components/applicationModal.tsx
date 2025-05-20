@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { withTranslation } from "react-i18next";
 import { useApplicationsQuery } from "../../../hooks/queries/useApplicationsQuery";
+import ReactDOM from "react-dom";
 
 const ApplicationModal: React.FC<ApplicationModalProps> = ({
   prop,
@@ -73,7 +74,7 @@ const ApplicationModal: React.FC<ApplicationModalProps> = ({
       });
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center z-100 overflow-auto">
       <div className="bg-white w-[30vw] max-h-[95vh] overflow-auto rounded-lg shadow-lg flex flex-col p-4">
         <h2 className="text-md font-semibold mb-4">
@@ -128,7 +129,8 @@ const ApplicationModal: React.FC<ApplicationModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

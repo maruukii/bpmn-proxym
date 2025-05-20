@@ -7,12 +7,12 @@ type LayoutProps = {
 
 const Protected: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="h-screen overflow-auto flex flex-col">
+    <div className="min-h-screen overflow-auto flex flex-col">
       {/* Fixed Navbar */}
       <Navbar />
 
       {/* Scrollable Main Content */}
-      <main className="pt-24 flex-grow overflow-auto">{children}</main>
+      <main className="mt-24 flex-grow overflow-auto">{children}</main>
     </div>
   );
 };

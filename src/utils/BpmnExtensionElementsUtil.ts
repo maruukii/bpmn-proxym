@@ -37,7 +37,6 @@ export function addExtensionElements(
 
   // (1) create bpmn:ExtensionElements if it doesn't exist
   if (!extensionElements) {
-    console.log(businessObject)
     extensionElements = createModdleElement(
       'bpmn:ExtensionElements',
       { values: [] },

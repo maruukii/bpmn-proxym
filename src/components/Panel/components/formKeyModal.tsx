@@ -5,6 +5,7 @@ import {
   useFormsQuery,
   useThumbnailMutation,
 } from "../../../hooks/queries/useFormsQuery";
+import ReactDOM from "react-dom";
 
 const FormKeyModal: React.FC<FormKeyModalProps> = ({
   prop,
@@ -184,7 +185,7 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
       });
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center z-100">
       <div className="bg-white w-[1500px] max-h-[95vh] overflow-auto rounded-lg shadow-lg flex flex-col p-4">
         <h2 className="text-3xl font-semibold mb-4">
@@ -242,7 +243,8 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

@@ -5,7 +5,7 @@ import type  { Element } from 'bpmn-js/lib/model/Types';
 
 
 const standAloneTypes = [
-  "name","isForCompensation", "isExecutable", "scriptFormat", "script","id","default"
+  "name","isForCompensation", "isExecutable", "scriptFormat", "script","id","default","targetNamespace"
 ]
 const defaultFlowCapableTypes = [
   "bpmn:ExclusiveGateway", // XOR gateway
@@ -54,7 +54,7 @@ function getSourceElement(
   return { SourceBO: sourceBO, source };
 }
 
-export function getDynamicProperty(element: Element,bpmnname:string): boolean | undefined {
+export function getDynamicProperty(element: Element,bpmnname:string): boolean|string | undefined {
   const businessObject = getBusinessObject(element);
 if (!businessObject) {
     return undefined;

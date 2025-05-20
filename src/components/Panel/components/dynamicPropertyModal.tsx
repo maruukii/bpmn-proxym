@@ -10,6 +10,7 @@ import {
 import { RootState } from "../../../store/store";
 import { useSelector } from "react-redux";
 import { ModdleElement } from "bpmn-moddle";
+import ReactDOM from "react-dom";
 
 interface DynamicPropertyModalProps {
   prop: any;
@@ -124,7 +125,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
       return newData;
     });
   };
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center z-100">
       <div className="bg-white p-6 rounded shadow-lg w-[800px] max-h-[90vh] overflow-auto flex gap-4">
         <div className="flex-1">
@@ -291,7 +292,8 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

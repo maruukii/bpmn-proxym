@@ -256,7 +256,7 @@
       "properties": [
         {
           "id": "assignee",
-          "type": "Complex",
+          "type": "Assignment",
           "title": "BPMN.PROPERTYPACKAGES.USERTASKASSIGNMENTPACKAGE.USERTASKASSIGNMENT.TITLE",
           "value": "",
           "description": "BPMN.PROPERTYPACKAGES.USERTASKASSIGNMENTPACKAGE.USERTASKASSIGNMENT.DESCRIPTION",

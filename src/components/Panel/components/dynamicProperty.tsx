@@ -16,6 +16,8 @@ import { ModdleElement } from "bpmn-moddle";
 import { getValues } from "../../../utils/exceptionElementUtil";
 import FormKeyModal from "./formKeyModal";
 import ApplicationModal from "./applicationModal";
+import AssignmentModal from "./assignmentModal";
+import { useApplicationsQuery } from "../../../hooks/queries/useApplicationsQuery";
 
 const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   activeElement,
@@ -25,7 +27,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   t,
 }) => {
   const [dynamicProperties, setDynamicProperties] = useState<
-    Record<string, string | boolean>
+    Record<string, string | boolean | Assignees>
   >({});
   const [tableData, setTableData] = useState<ModdleElement[]>([]);
 
@@ -35,7 +37,11 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   const [extendedFields, setExtendedFields] = useState<any[]>([]);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [formKeyEditing, setFormKeyEditing] = useState(false);
-  const [categoryEditing, setCategoryEditing] = useState(false);
+  const [applicationEditing, setApplicationEditing] = useState(false);
+  const [assignmentEditing, setAssignmentEditing] = useState(false);
+  const [assigneeValues, setAssigneeValues] = useState<Assignees>();
+  const [audience, setAudience] = useState<string | undefined>();
+  const { data } = useApplicationsQuery();
 
   useEffect(() => {
     if (!activeElement) return;
@@ -50,6 +56,55 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
         } else {
           property = getDynamicProperty(activeElement, id);
         }
+        if (id === "category") {
+          const application = data?.find((item: any) => item.name === property);
+          if (application) setAudience(application?.audience);
+        } else if (id === "assignee") {
+          const assignee = getDynamicProperty(activeElement, "assignee");
+          const candidateUsers = getDynamicProperty(
+            activeElement,
+            "candidateUsers"
+          );
+          const candidateGroups = getDynamicProperty(
+            activeElement,
+            "candidateGroups"
+          );
+
+          const assigneeValues = {
+            assignmentType: "bankerise-groups",
+            assignee: (assignee as string) || undefined,
+            candidateUsers: (candidateUsers as string) || undefined,
+            candidateGroups: (candidateGroups as string) || undefined,
+          };
+
+          setAssigneeValues(assigneeValues);
+          newProps[id] = [
+            assigneeValues?.assignee
+              ? `Assignee ${assigneeValues.assignee}`
+              : "",
+            assigneeValues?.candidateUsers &&
+            assigneeValues.candidateUsers.split(",").length > 0
+              ? `${
+                  assigneeValues.candidateUsers.split(",").length
+                } Candidate user${
+                  assigneeValues.candidateUsers.split(",").length > 1 ? "s" : ""
+                }`
+              : "",
+            assigneeValues?.candidateGroups &&
+            assigneeValues.candidateGroups.split(",").length > 0
+              ? `${
+                  assigneeValues.candidateGroups.split(",").length
+                } Candidate group${
+                  assigneeValues.candidateGroups.split(",").length > 1
+                    ? "s"
+                    : ""
+                }`
+              : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
+          return;
+        }
 
         newProps[id] = property ?? "";
       });
@@ -57,7 +112,6 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
 
     setDynamicProperties(newProps);
   }, [activeElement, tags]);
-
   const handleInlineChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     id: string
@@ -71,7 +125,12 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     if (newValue === "") {
       removeDynamicProperty(modeling, activeElement, id);
     } else {
-      updateDynamicProperty(modeling, activeElement, id, newValue);
+      updateDynamicProperty(
+        modeling,
+        activeElement,
+        id,
+        newValue as string | boolean
+      );
     }
     setInlineEditingId(null);
   };
@@ -81,7 +140,6 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
       setInlineEditingId(id);
       return;
     }
-    console.log(type);
     if (type === "Text") {
       setModalValue((dynamicProperties[id] as string) ?? "");
       setCurrentId(id);
@@ -93,7 +151,12 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     } else if (type === "Application") {
       setCurrentId(id);
       setModalValue((dynamicProperties[id] as string) ?? "");
-      setCategoryEditing(true);
+      setApplicationEditing(true);
+      return;
+    } else if (type === "Assignment") {
+      setCurrentId(id);
+      setModalValue((dynamicProperties[id] as string) ?? "");
+      setAssignmentEditing(true);
       return;
     } else if (id in extendedProperties) {
       const props = (extendedProperties as ExtendedProperties)[id] ?? [];
@@ -107,11 +170,15 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
   };
 
   const saveModalChange = () => {
-    if ((modalEditingId || formKeyEditing || categoryEditing) && currentId) {
+    if ((modalEditingId || formKeyEditing || applicationEditing) && currentId) {
       setDynamicProperties((prev) => ({
         ...prev,
         [currentId as string]: modalValue,
       }));
+      if (applicationEditing) {
+        const application = data?.find((item: any) => item.name === modalValue);
+        if (application) setAudience(application?.audience);
+      }
       if (currentId === "documentation") {
         setDocumentValue(activeElement, modeler, modeling, modalValue);
       } else {
@@ -124,10 +191,81 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     }
     setModalEditingId(null);
     setFormKeyEditing(false);
-    setCategoryEditing(false);
+    setApplicationEditing(false);
+    setAssignmentEditing(false);
     setCurrentId(null);
     setModalValue("");
     setExtendedFields([]);
+  };
+  const handleAssignments = (assigneeValues: Assignees) => {
+    if (assignmentEditing && currentId && assigneeValues) {
+      setDynamicProperties((prev) => ({
+        ...prev,
+        [currentId as string]: [
+          assigneeValues?.assignee ? `Assignee ${assigneeValues.assignee}` : "",
+          assigneeValues?.candidateUsers &&
+          assigneeValues.candidateUsers.split(",").length > 0
+            ? `${
+                assigneeValues.candidateUsers.split(",").length
+              } Candidate user${
+                assigneeValues.candidateUsers.split(",").length > 1 ? "s" : ""
+              }`
+            : "",
+          assigneeValues?.candidateGroups &&
+          assigneeValues.candidateGroups.split(",").length > 0
+            ? `${
+                assigneeValues.candidateGroups.split(",").length
+              } Candidate group${
+                assigneeValues.candidateGroups.split(",").length > 1 ? "s" : ""
+              }`
+            : "",
+        ]
+          .filter(Boolean)
+          .join(" "),
+      }));
+      if (
+        !assigneeValues?.assignee ||
+        !assigneeValues?.candidateGroups ||
+        !assigneeValues?.candidateUsers
+      ) {
+        !assigneeValues?.assignee &&
+          removeDynamicProperty(modeling, activeElement, "assignee");
+        !assigneeValues?.candidateUsers &&
+          removeDynamicProperty(modeling, activeElement, "candidateUsers");
+        !assigneeValues?.candidateGroups &&
+          removeDynamicProperty(modeling, activeElement, "candidateGroups");
+      }
+      if (
+        assigneeValues.assignmentType === "fixed" ||
+        assigneeValues.assignmentType === "bankerise-groups" ||
+        assigneeValues.assignmentType === "identity"
+      ) {
+        assigneeValues?.candidateGroups &&
+          updateDynamicProperty(
+            modeling,
+            activeElement,
+            "candidateGroups",
+            assigneeValues.candidateGroups
+          );
+        assigneeValues?.candidateUsers &&
+          updateDynamicProperty(
+            modeling,
+            activeElement,
+            "candidateUsers",
+            assigneeValues.candidateUsers
+          );
+        assigneeValues?.assignee &&
+          updateDynamicProperty(
+            modeling,
+            activeElement,
+            "assignee",
+            assigneeValues.assignee
+          );
+      }
+    }
+    setAssignmentEditing(false);
+    setCurrentId(null);
+    setAssigneeValues(assigneeValues);
   };
 
   const cancelEdit = () => {
@@ -135,7 +273,8 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     setModalValue("");
     setExtendedFields([]);
     setFormKeyEditing(false);
-    setCategoryEditing(false);
+    setAssignmentEditing(false);
+    setApplicationEditing(false);
     setCurrentId(null);
   };
   const handleSelectCheckboxChange = (
@@ -160,7 +299,6 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
 
     updateDynamicProperty(modeling, activeElement, name, value);
   };
-
   const allProperties = tags.flatMap((tag: any) => tag.properties);
   return (
     <div className="grid grid-cols-2 gap-3 text-md">
@@ -217,7 +355,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
                     onChange={(e) => handleInlineChange(e, id)}
                     onBlur={() => saveInlineChange(id)}
                     onKeyDown={(e) => e.key === "Enter" && saveInlineChange(id)}
-                    className="border border-gray-300 rounded px-1 py-0.5 w-full text-xs truncate"
+                    className="border border-gray-300 rounded px-1 py-0.5 w-full text-md truncate"
                   />
                 )
               ) : numberOfValues > 0 ? (
@@ -233,11 +371,15 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
                 >
                   No Value
                 </span>
+              ) : audience && type === "Application" ? (
+                <span className=" text-md" onClick={() => openEditor(id, type)}>
+                  {String(value)}
+                  <span className="bg-gray-600 text-white text-sm px-1 py-0 rounded ml-1">
+                    {audience || ""}
+                  </span>
+                </span>
               ) : (
-                <span
-                  className="truncate text-md"
-                  onClick={() => openEditor(id, type)}
-                >
+                <span className=" text-md" onClick={() => openEditor(id, type)}>
                   {String(value)}
                 </span>
               )}
@@ -267,13 +409,21 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
           modalValue={modalValue}
           // onSelect={handleSelectCheckboxChange}
         />
-      ) : currentId && categoryEditing ? (
+      ) : currentId && applicationEditing ? (
         <ApplicationModal
           prop={allProperties.find((p: any) => p.id === currentId) || {}}
           onCancel={cancelEdit}
           onSave={saveModalChange}
           setModalValue={setModalValue}
           modalValue={modalValue}
+        />
+      ) : currentId && assignmentEditing ? (
+        <AssignmentModal
+          prop={allProperties.find((p: any) => p.id === currentId) || {}}
+          onCancel={cancelEdit}
+          onSave={handleAssignments}
+          modalValue={assigneeValues}
+          audience={audience}
         />
       ) : null}
     </div>
