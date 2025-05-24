@@ -1,19 +1,13 @@
-import { useDispatch } from "react-redux";
-import axiosInstance from "../config/axiosInstance";
-import { setLogoutError ,clearLogoutError} from "../store/user/userSlice";
+import {axiosInstance} from "../config/axiosInstance";
 const useLogout = () => {
-  const dispatch=useDispatch();
   const logout = async () => {
-    dispatch(clearLogoutError())
     try {
-      await axiosInstance.post("/logout",
+      const response=await axiosInstance.post("/gw/logout",
         {},
-        {
-          withCredentials: true,
-        }
-      );
+      )
+      return response;
     } catch (error) {
-dispatch(setLogoutError(error as string))    }
+  }
   };
   return logout;
 };

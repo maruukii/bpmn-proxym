@@ -1,28 +1,25 @@
-// import { useLocation, Navigate } from "react-router-dom";
-// import useAuth from "./useAuth";
-// import { useState, useEffect } from "react";
+import { useLocation, Navigate } from "react-router-dom";
+import { ReactNode } from "react";
+import Preloader from "../components/preloader";
+import useAuth from "./useAuth";
 
-// const RequireAuth = (props) => {
-//   const { auth } = useAuth();
-//   const location = useLocation();
-//   const [isLoading, setIsLoading] = useState(true);
+interface RequireAuthProps {
+  children: ReactNode;
+}
 
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//       setIsLoading(false);
-//     }, 500);
+const RequireAuth: React.FC<RequireAuthProps> = ({ children }) => {
+  const location = useLocation();
+  const { userName, loading } = useAuth();
 
-//     return () => clearTimeout(timer);
-//   }, [auth]);
-//   if (!isLoading) {
-//     return props.allowedRole.includes(auth?.user?.Role) ? (
-//       props.children
-//     ) : auth?.accessToken ? (
-//       <Navigate to="/" state={{ from: location }} replace />
-//     ) : (
-//       <Navigate to="/login" state={{ from: location }} replace />
-//     );
-//   }
-// };
+  if (loading) {
+    return <Preloader />;
+  }
 
-// export default RequireAuth;
+  return userName ? (
+    children
+  ) : (
+    <Navigate to="/landingpage" state={{ from: location }} replace />
+  );
+};
+
+export default RequireAuth;

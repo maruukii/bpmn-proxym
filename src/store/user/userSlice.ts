@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
   userName: string | null;
-  accessToken:string | null;
   isLoggedIn: boolean;
   loginError: string | null;
   logoutError: string | null;
@@ -11,7 +10,6 @@ interface UserState {
 
 const initialState: UserState = {
   userName: null,
-  accessToken:null,
   isLoggedIn: false,
   loginError: null,
   logoutError: null,
@@ -21,15 +19,19 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<{ userName: string;accessToken:string}>) => {
-      state.userName = action.payload.userName;
-      state.accessToken = action.payload.accessToken;
+    setUserData: (state, action: PayloadAction<string>) => {
+      state.userName = action.payload;
       state.isLoggedIn = true;
     },
     clearUserData: (state) => {
       state.userName = null;
-      state.accessToken = null;
       state.isLoggedIn = false;
+    },
+    setIsLoggedIn:(state)=>{
+      state.isLoggedIn=true;
+    },
+clearIsLoggedIn:(state)=>{
+      state.isLoggedIn=false;
     },
     setLoginError: (state, action: PayloadAction<string>) => {
         state.loginError = action.payload;
@@ -46,5 +48,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserData,clearUserData,setLoginError,clearLoginError,setLogoutError,clearLogoutError } = userSlice.actions;
+export const { setUserData,clearUserData,setLoginError,clearLoginError,setLogoutError,clearLogoutError,setIsLoggedIn,clearIsLoggedIn } = userSlice.actions;
 export default userSlice.reducer;

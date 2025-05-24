@@ -1,9 +1,9 @@
-import { Element } from 'diagram-js/lib/model/Types'
+import type  { Element } from 'bpmn-js/lib/model/Types';
 import { isDifferentType } from 'bpmn-js/lib/features/popup-menu/util/TypeUtil'
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil'
 import * as replaceOptions from 'bpmn-js/lib/features/replace/ReplaceOptions'
 import { isEventSubProcess, isExpanded } from 'bpmn-js/lib/util/DiUtil'
-import { isAppendAction } from './BpmnDesignerUtils'
+import { isAppendAction } from './bpmnDesignerUtils'
 
 export default function (element?: Element) {
   const differentType = (element: Element) => isDifferentType(element)
@@ -28,8 +28,11 @@ export default function (element?: Element) {
     // expanded/collapsed pools
     if (is(businessObject, 'bpmn:Participant')) {
       return replaceOptions.PARTICIPANT.filter(
-        (entry) => isExpanded(element) !== entry.target.isExpanded
+        (entry) => {isExpanded(element) !== entry?.target?.isExpanded}
       )
+    }
+    if(is(businessObject,'bpmn:Lane')){
+      return replaceOptions.PARTICIPANT.filter((entry)=>console.log(entry))
     }
 
     // start events inside event sub processes
@@ -37,7 +40,7 @@ export default function (element?: Element) {
       return replaceOptions.EVENT_SUB_PROCESS_START_EVENT.filter((entry) => {
         const target = entry.target
 
-        const isInterrupting = target.isInterrupting !== false
+        const isInterrupting = target?.isInterrupting !== false
 
         const isInterruptingEqual = getBusinessObject(element).isInterrupting === isInterrupting
 
@@ -122,8 +125,8 @@ export default function (element?: Element) {
     if (is(businessObject, 'bpmn:AdHocSubProcess') && !isExpanded(element)) {
       return replaceOptions.TASK.filter((entry) => {
         const target = entry.target
-        const isTargetSubProcess = target.type === 'bpmn:SubProcess'
-        const isTargetExpanded = target.isExpanded === true
+        const isTargetSubProcess = target?.type === 'bpmn:SubProcess'
+        const isTargetExpanded = target?.isExpanded === true
         return isDifferentType(element)(target) && (!isTargetSubProcess || isTargetExpanded)
       })
     }
@@ -143,7 +146,7 @@ export default function (element?: Element) {
     const { START_EVENT, TASK, GATEWAY, BOUNDARY_EVENT } = replaceOptions
     return [...START_EVENT, ...TASK, ...GATEWAY, ...BOUNDARY_EVENT]
   }
-  const removeFunctionLabel = (entry) => typeof entry.label === 'string'
+  const removeFunctionLabel = (entry:any) => typeof entry.label === 'string'
 
   return !isAppendAction(element)
     ? getCurrentReplaceOptions(element!).filter(removeFunctionLabel)

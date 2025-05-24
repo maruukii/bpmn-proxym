@@ -9,14 +9,14 @@ const languages: Record<LanguageKey, { label: string; flag: string }> =
   languagesData;
 
 const LanguageDropdown: React.FC = () => {
-  const [selectLang, setSelectLang] = useState<LanguageKey>("en_US");
+  const [selectLang, setSelectLang] = useState<LanguageKey>("en-US");
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [dropdownWidth, setDropdownWidth] = useState<number | "auto">("auto");
 
   useEffect(() => {
     const savedLang =
-      (localStorage.getItem("I18N_LANGUAGE") as LanguageKey) || "en_US";
+      (localStorage.getItem("I18N_LANGUAGE") as LanguageKey) || "en-US";
     if (languages[savedLang]) setSelectLang(savedLang);
   }, []);
 

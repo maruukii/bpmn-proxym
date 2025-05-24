@@ -4,9 +4,10 @@ import { RootState } from '../../store/store'
 import BpmnReplace from 'bpmn-js/lib/features/replace/BpmnReplace'
 import ElementFactory from 'bpmn-js/lib/features/modeling/ElementFactory'
 import Create from 'diagram-js/lib/features/create/Create'
+import { generateFlowableId } from '../../utils/tools'
 
 export default function useBpmnActions() {
-  const modeler = useSelector((state: RootState) => state.modeler.modeler)
+  const {modeler,modeling} = useSelector((state: RootState) => state.modeler)
 
   let replaceElement: BpmnReplace['replaceElement']
   let elementFactory: ElementFactory
@@ -16,7 +17,17 @@ export default function useBpmnActions() {
     if (!replaceElement && modeler) {
       replaceElement = modeler.get<BpmnReplace>('bpmnReplace').replaceElement
     }
-    replaceElement?.(currentElement, target)
+     const customId = currentElement.businessObject.id;
+
+
+  const newElement = replaceElement(currentElement, target);
+
+  if (newElement && newElement.businessObject) {
+    newElement.businessObject.id = customId;
+  }
+
+    
+
   }
 
   function appendAction(target: any, event: Event) {
@@ -29,7 +40,8 @@ export default function useBpmnActions() {
 
     const shape = elementFactory?.createShape(target)
     if (!shape) return
-
+ const customId = generateFlowableId();
+shape.businessObject.id = customId;
     if (target.isExpanded != null) {
       shape.businessObject.di.isExpanded = target.isExpanded
     }

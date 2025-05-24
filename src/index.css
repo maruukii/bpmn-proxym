@@ -4,6 +4,9 @@
 .bjs-powered-by {
   display: none;
 }
+.djs-palette {
+  display: none;
+}
 * {
   box-sizing: border-box;
 }
@@ -20,7 +23,7 @@ html {
   margin: 0;
 } */
 
-a:link {
+/* a:link {
   text-decoration: none;
 }
 
@@ -129,7 +132,7 @@ a:link {
     padding-bottom: 70px;
     min-height: 100%;
   }
-}
+} */
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

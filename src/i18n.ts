@@ -7,17 +7,17 @@ import En from "./locales/en_US/index";
 
 // the translations
 const resources = {
-  fr_FR: {
+  "fr-FR": {
     translation: Fr,
   },
-  en_US: {
+  "en-US": {
     translation: En,
   },
 };
 
 const language = localStorage.getItem("I18N_LANGUAGE");
-if (!language||(language!="en_US" && language!="fr_FR")) {
-  localStorage.setItem("I18N_LANGUAGE", "en_US");
+if (!language||(language!="en-US" && language!="fr-FR")) {
+  localStorage.setItem("I18N_LANGUAGE", "en-US");
 }
 
 i18n
@@ -25,10 +25,9 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: localStorage.getItem("I18N_LANGUAGE") || "en_US",
-    fallbackLng: "fr_FR",
+    lng: localStorage.getItem("I18N_LANGUAGE") || "en-US",
+    fallbackLng: "fr-FR",
 
-    keySeparator: false,
 
     interpolation: {
       escapeValue: false,

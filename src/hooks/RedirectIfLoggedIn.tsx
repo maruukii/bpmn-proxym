@@ -1,23 +1,27 @@
-// import React, { useEffect } from "react";
-// import { Navigate, useLocation } from "react-router-dom";
-// import useAuth from "./useAuth";
+import { Navigate, useLocation } from "react-router-dom";
+import { ReactNode } from "react";
+import Preloader from "../components/preloader";
+import useAuth from "./useAuth";
 
-// const RedirectIfLoggedIn = ({ children }) => {
-//   const { auth } = useAuth();
-//   const location = useLocation();
-//   useEffect(() => {
-//     const timer = setTimeout(() => {}, 1000);
+interface RedirectIfLoggedInProps {
+  children: ReactNode;
+}
 
-//     return () => clearTimeout(timer);
-//   }, []);
+const RedirectIfLoggedIn: React.FC<RedirectIfLoggedInProps> = ({
+  children,
+}) => {
+  const location = useLocation();
+  const { userName, loading } = useAuth();
 
-//   const isAuthEmpty = Object.keys(auth).length === 0;
-//   if (!isAuthEmpty) {
-//     const previousLocation = location.state?.from?.pathname || "/";
-//     return <Navigate to={previousLocation} />;
-//   }
+  if (loading) {
+    return <Preloader />;
+  }
 
-//   return children;
-// };
+  return userName ? (
+    <Navigate to={location.state?.from?.pathname || "/"} replace />
+  ) : (
+    children
+  );
+};
 
-// export default RedirectIfLoggedIn;
+export default RedirectIfLoggedIn;

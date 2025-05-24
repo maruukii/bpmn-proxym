@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Moddle } from 'moddle'
+import type  BpmnModdle  from 'bpmn-moddle'
 import type Modeler from 'bpmn-js/lib/Modeler'
 import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
 import type Canvas from 'diagram-js/lib/core/Canvas'
@@ -10,10 +10,11 @@ interface ModelerState {
   activeElement: BpmnElement | undefined
   activeElementId: string | undefined
   modeler: Modeler | undefined
-  moddle: Moddle | undefined
+  moddle: BpmnModdle | undefined
   modeling: Modeling | undefined
   canvas: Canvas | undefined
   elementRegistry: ElementRegistry | undefined
+  newDiagramStatus:boolean
 }
 
 const initialState: ModelerState = {
@@ -23,7 +24,8 @@ const initialState: ModelerState = {
   moddle: undefined,
   modeling: undefined,
   canvas: undefined,
-  elementRegistry: undefined
+  elementRegistry: undefined,
+  newDiagramStatus: false,
 }
 
 const modelerSlice = createSlice({
@@ -35,7 +37,8 @@ const modelerSlice = createSlice({
       if (action.payload) {
         const modeler = action.payload
         state.modeling = modeler.get<Modeling>('modeling')
-        state.moddle = modeler.get<Moddle>('moddle')
+        state.newDiagramStatus = false
+        state.moddle = modeler.get<BpmnModdle>('moddle')
         state.canvas = modeler.get<Canvas>('canvas')
         state.elementRegistry = modeler.get<ElementRegistry>('elementRegistry')
       } else {
@@ -45,6 +48,10 @@ const modelerSlice = createSlice({
         state.elementRegistry = undefined
       }
     },
+    setNewDiagramStatus(state) {
+      state.newDiagramStatus = true 
+},
+
     setElement(state, action: PayloadAction<BpmnElement | undefined>) {
       state.activeElement = action.payload
       state.activeElementId = action.payload?.id
@@ -52,6 +59,6 @@ const modelerSlice = createSlice({
   }
 })
 
-export const { setModeler, setElement } = modelerSlice.actions
+export const { setModeler, setElement,setNewDiagramStatus } = modelerSlice.actions
 
 export default modelerSlice.reducer
