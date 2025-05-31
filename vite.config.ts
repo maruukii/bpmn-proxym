@@ -4,16 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
-  plugins: [react({
-          jsxRuntime: 'automatic',
-
-  }),    tailwindcss(),svgr()
+  plugins: [react(),    tailwindcss(),svgr()
   ],
  
   assetsInclude: ["**/*.xml","**/*.bpmn"],
   server:{
     host: '0.0.0.0',
-    allowedHosts: ["bpmn-proxym.onrender.com","bpmn-proxym.vercel.app"],
+    allowedHosts: ["bpmn-proxym.onrender.com","bpmn-proxym.vercel.app","bankerise-studio.netlify.app"],
     proxy: {
       '/authorization': {
         target: 'http://admin-gw.platform-dev.pres.proxym-it.net',
