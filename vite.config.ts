@@ -4,8 +4,18 @@ import tailwindcss from '@tailwindcss/vite'
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
-  plugins: [react(),    tailwindcss(),svgr()
+  plugins: [react(),react({
+      jsxRuntime: 'automatic',
+    }),    tailwindcss(),svgr()
   ],
+  resolve: {
+    alias: {
+      'react/jsx-runtime': 'react/jsx-runtime.js',
+    },
+  },
+  optimizeDeps: {
+    include: ['react/jsx-runtime'],
+  },
   assetsInclude: ["**/*.xml","**/*.bpmn"],
   server:{
     host: '0.0.0.0',
