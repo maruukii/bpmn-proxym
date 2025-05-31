@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { withTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { dateTimestamp } from "../../../utils/tools";
-import { ProcessMetadata } from "../../../../types/apis/bpmn-process";
+import {
+  ProcessHistoryProps,
+  ProcessMetadata,
+} from "../../../../types/apis/bpmn-process";
 
 const History: React.FC<ProcessHistoryProps> = ({
   history,
   setHistoryOpen,
   navigate,
 }) => {
+  const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { lastVersionId, oldVersionId } = useParams();
   const [id, setId] = useState<string | null>(null);
@@ -50,10 +54,17 @@ const History: React.FC<ProcessHistoryProps> = ({
                 }`}
                 onClick={() => {
                   item?.id !== id
-                    ? item?.id === lastVersionId
-                      ? navigate(`/process/${lastVersionId}`)
+                    ? item?.id === lastVersionId &&
+                      location?.pathname?.includes("/apps")
+                      ? navigate(`/apps/${lastVersionId}`)
+                      : item?.id === lastVersionId &&
+                        location?.pathname?.includes("/processes")
+                      ? navigate(`/processes/${lastVersionId}`)
+                      : item?.id !== lastVersionId &&
+                        location?.pathname?.includes("/apps")
+                      ? navigate(`/apps/${lastVersionId}/history/${item?.id}`)
                       : navigate(
-                          `/process/${lastVersionId}/history/${item?.id}`
+                          `/processes/${lastVersionId}/history/${oldVersionId}`
                         )
                     : null;
                   setHistoryOpen(false);
@@ -91,9 +102,7 @@ const History: React.FC<ProcessHistoryProps> = ({
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 text-sm text-center">
-            No history available.
-          </p>
+          <></>
         )}
       </div>
     </div>

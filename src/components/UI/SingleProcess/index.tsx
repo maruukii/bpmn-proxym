@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { fetchThumbnail } from "../../../hooks/useFetchThumbnail";
 import { Mirage } from "ldrs/react";
 import Tag from "../components/tag";
+import { Cog6ToothIcon } from "@heroicons/react/24/solid";
+import { SingleProcessMetadata } from "../../../../types/apis/bpmn-process";
 
 export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
   const navigate = useNavigate();
@@ -24,7 +26,9 @@ export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
       }
     };
 
-    loadThumbnail();
+    !location?.pathname?.toLowerCase()?.startsWith("/apps")
+      ? loadThumbnail()
+      : undefined;
 
     return () => {
       isMounted = false;
@@ -35,7 +39,7 @@ export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
   }, [process?.id]);
 
   const handleProcessSelection = () => {
-    navigate(`/process/${process?.id}`);
+    navigate(`${process?.id}`);
   };
   return (
     <div
@@ -45,7 +49,7 @@ export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
       {/* Canvas View - Fixed Size */}
       <div className="relative h-70">
         {/* Version Tag - Positioned at the Top Right */}
-        <span className="absolute top-2 left-2 text-xs px-2 py-1 rounded">
+        <span className="absolute top-2 left-2 text-xs px-2 py-1 rounded z-10">
           <Tag
             className="bg-blue-100 text-blue-700"
             label={"v" + process.version}
@@ -57,7 +61,13 @@ export const SingleProcess: React.FC<SingleProcessMetadata> = ({ process }) => {
           className="absolute inset-0 flex items-center justify-center cursor-pointer"
           onClick={handleProcessSelection}
         >
-          {thumbnail ? (
+          {location?.pathname?.includes("/apps") ? (
+            <div className="relative inline-block w-full h-full bg-cyan-600 overflow-hidden group rounded shadow">
+              <Cog6ToothIcon className="absolute top-[-3rem] right-5 w-50 h-50 text-cyan-100 transition-all duration-1000 group-hover:top-0.5 opacity-5" />
+              <Cog6ToothIcon className="absolute top-[10%] right-5 w-30 h-30 text-cyan-700 opacity-40 transition-transform duration-1000 group-hover:translate-x-5" />
+              {/* Second gear (sliding from top) */}
+            </div>
+          ) : thumbnail ? (
             <img src={thumbnail} alt="Thumbnail" />
           ) : (
             <span className="absolute inset-0 flex items-center justify-center">

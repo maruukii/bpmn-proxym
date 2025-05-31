@@ -11,7 +11,6 @@ export const exportBPMN = (modeler: any, filename: string, dispatch: AppDispatch
     }
 
     try {
-      // Save the BPMN diagram as XML
       const result = await modeler.saveXML({ format: true });
 
       if (!result.xml) {
@@ -22,30 +21,24 @@ export const exportBPMN = (modeler: any, filename: string, dispatch: AppDispatch
 
       const xml: string = result.xml;
 
-      // Create a Blob from the XML string
       const blob = new Blob([xml], { type: "application/xml" });
 
-      // Create a link element
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = `${filename?.split(".")[0]}_exported_copy.bpmn`;
 
-      // Append the link to the body (for Firefox compatibility)
       document.body.appendChild(link);
 
-      // Trigger the download
       link.click();
 
-      // Remove the link from the document
       document.body.removeChild(link);
 
-      // Revoke the Blob URL to free up memory
       URL.revokeObjectURL(link.href);
 
-      resolve(); // Resolve the promise on success
+      resolve(); 
     } catch (err) {
       console.error("Failed to export BPMN diagram:", err);
-      reject(err); // Reject the promise on failure
+      reject(err);
     }
   });
 };
@@ -60,31 +53,82 @@ export const downloadBPMN = (id:string,filename: string): Promise<void> => {
       const xml: string = data?.data;      
        const blob = new Blob([xml], { type: "application/xml" });
 
-      // Create a link element
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = `${filename?.split(".")[0]}.bpmn20.bpmn`;
 
-      // Append the link to the body (for Firefox compatibility)
       document.body.appendChild(link);
 
-      // Trigger the download
       link.click();
 
-      // Remove the link from the document
       document.body.removeChild(link);
 
-      // Revoke the Blob URL to free up memory
       URL.revokeObjectURL(link.href);
 
       resolve(); 
     })
 
-      // Create a Blob from the XML string
-     // Resolve the promise on success
+     
     } catch (err) {
       console.error("Failed to download BPMN diagram:", err);
-      reject(err); // Reject the promise on failure
+      reject(err); 
+    }
+  });
+};
+
+export const exportBar = (id: string, filename: string): Promise<void> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axiosInstance.get(`/configuration/modeler/rest/app-definitions/${id}/export-bar`, {
+        responseType: "arraybuffer",
+      });
+
+      const blob = new Blob([response.data], { type: "application/octet-stream" });
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${filename?.split(".")[0]}.bar`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(link.href);
+
+      resolve();
+    } catch (err) {
+      console.error("Failed to download BAR file:", err);
+      reject(err);
+    }
+  });
+};
+export const downloadZip = (id: string, filename: string): Promise<void> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axiosInstance.get(`/configuration/modeler/rest/app-definitions/${id}/export`, {
+        responseType: "arraybuffer", 
+      });
+
+      const blob = new Blob([response.data], { type: "application/zip" });
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${filename?.split(".")[0]}.zip`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(link.href);
+
+      resolve();
+    } catch (err) {
+      console.error("Failed to download ZIP file:", err);
+      reject(err);
     }
   });
 };

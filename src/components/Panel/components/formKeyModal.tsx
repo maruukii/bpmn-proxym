@@ -6,6 +6,10 @@ import {
   useThumbnailMutation,
 } from "../../../hooks/queries/useFormsQuery";
 import ReactDOM from "react-dom";
+import {
+  FormKeyModalProps,
+  FormMetadata,
+} from "../../../../types/apis/bpmn-form";
 
 const FormKeyModal: React.FC<FormKeyModalProps> = ({
   prop,
@@ -30,7 +34,9 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
 
   useEffect(() => {
     if (selectedItem) {
-      setModalValue(`${selectedItem.key}::${selectedItem.version}`);
+      selectedItem?.latestVersion
+        ? setModalValue(`${selectedItem.key}::latest`)
+        : setModalValue(`${selectedItem.key}::${selectedItem.version}`);
       setExpandedItems((prev) => {
         const next = new Set(prev);
         next.add(selectedItem.name);
@@ -48,7 +54,10 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
         for (const item of items) {
           const newParents = [...parents, item.name];
 
-          if (item.key === key && String(item.version) === version) {
+          if (
+            item.key === key &&
+            (String(item.version) === version || version === "latest")
+          ) {
             return { item, parents: newParents };
           }
 
@@ -99,22 +108,6 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
       }
     };
   }, [selectedItem?.thumbnail]);
-
-  // const handleSelectedFormThumbnail = (item: FormMetadata) => {
-  //   setSelectedItem(item);
-  //   mutate(item.id, {
-  //     onSuccess: (data) => {
-  //       // setSelectedItem((prevItem) =>
-  //       //   prevItem
-  //       //     ? { ...prevItem, thumbnail: data || prevItem.thumbnail }
-  //       //     : null
-  //       // );
-  //     },
-  //     onError: (error) => {
-  //       console.error("Error fetching thumbnail:", error);
-  //     },
-  //   });
-  // };
 
   const toggleExpand = (name: string) => {
     setExpandedItems((prev) => {
@@ -186,7 +179,7 @@ const FormKeyModal: React.FC<FormKeyModalProps> = ({
   };
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 flex items-center justify-center z-100">
+    <div className="fixed inset-0 flex items-center justify-center z-130">
       <div className="bg-white w-[1500px] max-h-[95vh] overflow-auto rounded-lg shadow-lg flex flex-col p-4">
         <h2 className="text-3xl font-semibold mb-4">
           {`${t(prop.title)} - ${selectedItem?.name || ""} (${

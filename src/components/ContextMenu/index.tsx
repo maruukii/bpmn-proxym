@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Element } from "diagram-js/lib/model/Types";
-import BpmnReplaceOptions from "../../utils/bpmnReplaceOptions";
-import { isAppendAction } from "../../utils/bpmnDesignerUtils";
+import BpmnReplaceOptions from "../../utils/BpmnReplaceOptions";
 import contextMenuElements from "../../tasks/contextMenu.json";
 import useBpmnActions from "./contextMenuActions";
 import { withTranslation } from "react-i18next";

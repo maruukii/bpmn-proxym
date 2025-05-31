@@ -7,7 +7,8 @@ declare module "*.xml" {
     const content: string;
     export default content;
   }
-  declare module "lodash";
+  
+  
   declare module "bpmn-moddle";
 
 

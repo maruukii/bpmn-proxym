@@ -4,7 +4,7 @@ import RedirectIfLoggedIn from "../hooks/RedirectIfLoggedIn";
 import Manage from "../Pages/Processes/Manage";
 
 // Lazy load the components
-const Home = lazy(() => import("../Pages/BPMNhome/bpmnHome"));
+const Editor = lazy(() => import("../Pages/BPMNhome/bpmnHome"));
 const Processes = lazy(() => import("../Pages/Processes"));
 const Error404 = lazy(() => import("../Pages/Utility/Error404"));
 const Login = lazy(() => import("../Pages/Login"));
@@ -20,16 +20,35 @@ const routes = [
     ),
     type: "public",
   },
-  // Protected Routes
-  { path: "/", element: <Home />, type: "protected" },
-  { path: "/processes", element: <Processes />, type: "protected" },
-  { path: "/process/:lastVersionId", element: <Manage />, type: "protected" },
   {
-    path: "/process/:lastVersionId/history/:oldVersionId",
+    path: "/",
+    element: <PathParms />,
+    type: "public",
+  },
+  // Protected Routes
+  { path: "/editor/:id", element: <Editor />, type: "protected" },
+  { path: "/processes", element: <Processes />, type: "protected" },
+  { path: "/processes/:lastVersionId", element: <Manage />, type: "protected" },
+  {
+    path: "/processes/:lastVersionId/history/:oldVersionId",
     element: <Manage />,
     type: "protected",
   },
-
+  {
+    path: "/apps",
+    element: <Processes />,
+    type: "protected",
+  },
+  {
+    path: "/apps/:lastVersionId",
+    element: <Manage />,
+    type: "protected",
+  },
+  {
+    path: "/apps/:lastVersionId/history/:oldVersionId",
+    element: <Manage />,
+    type: "protected",
+  },
   {
     path: "/*",
     element: <Error404 />,

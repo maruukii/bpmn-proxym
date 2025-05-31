@@ -32,7 +32,16 @@ comment?:string
     page?: number;
     limit?: number;
   }
-
+// declare interface UseProcessesSavingProps {
+//     modeltype: string;
+//     json_xml: string;
+//     name:string;
+//     key:string;
+//     description?:string;
+//     newversion?:string;
+//     comment?:string; 
+//     lastUpdated:number
+//   }
   declare interface SaveAndDuplicateModalProps {
   process?: ProcessMetadata;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,13 +50,17 @@ comment?:string
   // ) => void;
   // setProcess: React.Dispatch<React.SetStateAction<ProcessMetadata>>;
     action:string
+    t:any
+    setIsSaved?:React.Dispatch<React.SetStateAction<boolean>>
 }
 
 declare interface DeleteModalProps {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   id:string;
   modelName:string
+  t:any
 }
+
 // declare interface ProcessCrudProps{
 //   description: string;
 // key: string;

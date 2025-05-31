@@ -59,7 +59,7 @@ const BpmnReadOnly = ({ xml }: { xml: string }) => {
   }, []); // ✅ Runs only once
 
   return (
-    <div className="w-full h-screen flex items-center justify-center overflow-hidden">
+    <div className="w-full h-[60vh] flex items-center justify-center overflow-hidden">
       <div ref={viewerRef} className="w-full h-screen overflow-auto" />
     </div>
   );

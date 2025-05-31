@@ -2,28 +2,14 @@ import React, { useEffect, useState } from "react";
 import { withTranslation } from "react-i18next";
 import {
   addProperty,
-  moveException,
   getValues,
   getMappedProperty,
   removeProperty,
-} from "../../../utils/exceptionElementUtil";
+} from "../../../utils/ExceptionElementUtil";
 import { RootState } from "../../../store/store";
 import { useSelector } from "react-redux";
 import { ModdleElement } from "bpmn-moddle";
 import ReactDOM from "react-dom";
-
-interface DynamicPropertyModalProps {
-  prop: any;
-  modalValue: string;
-  setModalValue: React.Dispatch<React.SetStateAction<string>>;
-  saveModalChange: () => void;
-  cancelEdit: () => void;
-  extendedFields: ExtendedField[];
-  setTableData: React.Dispatch<React.SetStateAction<ModdleElement[]>>;
-  tableData: ModdleElement[];
-  t: any;
-  id: string | null;
-}
 
 const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
   prop,
@@ -41,6 +27,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
     (state: RootState) => state.modeler
   );
   const [newRow, setNewRow] = useState<Record<string, string | boolean>>({});
+
   useEffect(() => {
     if (activeElement && extendedFields.length > 0 && id) {
       const existing = getValues(activeElement, id);
@@ -54,7 +41,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setNewRow((prev) => ({ ...prev, [key]: e.target.value }));
+    setNewRow((prev) => ({ ...prev, [key]: e.target.value.trim() }));
   };
 
   const [extendedFieldNames, setExtendedFieldNames] = useState<string[]>([]);
@@ -87,7 +74,6 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
 
       // Refetch the exceptions and update the table data
       const updatedExceptions = getValues(activeElement, id) || [];
-      console.log(updatedExceptions);
       setTableData(updatedExceptions);
       setNewRow({});
     }
@@ -98,33 +84,33 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
     setTableData(updatedData);
     if (modeling) removeProperty(activeElement, exception, modeling); // Pass index only
   };
-  const moveRow = (
-    index: number,
-    direction: "up" | "down",
-    exception: ModdleElement
-  ) => {
-    setTableData((prev) => {
-      const newData = [...prev];
-      const targetIndex = direction === "up" ? index - 1 : index + 1;
+  // const moveRow = (
+  //   index: number,
+  //   direction: "up" | "down",
+  //   exception: ModdleElement
+  // ) => {
+  //   setTableData((prev) => {
+  //     const newData = [...prev];
+  //     const targetIndex = direction === "up" ? index - 1 : index + 1;
 
-      if (targetIndex >= 0 && targetIndex < newData.length && id) {
-        [newData[index], newData[targetIndex]] = [
-          newData[targetIndex],
-          newData[index],
-        ];
+  //     if (targetIndex >= 0 && targetIndex < newData.length && id) {
+  //       [newData[index], newData[targetIndex]] = [
+  //         newData[targetIndex],
+  //         newData[index],
+  //       ];
 
-        if (modeling) {
-          moveException(activeElement, exception, direction, modeling);
-        }
+  //       if (modeling) {
+  //         moveException(activeElement, exception, direction, modeling);
+  //       }
 
-        // Refetch the exceptions and update the table data
-        const updatedExceptions = getValues(activeElement, id) || [];
-        setTableData(updatedExceptions);
-      }
+  //       // Refetch the exceptions and update the table data
+  //       const updatedExceptions = getValues(activeElement, id) || [];
+  //       setTableData(updatedExceptions);
+  //     }
 
-      return newData;
-    });
-  };
+  //     return newData;
+  //   });
+  // };
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center z-100">
       <div className="bg-white p-6 rounded shadow-lg w-[800px] max-h-[90vh] overflow-auto flex gap-4">
@@ -146,7 +132,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
                           </th>
                         )
                     )}
-                    <th className="border px-2 py-1">Actions</th>
+                    <th className="border px-2 py-1 ">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -156,24 +142,37 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
                       extendedFields
                     );
                     return (
-                      <tr key={rowIndex}>
+                      <tr
+                        key={rowIndex}
+                        onClick={() =>
+                          setNewRow(parsed as Record<string, string | boolean>)
+                        }
+                      >
                         {extendedFields.map(
                           (field) =>
                             field?.isDisplayed && (
                               <td key={field.key} className="border px-2 py-1">
                                 {(() => {
-                                  // Dynamically fetch the value from `parsed` using the field key
                                   const value = parsed?.[field.key];
+                                  if (field.key === "implementation") {
+                                    return parsed?.["class"]
+                                      ? parsed["class"]
+                                      : parsed?.["delegateExpression"]
+                                      ? parsed["delegateExpression"]
+                                      : parsed?.["expression"]
+                                      ? parsed?.["expression"]
+                                      : "";
+                                  }
                                   if (field.type === "Boolean") {
                                     return String(value ? true : false);
                                   }
-                                  return value || ""; // Default to an empty string if value is undefined
+                                  return value || "";
                                 })()}
                               </td>
                             )
                         )}
                         <td className="border px-2 py-1 space-x-1">
-                          <button
+                          {/* <button
                             onClick={() => moveRow(rowIndex, "up", exceptionEl)}
                             disabled={rowIndex === 0}
                             className={`text-xs px-2 py-1 border rounded ${
@@ -196,7 +195,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
                             }`}
                           >
                             ↓
-                          </button>
+                          </button> */}
                           <button
                             onClick={() => deleteRow(rowIndex, exceptionEl)}
                             className="text-xs px-2 py-1 bg-red-200 border rounded"
@@ -215,7 +214,7 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
               className="w-full border p-2 rounded text-sm"
               rows={6}
               value={modalValue}
-              onChange={(e) => setModalValue(e.target.value)}
+              onChange={(e) => setModalValue(e.target.value.trim())}
             />
           )}
           <div className="flex justify-end mt-4 gap-2">
@@ -239,50 +238,53 @@ const DynamicPropertyModal: React.FC<DynamicPropertyModalProps> = ({
         {extendedFields.length > 0 && (
           <div className="w-1/3 border-l pl-4">
             <h3 className="font-medium mb-2 text-sm">{t("NEW_ENTRY")}</h3>
-            {extendedFields.map((field) => (
-              <div key={field.key} className="mb-2">
-                <label className="block text-xs mb-1">{field.label}</label>
-                {field.type == "Boolean" ? (
-                  <input
-                    type={"checkbox"}
-                    className="w-full border px-2 py-1 text-xs rounded"
-                    checked={
-                      newRow[field.key] === "true" || newRow[field.key] === true
-                    }
-                    onChange={(e) => {
-                      const checkedVal = e.target.checked ? true : false;
-                      setNewRow((prev) => ({
-                        ...prev,
-                        [field.key]: checkedVal,
-                      }));
-                    }}
-                  />
-                ) : field.type === "Select" &&
-                  Array.isArray(field.options) &&
-                  field.options.length > 0 ? (
-                  <select
-                    autoFocus
-                    id={`propertyInput-${id}`}
-                    defaultValue={field.options[0].id}
-                    onChange={(e) => handleInputChange(field.key, e)}
-                    className="border border-gray-300 rounded px-1 py-0.5 w-full text-xs"
-                  >
-                    {field.options.map((option: any) => (
-                      <option key={option.value} value={option.id}>
-                        {t(option.name)}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <input
-                    type="text"
-                    className="w-full border px-2 py-1 text-xs rounded"
-                    value={(newRow[field.key] as string) || ""}
-                    onChange={(e) => handleInputChange(field.key, e)}
-                  />
-                )}
-              </div>
-            ))}
+            {extendedFields
+              .filter((field) => field?.isInput)
+              .map((field) => (
+                <div key={field.key} className="mb-2">
+                  <label className="block text-xs mb-1">{field.label}</label>
+                  {field.type == "Boolean" ? (
+                    <input
+                      type={"checkbox"}
+                      className="w-full border px-2 py-1 text-xs rounded"
+                      checked={
+                        newRow[field.key] === "true" ||
+                        newRow[field.key] === true
+                      }
+                      onChange={(e) => {
+                        const checkedVal = e.target.checked ? true : false;
+                        setNewRow((prev) => ({
+                          ...prev,
+                          [field.key]: checkedVal,
+                        }));
+                      }}
+                    />
+                  ) : field.type === "Select" &&
+                    Array.isArray(field.options) &&
+                    field.options.length > 0 ? (
+                    <select
+                      autoFocus
+                      id={`propertyInput-${id}`}
+                      defaultValue={field.options[0].id}
+                      onChange={(e) => handleInputChange(field.key, e)}
+                      className="border border-gray-300 rounded px-1 py-0.5 w-full text-xs"
+                    >
+                      {field.options.map((option: any) => (
+                        <option key={option.value} value={option.id}>
+                          {t(option.name)}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      className="w-full border px-2 py-1 text-xs rounded"
+                      value={(newRow[field.key] as string) || ""}
+                      onChange={(e) => handleInputChange(field.key, e)}
+                    />
+                  )}
+                </div>
+              ))}
             <button
               onClick={addRow}
               className="mt-2 bg-green-500 text-white px-3 py-1 rounded text-sm w-full"

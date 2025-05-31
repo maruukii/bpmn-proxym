@@ -2,7 +2,7 @@ import Modeler from 'bpmn-js/lib/Modeler';
 
 import { setModeler } from '../../store/modeler/modelerSlice'; 
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer';
-import type Canvas from 'diagram-js/lib/core/Canvas'
+import { InitModelerProps } from '../../../types/declares/bpmn-modeler';
 
 
 /**

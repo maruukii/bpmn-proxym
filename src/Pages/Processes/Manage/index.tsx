@@ -10,6 +10,8 @@ import {
   CalendarIcon,
   TagIcon,
   KeyIcon,
+  ShareIcon,
+  ArrowLongUpIcon,
 } from "@heroicons/react/24/outline";
 import { withTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,14 +22,18 @@ import ActionButton from "../../../components/UI/components/actionButton";
 import { axiosInstance } from "../../../config/axiosInstance";
 import SaveAndDuplicate from "../../../components/modals/saveAndDuplicate";
 import Delete from "../../../components/modals/delete";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Mirage } from "ldrs/react";
-import { fetchThumbnail } from "../../../hooks/useFetchThumbnail";
 import History from "./history";
 import BpmnReadOnly from "./bpmnReadOnly";
 import { ProcessMetadata } from "../../../../types/apis/bpmn-process";
 import { setProcessData, setXml } from "../../../store/process/processSlice";
-import { downloadBPMN } from "../../../utils/fileExporter";
+import {
+  downloadBPMN,
+  downloadZip,
+  exportBar,
+} from "../../../utils/fileExporter";
+import { Actions } from "../../../CommonData/Enums";
 
 const Manage: FC<any> = ({ t }) => {
   // const {
@@ -42,10 +48,14 @@ const Manage: FC<any> = ({ t }) => {
   // } = useSelector((state: RootState) => state.process);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [newVersionModalOpen, setNewVersionModalOpen] =
-    useState<boolean>(false);
-  const [DuplicateModalOpen, setDuplicateModalOpen] = useState<boolean>(false);
+  const location = useLocation();
+  // const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  // const [newVersionModalOpen, setNewVersionModalOpen] =
+  //   useState<boolean>(false);
+  // const [DuplicateModalOpen, setDuplicateModalOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [action, setAction] = useState<Actions>(Actions.NULL);
+
   const [historyData, setHistoryData] = useState<ProcessMetadata[]>([]);
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [process, setProcess] = useState<ProcessMetadata>();
@@ -65,7 +75,7 @@ const Manage: FC<any> = ({ t }) => {
     // let isMounted = true;
     const loadProcess = async () => {
       try {
-        if (lastVersionId) {
+        if (lastVersionId && !modalOpen) {
           if (oldVersionId) {
             await axiosInstance
               .get(
@@ -73,14 +83,17 @@ const Manage: FC<any> = ({ t }) => {
               )
               .then(async (data) => {
                 setProcess(data.data);
-                await axiosInstance.get(
-                  `/configuration/modeler/rest/models/${lastVersionId}/history/${oldVersionId}/model-json`
-                );
+                if (location?.pathname?.includes("/processes"))
+                  await axiosInstance.get(
+                    `/configuration/modeler/rest/models/${lastVersionId}/history/${oldVersionId}/model-json`
+                  );
               });
           } else {
             await axiosInstance
               .get(`/configuration/modeler/rest/models/${lastVersionId}`)
-              .then((data) => setProcess(data.data));
+              .then((data) => {
+                setProcess(data.data);
+              });
           }
         }
       } catch (error) {
@@ -118,10 +131,10 @@ const Manage: FC<any> = ({ t }) => {
     //     URL.revokeObjectURL(thumbnail);
     //   }
     // };
-  }, [lastVersionId, oldVersionId]);
+  }, [lastVersionId, oldVersionId, modalOpen]);
   useEffect(() => {
     const fetchXML = async () => {
-      if (lastVersionId) {
+      if (lastVersionId && location?.pathname?.includes("/processes")) {
         setLoading(false);
         oldVersionId
           ? await axiosInstance
@@ -155,7 +168,17 @@ const Manage: FC<any> = ({ t }) => {
   }, [oldVersionId, lastVersionId]);
 
   const handleDownload = async () => {
-    if (process) await downloadBPMN(process?.id, process?.name);
+    if (process) {
+      location?.pathname?.includes("/processes")
+        ? await downloadBPMN(process?.id, process?.name)
+        : location?.pathname?.includes("/apps")
+        ? await downloadZip(process?.id, process?.name)
+        : undefined;
+    }
+  };
+
+  const handleExportBar = async () => {
+    if (process) await exportBar(process?.id, process?.name);
   };
 
   //   const  handleSetNewVersion=()=> {
@@ -163,7 +186,7 @@ const Manage: FC<any> = ({ t }) => {
   //   }
 
   return (
-    <div className="flex flex-col gap-6 p-6 ">
+    <div className=" flex flex-col gap-6 p-6 ">
       {/* Top Section */}
       <div className="flex justify-between items-start border-b pb-4">
         {/* Left: Name and Version */}
@@ -173,7 +196,9 @@ const Manage: FC<any> = ({ t }) => {
             <span className="text-gray-500">|</span>
             <Tag
               className="bg-blue-100 text-blue-700"
-              label={process?.version?.toString()}
+              label={
+                process?.latestVersion ? "latest" : process?.version?.toString()
+              }
               icon={<TagIcon className="w-4 h-4" />}
             />
           </div>
@@ -184,12 +209,14 @@ const Manage: FC<any> = ({ t }) => {
             </div>
             <div className="flex items-center gap-1">
               <UserIcon className="w-4 h-4" />
-              <span>Created by {process?.createdBy}</span>
+              <span>
+                {t("Created by")} {process?.createdBy}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <CalendarIcon className="w-4 h-4" />
               <span>
-                Last updated by {process?.lastUpdatedBy} {" - "}
+                {t("Last updated by")} {process?.lastUpdatedBy} {" - "}
                 {process?.lastUpdated
                   ? formatTimestamp(
                       process?.lastUpdated,
@@ -206,17 +233,24 @@ const Manage: FC<any> = ({ t }) => {
           {!oldVersionId ? (
             <ActionButton
               icon={<EyeIcon className="w-5 h-5" />}
-              label={t("Visual Editor")}
+              label={
+                location?.pathname?.includes("/apps")
+                  ? t("App Editor")
+                  : t("Visual Editor")
+              }
               onClick={() => {
-                dispatch(setProcessData(process));
-                navigate("/");
+                dispatch(setProcessData(process as ProcessMetadata));
+                navigate(`/editor/${process?.id}`);
               }}
             />
           ) : (
             <ActionButton
               icon={<TagIcon className="w-5 h-5" />}
               label={t("Use as new version")}
-              onClick={() => setNewVersionModalOpen(true)}
+              onClick={() => {
+                setModalOpen(true);
+                setAction(Actions.NEW_VERSION);
+              }}
             />
           )}
           <ActionButton
@@ -224,22 +258,50 @@ const Manage: FC<any> = ({ t }) => {
             label={t("Download")}
             onClick={handleDownload}
           />
-
+          {location?.pathname?.includes("/apps") && (
+            <ActionButton
+              icon={<ShareIcon className="w-5 h-5" />}
+              label={t("Publish")}
+              onClick={() => {
+                setModalOpen(true);
+                setAction(Actions.PUBLISH);
+              }}
+              disabled={oldVersionId ? true : false}
+            />
+          )}
+          {location?.pathname?.includes("/apps") && (
+            <ActionButton
+              icon={<ArrowLongUpIcon className="w-5 h-5" />}
+              label={t("Export bar")}
+              onClick={handleExportBar}
+              disabled={oldVersionId ? true : false}
+            />
+          )}
           <ActionButton
             icon={<TrashIcon className="w-5 h-5" />}
             label={t("Delete")}
-            onClick={() => setDeleteModalOpen(true)}
+            onClick={() => {
+              setModalOpen(true);
+              setAction(Actions.DELETE);
+            }}
             disabled={oldVersionId ? true : false}
           />
           <ActionButton
             icon={<DocumentDuplicateIcon className="w-5 h-5" />}
             label={t("Duplicate")}
-            onClick={() => setDuplicateModalOpen(true)}
+            onClick={() => {
+              setModalOpen(true);
+              setAction(Actions.DUPLICATE);
+            }}
             disabled={oldVersionId ? true : false}
           />
           <ActionButton
             icon={<PencilIcon className="w-5 h-5" />}
             label={t("Modify")}
+            onClick={() => {
+              setModalOpen(true);
+              setAction(Actions.MODIFY);
+            }}
             disabled={oldVersionId ? true : false}
           />
         </div>
@@ -292,6 +354,8 @@ const Manage: FC<any> = ({ t }) => {
           <div className="w-full h-full max-w-[90vw] ">
             <BpmnReadOnly xml={xml} />
           </div>
+        ) : location?.pathname?.includes("/apps") ? (
+          <p>No data</p>
         ) : (
           <span className="absolute inset-0 flex items-center justify-center">
             <Mirage size="60" speed="2.5" color="black" />
@@ -299,27 +363,23 @@ const Manage: FC<any> = ({ t }) => {
         )}
       </div>
 
-      {DuplicateModalOpen && (
+      {modalOpen && action !== Actions.DELETE && (
         <SaveAndDuplicate
           process={process}
-          setModalOpen={setDuplicateModalOpen}
-          action={"Duplicate"}
+          setModalOpen={setModalOpen}
+          action={action}
         />
       )}
-      {newVersionModalOpen && (
-        <SaveAndDuplicate
-          process={process}
-          setModalOpen={setNewVersionModalOpen}
-          action={"Use As New Version"}
-        />
-      )}
-      {deleteModalOpen && (
-        <Delete
-          setModalOpen={setDeleteModalOpen}
-          id={lastVersionId}
-          modelName={process?.name}
-        />
-      )}
+      {modalOpen &&
+        action === Actions.DELETE &&
+        lastVersionId &&
+        process?.name && (
+          <Delete
+            setModalOpen={setModalOpen}
+            id={lastVersionId}
+            modelName={process?.name || "Unnamed Process"}
+          />
+        )}
     </div>
   );
 };

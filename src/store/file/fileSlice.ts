@@ -6,6 +6,7 @@ interface FileState {
   fileContentCopySuccess:boolean|null;
   fileImportSuccess: boolean;
   fileExportSuccess: boolean;
+  fileSavedSuccess: boolean;
   newDiagramCreationSuccess: boolean;
   fileError: string | null;
 }
@@ -15,6 +16,7 @@ const initialState: FileState = {
   fileContent:null,
   fileContentCopySuccess:false,
   fileExportSuccess: false,
+  fileSavedSuccess: false,
   fileImportSuccess: false,
   newDiagramCreationSuccess: false,
   fileError:null,
@@ -62,8 +64,14 @@ const fileSlice = createSlice({
     clearFileError: (state) => {
         state.fileError = null;
     },
+    setModelSaved: (state) => {
+      state.fileSavedSuccess = true;
+    },
+    clearModelSaved: (state) => {
+      state.fileSavedSuccess = false;
+    },
   },
 });
 
-export const { setFileData, clearFileData,clearFileImportSucess,setFileExportSuccess,clearFileExportSuccess,setFileError,clearFileError,setFileContentCopySuccess,clearFileContentCopySuccess,setNewDiagram,clearNewDiagramCreationSuccess } = fileSlice.actions;
+export const { setFileData, clearFileData,clearFileImportSucess,setFileExportSuccess,clearFileExportSuccess,setFileError,clearFileError,setFileContentCopySuccess,clearFileContentCopySuccess,setNewDiagram,clearNewDiagramCreationSuccess,setModelSaved,clearModelSaved } = fileSlice.actions;
 export default fileSlice.reducer;

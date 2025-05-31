@@ -5,20 +5,8 @@ import ReactDOM from "react-dom";
 import {
   useBranchesMutation,
   useFunctionsMutation,
-  useGroupesQuery,
 } from "../../../hooks/queries/useAssignmentsQuery";
 import { axiosInstance } from "../../../config/axiosInstance";
-import { data } from "react-router-dom";
-
-type AutoSuggestInputProps = {
-  searchCategory?: "branches" | "functions";
-  selectedItems: BranchesMetadata[] | FunctionsMetadata[];
-  setSelectedItems: (items: BranchesMetadata[]) => void;
-  modalValue?: Assignees;
-  multiple?: boolean;
-  placeholder?: string;
-  t: (key: string) => string;
-};
 
 const AutoSuggestInput: React.FC<AutoSuggestInputProps> = ({
   selectedItems,
@@ -40,19 +28,52 @@ const AutoSuggestInput: React.FC<AutoSuggestInputProps> = ({
   useEffect(() => {
     const fetchBranches = async () => {
       if (searchCategory === "branches" && modalValue?.candidateGroups) {
+        let $values: BranchesMetadata[] = modalValue.candidateGroups
+          .split(",")
+          .filter((value) => {
+            const splitValue = value.split("::")[1];
+            return splitValue.startsWith("${") && splitValue.endsWith("}");
+          })
+          .map((value) => {
+            const splitValue = value.split("::")[1];
+            return {
+              attributes: {
+                ar: [splitValue],
+                en: [splitValue],
+                fr: [splitValue],
+              },
+              code: Math.floor(Math.random() * 1000),
+              id: splitValue,
+              name: splitValue,
+            };
+          });
+
+        const otherValues = modalValue.candidateGroups
+          .split(",")
+          .filter(
+            (value) =>
+              !value.split("::")[1].startsWith("${") ||
+              !value.split("::")[1].endsWith("}")
+          )
+          .map((value) => value.split("::")[1]);
+        console.log(otherValues.join(","));
         await axiosInstance
           .get(
-            `/configuration/modeler/rest/models/groups?branches=${modalValue.candidateGroups
-              .split(",")
-              .map((branch) => branch.split("::")[1])
-              .join(",")}&functions=`
+            `/configuration/modeler/rest/models/groups?branches=${otherValues.join(
+              ","
+            )}&functions=`
           )
           .then((data) => {
-            setSelectedItems(data?.data?.branches);
+            setSelectedItems([...$values, ...(data?.data?.branches ?? [])]);
           })
-          .catch(() => setSelectedItems([]));
-      } else setSelectedItems([]);
+          .catch(() => {
+            setSelectedItems($values);
+          });
+      } else {
+        setSelectedItems([]);
+      }
     };
+
     fetchBranches();
   }, []);
 
@@ -108,7 +129,7 @@ const AutoSuggestInput: React.FC<AutoSuggestInputProps> = ({
     setSelectedItems(selectedItems.filter((item) => item.id !== id));
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+  const handleBlur = () => {
     setTimeout(() => {
       if (
         document.activeElement &&
@@ -117,6 +138,24 @@ const AutoSuggestInput: React.FC<AutoSuggestInputProps> = ({
         setShowSuggestions(false);
       }
     }, 100);
+  };
+  const addCustomItem = () => {
+    if (inputValue.startsWith("${") && inputValue.endsWith("}")) {
+      const newItem: BranchesMetadata = {
+        id: inputValue,
+        name: inputValue,
+        attributes: {
+          ar: [inputValue],
+          en: [inputValue],
+          fr: [inputValue],
+        },
+        code: Math.floor(Math.random() * 1000),
+      };
+
+      setSelectedItems([...selectedItems, newItem]); // Add item to list
+      setInputValue(""); // Clear input after adding
+      setShowSuggestions(false);
+    }
   };
   return (
     <div className="relative" onBlur={handleBlur} ref={containerRef}>
@@ -136,18 +175,35 @@ const AutoSuggestInput: React.FC<AutoSuggestInputProps> = ({
             </button>
           </div>
         ))}
-        {!(!multiple && selectedItems.length === 1) && (
-          <input
-            type="text"
-            className="flex-grow border-none outline-none py-1 px-1 text-sm"
-            placeholder={placeholder}
-            value={inputValue}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-              setShowSuggestions(true);
-            }}
-            onFocus={() => setShowSuggestions(true)}
-          />
+
+        <input
+          type="text"
+          className="flex-grow border-none outline-none py-1 px-1 text-sm"
+          placeholder={placeholder}
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            setShowSuggestions(true);
+          }}
+          onKeyDown={(e) => {
+            if (
+              e.key === "Enter" &&
+              inputValue.startsWith("${") &&
+              inputValue.endsWith("}")
+            ) {
+              addCustomItem();
+            }
+          }}
+        />
+
+        {/* Show Enter Icon if input matches pattern */}
+        {inputValue.startsWith("${") && inputValue.endsWith("}") && (
+          <button
+            onClick={addCustomItem}
+            className="ml-2 p-1 bg-green-500 text-white rounded text-sm"
+          >
+            Enter
+          </button>
         )}
       </div>
 
@@ -250,9 +306,15 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
   };
   const handleBankeriseGroups = async () => {
     const userValues = fixedCandidateUsers.join(",");
+
     const groupValues = branches
-      .map((group) => `branch::${group.code}`)
+      .map((group) =>
+        group.name.startsWith("${") && group.name.endsWith("}")
+          ? `branch::${group.name}`
+          : `branch::${group.code}`
+      )
       .join(",");
+
     const assigneeValues = {
       assignmentType: "bankerise-groups",
       type: "",
@@ -260,6 +322,7 @@ const AssignmentModal: React.FC<AssignmentModalProps> = ({
       candidateUsers: userValues,
       candidateGroups: groupValues,
     };
+
     onSave(assigneeValues);
   };
 

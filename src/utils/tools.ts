@@ -1,3 +1,5 @@
+import type { Location } from "react-router-dom";
+
 export const formatTimestamp = (timestamp: number, language?: string) => {
   const date = new Date(timestamp);
   const timeZone = "Africa/Tunis";
@@ -55,7 +57,9 @@ export function generateFlowableId(): string {
 
   return `sid-${uuid.toUpperCase()}`;
 }
-
+export const isActive = (location:Location ,path: string) => {
+    return location?.pathname?.toLowerCase()?.includes(path.toLowerCase());
+  };
 /** Empty function */
 export function noop(): void {}
 

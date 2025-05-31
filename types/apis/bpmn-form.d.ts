@@ -1,5 +1,7 @@
+import { ProcessMetadata } from "./bpmn-process";
 declare interface FormMetadata extends ProcessMetadata {
         historyModels: FormMetadata[]|[];
+        thumbnail?:string
 
 }
 declare interface SingleFormMetadata {

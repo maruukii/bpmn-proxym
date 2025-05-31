@@ -3,7 +3,7 @@ import { isDifferentType } from 'bpmn-js/lib/features/popup-menu/util/TypeUtil'
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil'
 import * as replaceOptions from 'bpmn-js/lib/features/replace/ReplaceOptions'
 import { isEventSubProcess, isExpanded } from 'bpmn-js/lib/util/DiUtil'
-import { isAppendAction } from './bpmnDesignerUtils'
+import { isAppendAction } from './BpmnDesignerUtils'
 
 export default function (element?: Element) {
   const differentType = (element: Element) => isDifferentType(element)
@@ -22,7 +22,7 @@ export default function (element?: Element) {
 
     // start events outside sub processes
     if (is(businessObject, 'bpmn:StartEvent') && !is(businessObject.$parent, 'bpmn:SubProcess')) {
-      return replaceOptions.START_EVENT.filter(differentType(element))
+      return replaceOptions.START_EVENT.filter(differentType(element) as any)
     }
 
     // expanded/collapsed pools
@@ -46,7 +46,7 @@ export default function (element?: Element) {
 
         // filters elements which types and event definition are equal but have have different interrupting types
         return (
-          differentType(element)(entry) || (!differentType(element)(entry) && !isInterruptingEqual)
+          differentType(element)(entry as any) || (!differentType(element)(entry as any) && !isInterruptingEqual)
         )
       })
     }
@@ -57,7 +57,7 @@ export default function (element?: Element) {
       !isEventSubProcess(businessObject.$parent) &&
       is(businessObject.$parent, 'bpmn:SubProcess')
     ) {
-      return replaceOptions.START_EVENT_SUB_PROCESS.filter(differentType(element))
+      return replaceOptions.START_EVENT_SUB_PROCESS.filter(differentType(element) as any)
     }
 
     // end events
@@ -65,12 +65,12 @@ export default function (element?: Element) {
       return replaceOptions.END_EVENT.filter((entry) => {
         const target = entry.target
         if (
-          target.eventDefinitionType == 'bpmn:CancelEventDefinition' &&
+          target?.eventDefinitionType == 'bpmn:CancelEventDefinition' &&
           !is(businessObject.$parent, 'bpmn:Transaction')
         ) {
           return false
         }
-        return differentType(element)(entry)
+        return differentType(element)(entry as any)
       })
     }
 
@@ -79,16 +79,16 @@ export default function (element?: Element) {
       return replaceOptions.BOUNDARY_EVENT.filter((entry) => {
         const target = entry.target
         if (
-          target.eventDefinitionType == 'bpmn:CancelEventDefinition' &&
+          target?.eventDefinitionType == 'bpmn:CancelEventDefinition' &&
           !is(businessObject.attachedToRef, 'bpmn:Transaction')
         ) {
           return false
         }
-        const cancelActivity = target.cancelActivity !== false
+        const cancelActivity = target?.cancelActivity !== false
         const isCancelActivityEqual = businessObject.cancelActivity == cancelActivity
         return (
-          differentType(element)(entry) ||
-          (!differentType(element)(entry) && !isCancelActivityEqual)
+          differentType(element)(entry as any) ||
+          (!differentType(element)(entry as any) && !isCancelActivityEqual)
         )
       })
     }
@@ -98,27 +98,27 @@ export default function (element?: Element) {
       is(businessObject, 'bpmn:IntermediateCatchEvent') ||
       is(businessObject, 'bpmn:IntermediateThrowEvent')
     ) {
-      return replaceOptions.INTERMEDIATE_EVENT.filter(differentType(element))
+      return replaceOptions.INTERMEDIATE_EVENT.filter(differentType(element) as any)
     }
 
     // gateways
     if (is(businessObject, 'bpmn:Gateway')) {
-      return replaceOptions.GATEWAY.filter(differentType(element))
+      return replaceOptions.GATEWAY.filter(differentType(element) as any)
     }
 
     // transactions
     if (is(businessObject, 'bpmn:Transaction')) {
-      return replaceOptions.TRANSACTION.filter(differentType(element))
+      return replaceOptions.TRANSACTION.filter(differentType(element) as any)
     }
 
     // expanded event sub processes
     if (isEventSubProcess(businessObject) && isExpanded(element)) {
-      return replaceOptions.EVENT_SUB_PROCESS.filter(differentType(element))
+      return replaceOptions.EVENT_SUB_PROCESS.filter(differentType(element) as any)
     }
 
     // expanded sub processes
     if (is(businessObject, 'bpmn:SubProcess') && isExpanded(element)) {
-      return replaceOptions.SUBPROCESS_EXPANDED.filter(differentType(element))
+      return replaceOptions.SUBPROCESS_EXPANDED.filter(differentType(element) as any)
     }
 
     // collapsed ad hoc sub processes
@@ -127,13 +127,13 @@ export default function (element?: Element) {
         const target = entry.target
         const isTargetSubProcess = target?.type === 'bpmn:SubProcess'
         const isTargetExpanded = target?.isExpanded === true
-        return isDifferentType(element)(target) && (!isTargetSubProcess || isTargetExpanded)
+        return isDifferentType(element)(target as any) && (!isTargetSubProcess || isTargetExpanded)
       })
     }
 
     // flow nodes
     if (is(businessObject, 'bpmn:FlowNode')) {
-      const ops = replaceOptions.TASK.filter(differentType(element))
+      const ops = replaceOptions.TASK.filter(differentType(element) as any)
       if (is(businessObject, 'bpmn:SubProcess') && !isExpanded(element)) {
         return ops.filter((entry) => entry.label !== 'Sub Process (collapsed)')
       }

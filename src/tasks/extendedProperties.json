@@ -4,45 +4,46 @@
         "label": "Error Code",
         "key": "errorCode",
         "type": "String",
-        "isDisplayed":true
+        "isDisplayed":true,"isInput":true
       },
       {
         "label": "Class",
         "key": "class",
         "type": "String",
         "isBody": true,
-        "isDisplayed":true
+        "isDisplayed":true,"isInput":true
       },{
         "label": "Include child exceptions",
         "key": "includeChildExceptions",
         "type": "Boolean",
-        "isDisplayed":false
+        "isDisplayed":false,"isInput":true
       }
     ],
     "field":[
       {
         "label": "Name",
         "key": "name",
-        "type": "String"
+        "type": "String","isInput":true,"isDisplayed":true
       },
       {
         "label": "String value",
         "key": "string",
-        "type": "String"
+        "type": "String","isInput":true
               },
               {
         "label": "Expression",
         "key": "expression",
-        "type": "String"
+        "type": "String","isInput":true
       },{
         "label": "String",
         "key": "stringDescription",
-        "type": "Text"
+        "type": "Text","isInput":true
       }
     ],"executionListener" :[
       {
       "label":"Event",
       "key":"event",
+      "isInput":true,
       "isDisplayed":true,
       "type":"Select",
       "options": [
@@ -63,20 +64,25 @@
       
       "label":"Class",
       "key":"class",
-      "isDisplayed":true,
-      "type":"String"
+      "isDisplayed":false,
+      "type":"String","isInput":true
     },
     {
       "label":"Expression",
       "key":"expression",
       "isDisplayed":false,
-      "type":"String"
+      "type":"String","isInput":true
     },
     {
       "label":"Delegate expression",
       "key":"delegateExpression",
       "isDisplayed":false,
-      "type":"String"
+      "type":"String","isInput":true
+    },{
+      "label":"Implementation",
+      "key":"implementation",
+      "isDisplayed":true,
+      "type":"String","isInput":false
     }
 
     ]
