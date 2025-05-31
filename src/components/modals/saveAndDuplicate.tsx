@@ -1,154 +1,312 @@
 import { withTranslation } from "react-i18next";
-import { axiosFormData, axiosInstance } from "../../config/axiosInstance";
-import { useState } from "react";
+import { axiosInstance } from "../../config/axiosInstance";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProcessData, setXml } from "../../store/process/processSlice";
-import { ProcessMetadata } from "../../../types/apis/bpmn-process";
-import { createNewDiagram } from "../../utils/createNewDiagram";
-import { setNewDiagram } from "../../store/file/fileSlice";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import {
-  openJsonPreview,
-  openXMLPreview,
-} from "../../utils/previewContentUtils";
+  ProcessMetadata,
+  SaveAndDuplicateModalProps,
+} from "../../../types/apis/bpmn-process";
+import { setModelSaved, setNewDiagram } from "../../store/file/fileSlice";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { openXMLPreview } from "../../utils/previewContentUtils";
 import { RootState } from "../../store/store";
+import {
+  useConvertToBpmnMutation,
+  useConvertToJsonMutation,
+  useCreateProcessMutation,
+  useDuplicateProcessMutation,
+  useModifyMutation,
+  usePublishMutation,
+  useSaveProcessMutation,
+} from "../../hooks/queries/useProcessesQuery";
+import { toast } from "react-toastify";
+import { Mirage } from "ldrs/react";
+import { Actions } from "../../CommonData/Enums";
 
 const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
   process,
   setModalOpen,
   action,
+  setIsSaved,
+  t,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const ModalTitle: string = location?.pathname
+    ?.toLowerCase()
+    ?.startsWith("/apps")
+    ? "apps_singular"
+    : "processModels_singular";
   const { lastVersionId, oldVersionId } = useParams();
-  const { modeler, moddle } = useSelector((state: RootState) => state.modeler);
+  const { modeler } = useSelector((state: RootState) => state.modeler);
   const dispatch = useDispatch();
-  const [model, setModel] = useState<ProcessMetadata>(
-    process || { modelType: 0 }
-  );
+  const [model, setModel] = useState<ProcessMetadata>(() => ({
+    id: process?.id || "",
+    name: process?.name || "Untitled",
+    key: process?.key || "",
+    createdBy: process?.createdBy || "System",
+    lastUpdatedBy: process?.lastUpdatedBy || "System",
+    lastUpdated: process?.lastUpdated || Date.now(),
+    latestVersion: process?.latestVersion ?? false,
+    version: process?.version ?? 1,
+    modelType:
+      process?.modelType ??
+      (location?.pathname?.toLowerCase()?.startsWith("/apps") ? 3 : 0),
+  }));
   const [newVersion, setNewVersion] = useState<boolean>(false);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setModel({ ...model, [e.target.name]: e.target.value });
   };
+  const closeEditor = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const duplication = useDuplicateProcessMutation();
+  const creation = useCreateProcessMutation();
+  const convertToBPMN = useConvertToBpmnMutation();
+  const converToJson = useConvertToJsonMutation();
+  const saving = useSaveProcessMutation();
+  const publish = usePublishMutation();
+  const modify = useModifyMutation();
   const handleSaveAndDuplicate = async () => {
+    if (!model.name || !model.key) {
+      alert("Model Name and Model Key are required!");
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      if (!model.name || !model.key) {
-        alert("Model Name and Model Key are required!");
-        return;
-      }
-      if (action === "Duplicate" && navigate) {
-        await axiosInstance
-          .post(`/configuration/modeler/rest/models/${model?.id}/clone`, model)
-          .then((data) => {
-            setModalOpen(false);
-            navigate(`/process/${data?.data?.id}`);
-          });
-      } else if (action === "Create" && navigate) {
-        await axiosInstance
-          .post("/configuration/modeler/rest/models", model)
-          .then(async (data) => {
-            dispatch(setProcessData(data.data));
-            await axiosInstance
-              .post(
-                `/configuration/modeler/rest/converter/convert-to-bpmn/${data?.data?.id}`,
-                {}
-              )
-              .then((data) => {
-                setModalOpen(false);
-                dispatch(setXml(data.data));
-                dispatch(
-                  setNewDiagram({
-                    filename: model?.name,
-                    fileContent: data.data,
-                  })
-                );
-                navigate("/");
-              });
-          });
-      } else if (action === "Use As New Version" && navigate) {
-        await axiosInstance
-          .post(
-            `/configuration/modeler/rest/models/${lastVersionId}/history/${oldVersionId}`,
-            { action: "useAsNewVersion", comment: model?.comment }
-          )
-          .then(() => {
-            navigate(`/process/${lastVersionId}`);
-            setModalOpen(false);
-          });
-      } else {
-        if (!modeler) return;
-        const xml = await openXMLPreview({ modeler });
-        const json = await axiosInstance.post(
-          "/configuration/modeler/rest/converter/convert-to-json",
-          {
-            value: xml,
+      switch (action) {
+        case Actions.DUPLICATE:
+          if (lastVersionId) {
+            const id = lastVersionId;
+            await new Promise<void>((resolve, reject) => {
+              duplication.mutate(
+                { id, model },
+                {
+                  onSuccess: (data) => {
+                    setModalOpen(false);
+                    location?.pathname?.includes("/apps")
+                      ? navigate(`/apps/${data?.id}`)
+                      : navigate(`/processes/${data?.id}`);
+                    resolve();
+                  },
+                  onError: (error) => {
+                    if (
+                      process?.id === model?.id ||
+                      process?.name === model?.name
+                    ) {
+                      toast.warn(
+                        "Already exists with the same name or ID. Please change the name or ID and try again."
+                      );
+                    }
+                    reject(error);
+                  },
+                }
+              );
+            });
           }
-        );
+          break;
+        case Actions.PUBLISH:
+          if (lastVersionId) {
+            const id = lastVersionId;
+            await new Promise<void>((resolve, reject) => {
+              publish.mutate(id, {
+                onSuccess: () => {
+                  setModalOpen(false);
+                  toast.success(t("Published", { item: t(ModalTitle) }));
+                  resolve();
+                },
+                onError: (error) => {
+                  reject(error);
+                },
+              });
+            });
+          }
+          break;
+        case Actions.MODIFY:
+          if (lastVersionId && model) {
+            const id = lastVersionId;
+            await new Promise<void>((resolve, reject) => {
+              modify.mutate(
+                { id, model },
+                {
+                  onSuccess: () => {
+                    setModalOpen(false);
+                    toast.success(t("Modified", { item: t(ModalTitle) }));
+                    resolve();
+                  },
+                  onError: (error) => {
+                    reject(error);
+                  },
+                }
+              );
+            });
+          }
+          break;
+        case Actions.CREATE:
+          await new Promise<void>((resolve, reject) => {
+            creation.mutate(model, {
+              onSuccess: (data) => {
+                dispatch(setProcessData(data));
+                setModalOpen(false);
 
-        const req = new URLSearchParams();
-        req.append("modeltype", "model");
-        req.append("json_xml", json?.data ? JSON.stringify(json.data) : "");
-        req.append("name", model?.name || "");
-        req.append("key", model?.key || "");
-        req.append("description", model?.description || "");
-        req.append("newversion", String(newVersion));
-        req.append("comment", model?.comment || "");
-        req.append("lastUpdated", String(Date.now()));
-
-        await axios
-          .post(
-            `/configuration/modeler/rest/models/${model?.id}/editor/json`,
-            req.toString(),
-            {
-              headers: {
-                "Content-Type":
-                  "application/x-www-form-urlencoded; charset=UTF-8",
+                if (location?.pathname?.includes("/apps")) {
+                  navigate(`/apps/${data?.id}`);
+                  resolve();
+                } else if (location?.pathname?.includes("/processes")) {
+                  convertToBPMN.mutate(data, {
+                    onSuccess: (xml) => {
+                      dispatch(setXml(xml || ""));
+                      dispatch(
+                        setNewDiagram({
+                          filename: model?.name,
+                          fileContent: xml,
+                        })
+                      );
+                      navigate(`/editor/${data?.id}`);
+                      resolve();
+                    },
+                    onError: (error) => {
+                      console.error("Error converting to BPMN:", error);
+                      toast.error("Error converting");
+                      reject(error);
+                    },
+                  });
+                }
               },
-            }
-          )
-          .then((data) => {
-            setModalOpen(false);
+              onError: (error) => {
+                console.error("Error creating process:", error);
+                toast.error("Error creating process");
+                reject(error);
+              },
+            });
           });
+          break;
+
+        case Actions.NEW_VERSION:
+          if (lastVersionId) {
+            await axiosInstance.post(
+              `/configuration/modeler/rest/models/${lastVersionId}/history/${oldVersionId}`,
+              { action: "useAsNewVersion", comment: model?.comment }
+            );
+            location?.pathname?.includes("/apps")
+              ? navigate(`/apps/${lastVersionId}`)
+              : navigate(`/processes/${lastVersionId}`);
+            setModalOpen(false);
+          }
+          break;
+
+        case Actions.SAVE:
+          if (!modeler) return;
+
+          const xml = await openXMLPreview({ modeler });
+
+          await new Promise<void>((resolve, reject) => {
+            converToJson.mutate(xml as string, {
+              onSuccess: (json) => {
+                const req = new URLSearchParams();
+                req.append("modeltype", "model");
+                req.append("json_xml", json.toString());
+                req.append("name", model?.name || "");
+                req.append("key", model?.key || "");
+                req.append("description", model?.description || "");
+                req.append("newversion", String(newVersion));
+                req.append("comment", model?.comment || "");
+                req.append("lastUpdated", String(Date.now()));
+
+                saving.mutate(
+                  { id: model?.id, req },
+                  {
+                    onSuccess: () => {
+                      dispatch(setModelSaved());
+                      setModalOpen(false);
+                      setIsSaved && setIsSaved(true);
+                      if (closeEditor.current) {
+                        navigate(`/processes/${model?.id}`);
+                      }
+                      resolve();
+                    },
+                    onError: (error) => {
+                      console.error("Error saving model:", error);
+                      toast.error("Error saving model");
+                      reject(error);
+                    },
+                  }
+                );
+              },
+              onError: (error) => {
+                console.error("Error converting to JSON:", error);
+                toast.error("Error converting to JSON");
+                reject(error);
+              },
+            });
+          });
+          break;
+
+        default:
+          console.warn("Unhandled action type:", action);
+          break;
       }
     } catch (error) {
-      console.error("Error duplicating BPMN:", error);
+      console.error("Error in handleSaveAndDuplicate:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-100 bg-opacity-50 overflow-auto backdrop-blur-md">
       <div className="bg-white p-6 rounded shadow-lg w-150 max-h-[90vh] overflow-y-auto">
         <h2 className="text-3xl font-semibold mb-4 bg-gray-200">
-          {action} Model
+          {action === Actions.NEW_VERSION
+            ? t("NewVersionModal_title")
+            : action === Actions.CREATE
+            ? t("CreateModal_title", { item: t(ModalTitle) })
+            : action === Actions.DUPLICATE
+            ? t("DuplicateModal_title", { item: t(ModalTitle) })
+            : action === Actions.MODIFY
+            ? t("ModifyModal_title", { item: t(ModalTitle) })
+            : action === Actions.SAVE
+            ? t("SaveModal_title", { item: t(ModalTitle) })
+            : action === Actions.PUBLISH
+            ? t("PublishModal_title", { item: t(ModalTitle) })
+            : ""}
         </h2>
-        {action === "Use As New Version" ? (
-          <h3 className="text-xl mb-5">
-            {`Are you sure you want to use version ${process?.version} to create a new version of \"${model?.name}\"`}
-          </h3>
-        ) : action !== "Create" ? (
-          <h3 className="text-xl mb-5">
-            You can change the name for the new model and you may want to change
-            the description at the same time.
-          </h3>
-        ) : (
-          <h3 className="text-xl mb-5">
-            You need to give a name for the new model and you may want to add a
-            description at the same time.
-          </h3>
-        )}
+        <h3 className="text-xl mb-5">
+          {action === Actions.NEW_VERSION
+            ? t("NewVersionModal_description", {
+                version: process?.version,
+                name: process?.name,
+              })
+            : action === Actions.CREATE
+            ? t("CreateModal_description", { item: t(ModalTitle) })
+            : action === Actions.DUPLICATE
+            ? t("DuplicateModal_description", { item: t(ModalTitle) })
+            : action === Actions.MODIFY
+            ? t("ModifyModal_description", { item: t(ModalTitle) })
+            : action === Actions.SAVE
+            ? t("SaveModal_description", { item: t(ModalTitle) })
+            : action === Actions.PUBLISH
+            ? t("PublishModal_description", { item: process?.name })
+            : ""}
+        </h3>
 
         <div className="flex flex-col gap-3">
-          {action !== "Use As New Version" && (
+          {![Actions.NEW_VERSION, Actions.PUBLISH].includes(
+            action as Actions
+          ) && (
             <>
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-700">
-                  Model Name
+                  {t("modelName", { item: t(ModalTitle) })}
                 </label>
                 <input
                   type="text"
                   name="name"
-                  placeholder="Enter new name"
+                  placeholder="..."
                   value={model?.name || ""}
                   onChange={handleChange}
                   className="border p-2 rounded w-full"
@@ -157,12 +315,12 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
 
               <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-700">
-                  Model Key
+                  {t("modelKey", { item: t(ModalTitle) })}
                 </label>
                 <input
                   type="text"
                   name="key"
-                  placeholder="Enter new Key"
+                  placeholder="..."
                   value={model?.key || ""}
                   onChange={handleChange}
                   className="border p-2 rounded w-full"
@@ -175,7 +333,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
                 </label>
                 <textarea
                   name="description"
-                  placeholder="Enter new Description"
+                  placeholder="..."
                   value={model?.description || ""}
                   onChange={handleChange}
                   className="border p-2 rounded w-full"
@@ -184,7 +342,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
               </div>
             </>
           )}
-          {action === "Save" && (
+          {action === Actions.SAVE && (
             <div className="flex flex-row gap-1">
               <input
                 type="checkbox"
@@ -192,14 +350,11 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
                 onChange={(e) => setNewVersion(e.target.checked)}
                 className="border p-2 rounded"
               />
-              <p className="text-sm">
-                Save this as a new version? This means you can always go back to
-                a previous version.
-              </p>
+              <p className="text-sm">{t("NewVersionModal_checkbox")}</p>
             </div>
           )}
 
-          {((newVersion && action === "Save") ||
+          {((newVersion && action === Actions.SAVE) ||
             action === "Use As New Version") && (
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700">
@@ -207,7 +362,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
               </label>
               <textarea
                 name="comment"
-                placeholder="Enter new Comment"
+                placeholder="..."
                 // value={model?.comment}
                 onChange={handleChange}
                 className="border p-2 rounded w-full"
@@ -223,15 +378,12 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
             onClick={() => setModalOpen(false)}
             className="px-4 py-2 bg-gray-300 rounded cursor-pointer"
           >
-            Cancel
+            {t("Cancel")}
           </button>
-          {action === "Save" && (
+          {action === Actions.SAVE && (
             <button
-              onClick={async () =>
-                await handleSaveAndDuplicate().then(() =>
-                  navigate(`/process/${process?.id}`)
-                )
-              }
+              ref={closeEditor}
+              onClick={handleSaveAndDuplicate}
               className={`px-4 py-2 ${
                 !model?.name || !model?.key
                   ? "bg-green-200 cursor-not-allowed"
@@ -239,7 +391,11 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
               }  text-white rounded `}
               disabled={!model?.name || !model?.key ? true : false}
             >
-              Save and close editor
+              {isLoading ? (
+                <Mirage size="60" speed="2.5" color="black" />
+              ) : (
+                t("SaveAndClose")
+              )}
             </button>
           )}
           <button
@@ -249,13 +405,25 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
                 ? "bg-blue-200 cursor-not-allowed"
                 : "bg-blue-600 cursor-pointer"
             }  text-white rounded `}
-            disabled={
-              (!model?.name || !model?.key) && action !== "Save As New Version"
-                ? true
-                : false
-            }
+            disabled={!model?.name || !model?.key ? true : false}
           >
-            {action}
+            {isLoading ? (
+              <Mirage size="60" speed="2.5" color="black" />
+            ) : action === Actions.NEW_VERSION ? (
+              t("NewVersionModal_title")
+            ) : action === Actions.CREATE ? (
+              t("CreateModal_title", { item: t(ModalTitle) })
+            ) : action === Actions.DUPLICATE ? (
+              t("DuplicateModal_title", { item: t(ModalTitle) })
+            ) : action === Actions.MODIFY ? (
+              t("ModifyModal_title", { item: t(ModalTitle) })
+            ) : action === Actions.SAVE ? (
+              t("SaveModal_title", { item: t(ModalTitle) })
+            ) : action === Actions.PUBLISH ? (
+              t("PublishModal_title", { item: t(ModalTitle) })
+            ) : (
+              ""
+            )}
           </button>
         </div>
       </div>

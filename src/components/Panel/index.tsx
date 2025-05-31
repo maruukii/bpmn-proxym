@@ -9,7 +9,7 @@ import getBpmnIconType from "../bpmn-icons/getIconType";
 import bpmnIcons from "../bpmn-icons";
 import stencils from "../../tasks/stencils.json";
 import properties from "../../tasks/properties.json";
-import DynamicProperty from "./components/DynamicProperty";
+import DynamicProperty from "./components/dynamicProperty";
 import { withTranslation } from "react-i18next";
 import { getDynamicProperty } from "../../utils/dynamicPropertyUtil";
 import { getBusinessObject } from "bpmn-js/lib/util/ModelUtil";
@@ -209,7 +209,6 @@ export function PropertiesPanel({ t }: { t: any }) {
     return computedTag;
   }, [activeElement, modeler, tagNames]);
 
-  // ✅ Now we update the state only when the tag changes
   useEffect(() => {
     if (tag) {
       setIcon(tag?.icon);
@@ -282,7 +281,7 @@ export function PropertiesPanel({ t }: { t: any }) {
           className="fixed top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white text-xs font-bold py-2 px-2 cursor-pointer rounded-l-2xl z-[90]"
           style={{ writingMode: "sideways-lr" }}
         >
-          <div className="text-lg tracking-wide px-3">P r o p e r t i e s</div>
+          <div className="text-lg tracking-wide px-3">Properties</div>
         </div>
       )}
     </>

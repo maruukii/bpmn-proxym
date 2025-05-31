@@ -4,5 +4,6 @@ export default{
     BPMNEXPORTSUCCESS:" exporté avec succès!",
     BPMNCOPYSUCCESS:" contenu copié avec succès!",
     BPMNCREATESUCCESS:" créé avec succès!",
-    CONNECTSUCCESS:"est connecté"
+    CONNECTSUCCESS:"est connecté",
+    BPMNSAVESUCCESS:" sauvegardé avec succès!",
 }

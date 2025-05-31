@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ProcessMetadata } from "../../../types/apis/bpmn-process";
 
 
 
@@ -14,7 +15,7 @@ const initialState: ProcessMetadata = {
     version:NaN,
     modelType: NaN,
     tenantId: "",
-    xml:null
+    xml:undefined
 };
 
 const processSlice = createSlice({
@@ -46,7 +47,7 @@ const processSlice = createSlice({
     state.version=NaN;
     state.modelType= NaN;
     state.tenantId= "";
-    state.xml=null;
+    state.xml=undefined;
     },
    setXml:(state,action:PayloadAction<string>)=>{
 

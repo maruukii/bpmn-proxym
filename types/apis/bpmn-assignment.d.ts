@@ -49,3 +49,12 @@ declare interface AssignmentMetadata{
     type: string;
     attributes?: [ApplicationAttributes];
 }
+declare interface  AutoSuggestInputProps  {
+  searchCategory?: "branches" | "functions";
+  selectedItems: BranchesMetadata[] | FunctionsMetadata[];
+  setSelectedItems: (items: BranchesMetadata[]) => void;
+  modalValue?: Assignees;
+  multiple?: boolean;
+  placeholder?: string;
+  t: (key: string) => string;
+};

@@ -18,7 +18,7 @@ const RedirectIfLoggedIn: React.FC<RedirectIfLoggedInProps> = ({
   }
 
   return userName ? (
-    <Navigate to={location.state?.from?.pathname || "/"} replace />
+    <Navigate to={location.state?.from?.pathname || "/processes"} replace />
   ) : (
     children
   );

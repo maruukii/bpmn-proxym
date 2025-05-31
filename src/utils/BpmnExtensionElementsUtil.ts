@@ -1,4 +1,3 @@
-import { is } from 'bpmn-js/lib/util/ModelUtil'
 import { Element } from 'bpmn-js/lib/model/Types';
 import { ModdleElement } from 'bpmn-moddle'
 import { isArray } from 'min-dash'
@@ -18,9 +17,7 @@ export function getExtensionElementsList(
   typeof extensionElements.get === 'function'
     ? extensionElements.get('values')
     : extensionElements.values;  if (!values || !values.length) return []
-
-  if (type) return values.filter((value) => is(value, type))
-
+  if (type) return( values.filter((value) => value?.$type?.includes(type) ))
   return values
 }
 

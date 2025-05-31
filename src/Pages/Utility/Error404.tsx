@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 
 const Error404 = () => {
-  document.title = "404 Not Found";
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="text-center px-4 py-8 bg-white rounded-lg shadow-lg w-full max-w-lg">
@@ -16,7 +14,7 @@ const Error404 = () => {
 
           <div className="mt-6">
             <Link
-              to="/"
+              to="/processes"
               className="inline-flex items-center justify-center px-6 py-3 text-white bg-yellow-500 hover:bg-yellow-400 rounded-md"
             >
               <i className="ri-arrow-left-line mr-2"></i>

@@ -1,4 +1,3 @@
-import { is } from 'bpmn-js/lib/util/ModelUtil';
 
 export default function CustomPropertiesProvider() {
   return {

@@ -2019,7 +2019,7 @@
       "properties": [
         {
           "id": "formReference",
-          "type": "Complex",
+          "type": "FormKey",
           "title": "BPMN.PROPERTYPACKAGES.FORMREFERENCEPACKAGE.FORMREFERENCE.TITLE",
           "value": "",
           "description": "BPMN.PROPERTYPACKAGES.FORMREFERENCEPACKAGE.FORMREFERENCE.DESCRIPTION",

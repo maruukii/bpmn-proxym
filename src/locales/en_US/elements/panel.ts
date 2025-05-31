@@ -53,6 +53,54 @@ export default {
     "BPMN" : {
       "TITLE": "Process editor",
       "DESCRIPTION" : "BPMN process editor",
+      
+          "CATEGORIES": {
+            "CUSTOMIZED" : {
+            "TITLE" : "Customized",
+            "DESCRIPTION" : "Customized BPMN elements",
+          },
+          
+            "STARTEVENTS" : {
+              "TITLE" : "Start events",
+              "DESCRIPTION" : "Start event elements"
+            },
+            "ENDEVENTS" : {
+              "TITLE" : "End events",
+              "DESCRIPTION" : "End event elements"
+            },
+            "ACTIVITIES":{
+              "TITLE": "Activities",
+              "DESCRIPTION": "Activity elements"
+            },
+            "STRUCTURAL":{
+              "TITLE": "Structural",
+              "DESCRIPTION": "Structural elements"
+            },
+            "GATEWAYS": {
+              "TITLE": "Gateways",
+              "DESCRIPTION": "Gateway elements"
+            },
+            "BOUNDARYEVENTS": {
+              "TITLE": "Boundary events",
+              "DESCRIPTION": "Boundary event elements"
+            },
+            "INTERMEDIATECATCHINGEVENTS": {
+              "TITLE": "Intermediate catching events",
+              "DESCRIPTION": "Intermediate catching event elements"
+            },
+            "INTERMEDIATETHROWINGEVENTS": {
+              "TITLE": "Intermediate throwing events",
+              "DESCRIPTION": "Intermediate throwing event elements"
+            },
+            "SWIMLANES": {
+              "TITLE": "Swimlanes",
+              "DESCRIPTION": "Swimlane elements"
+            },
+            "ARTIFACTS": {
+              "TITLE": "Artifacts",
+              "DESCRIPTION": "Artifact elements"
+            }
+          },
       "PROPERTYPACKAGES" : {
         "PROCESS_IDPACKAGE" : {
           "PROCESS_ID" : {
@@ -60,6 +108,7 @@ export default {
             "DESCRIPTION" : "Unique identifier of the process definition."
           }
         },
+        
         "OVERRIDEIDPACKAGE" : {
           "OVERRIDEID" : {
             "TITLE" : "Id",

@@ -1,17 +1,16 @@
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling';
-import type { Moddle } from 'bpmn-moddle';
 import type  { Element } from 'bpmn-js/lib/model/Types';
 
-
+// add bpmn attribute (exmpl : id, name ... the ones that doesn't need the prefix flowable)
 const standAloneTypes = [
   "name","isForCompensation", "isExecutable", "scriptFormat", "script","id","default","targetNamespace"
 ]
 const defaultFlowCapableTypes = [
-  "bpmn:ExclusiveGateway", // XOR gateway
-  "bpmn:InclusiveGateway", // OR gateway
-  "bpmn:Activity",          // Includes tasks and subprocesses
-  "bpmn:Task",              // Base task type (for completeness)
+  "bpmn:ExclusiveGateway",
+  "bpmn:InclusiveGateway",
+  "bpmn:Activity",          
+  "bpmn:Task",              
   "bpmn:UserTask",
   "bpmn:ServiceTask",
   "bpmn:ScriptTask",

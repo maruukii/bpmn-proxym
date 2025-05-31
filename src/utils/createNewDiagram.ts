@@ -1,7 +1,6 @@
 import { setNewDiagram } from '../store/file/fileSlice';
-import { setNewDiagramStatus } from '../store/modeler/modelerSlice';
 import { AppDispatch } from '../store/store';
-import EmptyXML from './emptyXML'
+import EmptyXML from './EmptyXML'
 import { setXml } from '../store/process/processSlice';
 // import { EditorSettings } from 'types/editor/settings'
 

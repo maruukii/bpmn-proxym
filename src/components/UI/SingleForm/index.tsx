@@ -4,6 +4,7 @@ import Tag from "../components/tag";
 import { useEffect, useState } from "react";
 import { Mirage } from "ldrs/react";
 import { fetchThumbnail } from "../../../hooks/useFetchThumbnail";
+import { SingleFormMetadata } from "../../../../types/apis/bpmn-form";
 export const SingleForm: React.FC<SingleFormMetadata> = ({ form }) => {
   const [thumbnail, setThumbnail] = useState<string | null>(null);
 

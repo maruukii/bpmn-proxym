@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { exportBPMN } from "../../utils/fileExporter";
 import { useDispatch, useSelector } from "react-redux";
 import { setFileExportSuccess } from "../../store/file/fileSlice";
@@ -26,20 +26,15 @@ import ContextMenu from "../../components/ContextMenu";
 import SaveAndDuplicate from "../../components/modals/saveAndDuplicate";
 import { clearProcessData } from "../../store/process/processSlice";
 import { useNavigate } from "react-router-dom";
+import { Actions } from "../../CommonData/Enums";
 
 interface BpmnEditorProps {
   filename: string | null;
   designer: React.RefObject<HTMLDivElement | null>;
-  // propertiesRef: React.RefObject<HTMLDivElement | null>;
   t: any;
 }
 
-const BpmnViewer: React.FC<BpmnEditorProps> = ({
-  filename,
-  designer,
-  // propertiesRef,
-  t,
-}) => {
+const BpmnViewer: React.FC<BpmnEditorProps> = ({ filename, designer, t }) => {
   const { modeler } = useSelector((state: RootState) => state.modeler);
   const process = useSelector((state: RootState) => state.process);
   const dispatch = useDispatch();
@@ -56,6 +51,7 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
   const [saveModal, setSaveModal] = useState<boolean>(false);
   const [canRedo, setCanRedo] = useState<boolean>(false);
   const [canUndo, setCanUndo] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(true);
   useEffect(() => {
     if (!modeler) return;
 
@@ -108,39 +104,53 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
     }
   };
 
+  // To capture is Saved Changes
+  const isSavedRef = useRef(isSaved);
+
   useEffect(() => {
+    isSavedRef.current = isSaved;
+  }, [isSaved]);
+
+  useEffect(() => {
+    if (!modeler) return;
+
+    const originalTitle = document.title;
+
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      const commandStack: any = modeler?.get("commandStack");
-      if (commandStack.canUndo()) {
+      const commandStack: any = modeler.get("commandStack");
+      if (commandStack.canUndo() && !isSavedRef.current) {
         event.preventDefault();
-        event.returnValue = ""; // Required for modern browsers to show the prompt
+        event.returnValue = "";
       } else {
-        document.title = originalTitle; // Reset the title if no changes
+        document.title = originalTitle;
       }
     };
 
     const updateTitle = () => {
-      if (commandStack?.canUndo()) {
-        document.title = `*${originalTitle}`; // Add an asterisk before the title
+      const commandStack: any = modeler.get("commandStack");
+      if (commandStack?.canUndo() && !isSavedRef.current) {
+        document.title = `*${originalTitle}`;
       } else {
-        document.title = originalTitle; // Reset to the original title
+        document.title = originalTitle;
       }
     };
 
-    // Store the original title
-    const originalTitle = document.title;
-
-    // Add event listeners
     window.addEventListener("beforeunload", handleBeforeUnload);
     const interval = setInterval(updateTitle, 100);
 
+    const handleCommandChange = () => {
+      setIsSaved(false);
+    };
+    modeler.on("commandStack.changed", handleCommandChange);
+
     return () => {
-      // Cleanup event listeners and interval
       window.removeEventListener("beforeunload", handleBeforeUnload);
       clearInterval(interval);
-      document.title = originalTitle; // Reset the title on component unmount
+      document.title = originalTitle;
+      modeler.off("commandStack.changed", handleCommandChange);
     };
   }, [modeler]);
+
   const handleClose = () => {
     dispatch(clearProcessData());
     navigate("/processes");
@@ -154,6 +164,7 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
           icon={<DocumentArrowDownIcon className="w-5 h-5" />}
           onClick={() => setSaveModal(true)}
           label={t("Save")}
+          disabled={isSaved}
         />
         <ActionButton
           icon={<ArrowUturnLeftIcon className="w-5 h-5" />}
@@ -244,7 +255,8 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({
         <SaveAndDuplicate
           process={process}
           setModalOpen={setSaveModal}
-          action={"Save"}
+          action={Actions.SAVE}
+          setIsSaved={setIsSaved}
         />
       )}
     </div>

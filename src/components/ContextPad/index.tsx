@@ -59,7 +59,7 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
 
       const findParentElement = (x: number, y: number) => {
         const participants = elementRegistry.filter(
-          (el: any) => el.type === "bpmn:Participant"
+          (el: any) => el.type === "bpmn:Participant" || el.type === "bpmn:Lane"
         );
         return participants.find((part: any) => {
           const { x: px, y: py, width, height } = part;
@@ -144,7 +144,7 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
     <>
       {/* Slide-in Palette Panel */}
       {isOpen && (
-        <div className="fixed z-[100] overflow-auto">
+        <div className="fixed z-[120] overflow-auto">
           <div
             className={`relative top-0 left-0 h-[79vh] bg-white shadow-lg border-r border-gray-300 transition-transform duration-300 ease-in-out w-64
         translate-x-0`}
@@ -168,7 +168,9 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
                       onClick={() => toggleCategory(category)}
                       className="w-full flex justify-between items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 font-medium text-md text-left"
                     >
-                      <span>{t(category)}</span>
+                      <span title={t(category.replace("TITLE", "DESCRIPTION"))}>
+                        {t(category)}
+                      </span>
                       <span className="text-gray-500">
                         {isCategoryOpen ? "▲" : "▼"}
                       </span>
@@ -194,7 +196,12 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
                               alt={t(stencil.title)}
                               className="w-6 h-6 object-contain"
                             />
-                            <span className="text-sm">{t(stencil.title)}</span>
+                            <span
+                              className="text-sm"
+                              title={t(stencil.description)}
+                            >
+                              {t(stencil.title)}
+                            </span>
                           </div>
                         ))}
                       </div>

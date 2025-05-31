@@ -7,7 +7,7 @@ import Create from 'diagram-js/lib/features/create/Create'
 import { generateFlowableId } from '../../utils/tools'
 
 export default function useBpmnActions() {
-  const {modeler,modeling} = useSelector((state: RootState) => state.modeler)
+  const {modeler} = useSelector((state: RootState) => state.modeler)
 
   let replaceElement: BpmnReplace['replaceElement']
   let elementFactory: ElementFactory

@@ -50,7 +50,53 @@ export default{
         "BPMN" : {
           "TITLE": "Éditeur de processus",
           "DESCRIPTION" : "Éditeur de processus BPMN",
-          "PROPERTYPACKAGES" : {
+          "CATEGORIES":{
+            "CUSTOMIZED":{
+              "TITLE": "Personnalisés",
+              "DESCRIPTION": "Éléments BPMN personnalisée."
+            },
+            "STARTEVENTS":{
+              "TITLE": "Événements de début",
+              "DESCRIPTION": "Éléments BPMN pour les événements de début."
+            },
+            "ENDEVENTS":{
+              "TITLE": "Événements de fin",
+              "DESCRIPTION": "Éléments BPMN pour les événements de fin."
+            },
+            "ACTIVITIES":{
+              "TITLE": "Activités",
+              "DESCRIPTION": "Éléments BPMN pour les activités."
+            }
+            ,
+            "GATEWAYS":{
+              "TITLE": "Passerelles",
+              "DESCRIPTION": "Éléments BPMN pour les passerelles."
+            },
+            "STRUCTURAL":{
+              "TITLE": "Éléments structurels",
+              "DESCRIPTION": "Éléments structurels."
+            },
+            "BOUNDARYEVENTS":{
+              "TITLE": "Événements de limite",
+              "DESCRIPTION": "Éléments BPMN pour les événements de limite."
+            },
+            "INTERMEDIATECATCHINGEVENTS":{
+              "TITLE": "Événements intermédiaires de capture",
+              "DESCRIPTION": "Éléments BPMN pour les événements intermédiaires de capture."
+            },
+            "INTERMEDIATETHROWINGEVENTS": {
+              "TITLE": "Événements intermédiaires de lancement",
+              "DESCRIPTION": "Éléments BPMN pour les événements intermédiaires de lancement."
+            },
+            "SWIMLANES":{
+              "TITLE": "Lignes de nage",
+              "DESCRIPTION": "Éléments BPMN pour les lignes de nage."
+            },
+            "ARTIFACTS":{
+              "TITLE": "Artefacts",
+              "DESCRIPTION": "Éléments BPMN pour les artefacts."
+            }},
+            "PROPERTYPACKAGES" : {
             "PROCESS_IDPACKAGE" : {
               "PROCESS_ID" : {
                 "TITLE" : "Identifiant du processus",
@@ -1023,6 +1069,13 @@ export default{
               "CONNECTINGOBJECTS" : "Objets de connexion",
               "ARTIFACTS" : "Artefacts"
             },
+            
+        "CUSTOM":{
+"MYSQL":{
+   "TITLE" : "Tâche MySQL",
+          "DESCRIPTION" : "Une tâche qui exécute une requête MySQL."
+}
+        },
             "BPMNDIAGRAM" : {
               "TITLE" : "Diagramme BPMN",
               "DESCRIPTION" : "Un diagramme BPMN 2.0."

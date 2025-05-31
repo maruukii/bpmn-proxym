@@ -2,7 +2,7 @@ import {
     getExtensionElementsList,
     addExtensionElements,
     removeExtensionElements,
-  } from './bpmnExtensionElementsUtil';
+  } from './BpmnExtensionElementsUtil';
   
   import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
   import type { Element, Moddle } from 'bpmn-js/lib/model/Types';
@@ -15,9 +15,16 @@ import {
   // Get all exceptions
   export function getValues(element: Element,id:string): ModdleElement[] {
     const businessObject = getPropertyContainer(element);
-    
+    const capitalizedId = id.charAt(0).toUpperCase() + id.slice(1);
 
-    return getExtensionElementsList(businessObject, `${prefix}:${id}`);
+let values = getExtensionElementsList(businessObject, `${id}`);
+if (!values || !values.length) values = getExtensionElementsList(businessObject, `${capitalizedId}`);
+if (!values || !values.length) values = getExtensionElementsList(businessObject, `${prefix}:${id}`);
+if (!values || !values.length) values = getExtensionElementsList(businessObject, `${prefix}:${capitalizedId}`);
+
+return values;
+
+
   }
  
   

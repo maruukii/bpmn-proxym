@@ -10,8 +10,10 @@ const FileUploadButton: React.FC = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     try {
-      dispatch(setXml(await fileUploader(input, dispatch)));
-      navigate("/");
+      await fileUploader(input, dispatch).then(({ xml, id }) => {
+        dispatch(setXml(xml));
+        if (id) navigate(`/editor/${id}`);
+      });
     } catch (error) {
       console.error("Error uploading file:", error);
       if (input) {

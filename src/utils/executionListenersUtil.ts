@@ -1,4 +1,4 @@
-import { getBusinessObject, is, isAny } from 'bpmn-js/lib/util/ModelUtil'
+import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil'
 import { Element } from 'bpmn-js/lib/model/Types';
 
 import { ModdleElement } from 'bpmn-moddle'
@@ -6,7 +6,7 @@ import {
   getExtensionElementsList,
   addExtensionElements,
   removeExtensionElements
-} from './bpmnExtensionElementsUtil'
+} from './BpmnExtensionElementsUtil'
 import type BpmnModdle from 'bpmn-moddle';
 import type Modeling from 'bpmn-js/lib/features/modeling/Modeling';
 // import { createScript } from '@/bo-utils/scriptUtil'
@@ -40,7 +40,7 @@ export function addExecutionListener(element: Element, props: ExecutionListenerF
 
   const businessObject = getListenersContainer(element)
   const listener = moddle!.create(`${prefix}:executionListener`, {})
-  updateListenerProperty(element, listener, props)
+  updateListenerProperty(element, listener, props,modeling)
   addExtensionElements(element, businessObject, listener,modeling,moddle)
 }
 
@@ -111,18 +111,16 @@ function updateListenerProperty(
     class: listenerClass,
     expression,
     delegateExpression,
-    script,
-    type,
-    fields
+
   } = props
 
-  const updateProperty = (key, value) =>
+  const updateProperty = ({key, value}:{key:string,value:any}) =>
     modeling.updateModdleProperties(element, listener, { [`${prefix}:${key}`]: value })
 
-  event && updateProperty('event', event)
-  listenerClass && updateProperty('class', listenerClass)
-  expression && updateProperty('expression', expression)
-  delegateExpression && updateProperty('delegateExpression', delegateExpression)
+  event && updateProperty({key:'event', value:event})
+  listenerClass && updateProperty({key:'class', value:listenerClass})
+  expression && updateProperty({key:'expression',value: expression})
+  delegateExpression && updateProperty({key:'delegateExpression', value:delegateExpression})
 
   // if (script) {
   //   const bpmnScript = createScript(script)

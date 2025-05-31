@@ -11,9 +11,9 @@ import {
 
 import { withTranslation } from "react-i18next";
 import extendedProperties from "../../../tasks/extendedProperties.json";
-import DynamicPropertyModal from "./DynamicPropertyModal";
+import DynamicPropertyModal from "./dynamicPropertyModal";
 import { ModdleElement } from "bpmn-moddle";
-import { getValues } from "../../../utils/exceptionElementUtil";
+import { getValues } from "../../../utils/ExceptionElementUtil";
 import FormKeyModal from "./formKeyModal";
 import ApplicationModal from "./applicationModal";
 import AssignmentModal from "./assignmentModal";
@@ -30,7 +30,6 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     Record<string, string | boolean | Assignees>
   >({});
   const [tableData, setTableData] = useState<ModdleElement[]>([]);
-
   const [inlineEditingId, setInlineEditingId] = useState<string | null>(null);
   const [modalEditingId, setModalEditingId] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState<string>("");
@@ -116,7 +115,7 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     id: string
   ) => {
-    const newValue = e.target.value;
+    const newValue = e.target.value.trim();
     setDynamicProperties((prev) => ({ ...prev, [id]: newValue }));
   };
 
@@ -306,8 +305,8 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
         const { id, title, type, description } = prop;
         const value = dynamicProperties[id];
         const isEditingInline = inlineEditingId === id;
-        const numberOfValues = getValues(activeElement, id).length;
-
+        const numberOfValues =
+          id in extendedProperties ? getValues(activeElement, id).length : 0;
         return (
           <React.Fragment key={id}>
             <label
@@ -372,12 +371,27 @@ const DynamicProperty: React.FC<BPMNPropertyPanelProps> = ({
                   No Value
                 </span>
               ) : audience && type === "Application" ? (
-                <span className=" text-md" onClick={() => openEditor(id, type)}>
-                  {String(value)}
+                <div
+                  className="flex flex-wrap"
+                  onClick={() => openEditor(id, type)}
+                >
+                  <span className="text-md">{String(value)}</span>
                   <span className="bg-gray-600 text-white text-sm px-1 py-0 rounded ml-1">
                     {audience || ""}
                   </span>
-                </span>
+                </div>
+              ) : type === "FormKey" ? (
+                <div
+                  className="flex flex-wrap"
+                  onClick={() => openEditor(id, type)}
+                >
+                  <span className="text-md">
+                    {String(value?.toString()?.split("::")[0])}
+                  </span>
+                  <span className="bg-gray-600 text-white text-sm px-1 py-0 rounded ml-1">
+                    {String(value?.toString()?.split("::")[1])}
+                  </span>
+                </div>
               ) : (
                 <span className=" text-md" onClick={() => openEditor(id, type)}>
                   {String(value)}

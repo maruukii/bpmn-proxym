@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import BpmnViewer from "../../Pages/BPMNviewer/bpmnViewer";
+import BpmnViewer from "../../Pages/BPMNviewer/editor";
 import modulesAndModdle, { ModulesAndModdles } from "./modulesAndModdle";
 import initModeler from "./initModeler";
 import { useDispatch, useSelector } from "react-redux";

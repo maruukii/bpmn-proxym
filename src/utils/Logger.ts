@@ -2,7 +2,7 @@ const isArray = function (obj: any): boolean {
   return Object.prototype.toString.call(obj) === '[object Array]'
 }
 
-const types: string[] = ['primary', 'success', 'warn', 'error', 'info']
+// const types: string[] = ['primary', 'success', 'warn', 'error', 'info']
 
 function Logger() {}
 

@@ -24,7 +24,9 @@ const login = () => {
 
   return (
     <div>
-      <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="flex flex-col justify-center items-center h-screen bg-gray-100 gap-10">
+        <img src="/bankerise-flowable-logo.png" alt="" className="w-100" />
+        <h3 className="text-xl font-bold">Welcome to the Studio</h3>
         <button
           className={`px-6 py-3 text-white font-semibold rounded-lg shadow-lg ${
             logginIn

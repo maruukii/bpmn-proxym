@@ -5,8 +5,7 @@
   import type { ModuleDeclaration } from 'didi'
   import minimapModule from 'diagram-js-minimap'
   import BpmnColorPickerModule from 'bpmn-js-color-picker'
-  import lintModule from 'bpmn-js-bpmnlint'
-import bpmnlint from '../Lint/bpmnlint'
+
 import CustomRenderer from './CustomRenderer/customRenderer'
 
   export type ModulesAndModdles = [
