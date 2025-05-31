@@ -4,9 +4,10 @@ import tailwindcss from '@tailwindcss/vite'
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
-  plugins: [react(),react({
-      jsxRuntime: 'automatic',
-    }),    tailwindcss(),svgr()
+  plugins: [react({
+          jsxRuntime: 'automatic',
+
+  }),    tailwindcss(),svgr()
   ],
  
   assetsInclude: ["**/*.xml","**/*.bpmn"],
