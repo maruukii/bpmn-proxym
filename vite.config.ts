@@ -8,14 +8,7 @@ export default defineConfig({
       jsxRuntime: 'automatic',
     }),    tailwindcss(),svgr()
   ],
-  resolve: {
-    alias: {
-      'react/jsx-runtime': 'react/jsx-runtime.js',
-    },
-  },
-  optimizeDeps: {
-    include: ['react/jsx-runtime'],
-  },
+ 
   assetsInclude: ["**/*.xml","**/*.bpmn"],
   server:{
     host: '0.0.0.0',
