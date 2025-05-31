@@ -9,6 +9,7 @@ export default defineConfig({
   assetsInclude: ["**/*.xml","**/*.bpmn"],
   server:{
     host: '0.0.0.0',
+    allowedHosts: ["bpmn-proxym.onrender.com","bpmn-proxym-git-develop-maruukiis-projects.vercel.app"],
     proxy: {
       '/authorization': {
         target: 'http://admin-gw.platform-dev.pres.proxym-it.net',
