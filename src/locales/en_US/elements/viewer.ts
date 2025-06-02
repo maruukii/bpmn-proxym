@@ -3,6 +3,7 @@ export default{
     Undo:"Undo",
     Export:"Export",
     Close:"Close",
+    "Preview code":"Preview code XML/JSON",
     "Preview as XML":"Preview as XML",
     "Preview as JSON":"Preview as JSON",
     "Properties Panel":"Properties Panel",

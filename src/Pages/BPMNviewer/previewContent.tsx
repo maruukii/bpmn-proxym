@@ -1,22 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import { withTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFileContentCopySuccess } from "../../store/file/fileSlice";
+import { RootState } from "../../store/store";
+import {
+  openJsonPreview,
+  openXMLPreview,
+} from "../../utils/previewContentUtils";
 
 interface PreviewContentProps {
   t: any;
-  previewData: string | null;
-  previewType: "xml" | "json" | null;
-  closePreviewModal: () => void;
+  setIsPreviewModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PreviewContent: React.FC<PreviewContentProps> = ({
-  previewData,
-  previewType,
-  closePreviewModal,
+  setIsPreviewModalOpen,
   t,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [previewData, setPreviewData] = useState<string | undefined>(undefined);
+  const [previewType, setPreviewType] = useState<"xml" | "json" | null>("xml");
+  const { modeler, moddle } = useSelector((state: RootState) => state.modeler);
   const dispatch = useDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -27,13 +31,33 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
         modalRef.current &&
         !modalRef.current.contains(event.target as Node)
       ) {
-        closePreviewModal();
+        setIsPreviewModalOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [closePreviewModal]);
+  }, [setIsPreviewModalOpen]);
+
+  useEffect(() => {
+    const importContent = async () => {
+      if (!modeler || !moddle) return;
+
+      try {
+        const data =
+          previewType === "xml"
+            ? await openXMLPreview({ modeler })
+            : await openJsonPreview({ modeler, moddle });
+
+        setPreviewData(data);
+      } catch (error) {
+        console.error("Error fetching preview content:", error);
+        setPreviewData(undefined);
+      }
+    };
+
+    importContent();
+  }, [previewType]);
 
   const handleCopy = () => {
     if (previewData) {
@@ -56,6 +80,22 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
           <h2 className="text-xl font-bold">
             {previewType === "xml" ? t("XML Preview") : t("JSON Preview")}
           </h2>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-600">XML</span>
+            <label className="relative inline-block w-12 h-6 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={previewType === "json"}
+                onChange={(e) =>
+                  setPreviewType(e.target.checked ? "json" : "xml")
+                }
+                className="sr-only peer"
+              />
+              <div className="w-full h-full bg-gray-300 rounded-full peer-checked:bg-blue-500 transition-colors duration-300"></div>
+              <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 transform peer-checked:translate-x-6"></div>
+            </label>
+            <span className="text-sm font-medium text-gray-600">JSON</span>
+          </div>
 
           <div className="flex items-center gap-2">
             <button
@@ -94,7 +134,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
 
         {/* Close button */}
         <button
-          onClick={closePreviewModal}
+          onClick={() => setIsPreviewModalOpen(false)}
           className="mt-4 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
         >
           {t("Close")}

@@ -5,22 +5,17 @@ import { setFileExportSuccess } from "../../store/file/fileSlice";
 import { withTranslation } from "react-i18next";
 import Property from "../../components/Panel";
 import { RootState } from "../../store/store";
-import BpmnModdle from "bpmn-moddle";
 import PreviewContent from "./previewContent";
-import {
-  openJsonPreview,
-  openXMLPreview,
-} from "../../utils/previewContentUtils";
+
 import ContextPad from "../../components/ContextPad";
 import ActionButton from "../../components/UI/components/actionButton";
 import {
-  ArrowUturnLeftIcon, // Undo
-  ArrowUturnRightIcon, // Redo
-  CloudArrowDownIcon, // Export
+  ArrowUturnLeftIcon,
+  ArrowUturnRightIcon,
+  CloudArrowDownIcon,
   CodeBracketIcon,
-  DocumentArrowDownIcon, // Preview as XML
-  DocumentTextIcon,
-  XCircleIcon, // Preview as JSON
+  DocumentArrowDownIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/outline";
 import ContextMenu from "../../components/ContextMenu";
 import SaveAndDuplicate from "../../components/modals/saveAndDuplicate";
@@ -39,15 +34,10 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({ filename, designer, t }) => {
   const process = useSelector((state: RootState) => state.process);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const moddle = new BpmnModdle();
 
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState({
-    json: false,
-    xml: false,
-  });
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const commandStack: any = modeler?.get("commandStack");
-  const [previewData, setPreviewData] = useState<string | null>(null);
-  const [previewType, setPreviewType] = useState<"xml" | "json" | null>(null);
+
   const [saveModal, setSaveModal] = useState<boolean>(false);
   const [canRedo, setCanRedo] = useState<boolean>(false);
   const [canUndo, setCanUndo] = useState<boolean>(false);
@@ -67,20 +57,6 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({ filename, designer, t }) => {
       eventBus.off("commandStack.changed", updateUndoRedoState);
     };
   }, [modeler]);
-  const openPreviewModal = (data: string, type: "xml" | "json") => {
-    setPreviewData(data);
-    setPreviewType(type);
-    setIsPreviewModalOpen({
-      json: type === "json",
-      xml: type === "xml",
-    });
-  };
-
-  const closePreviewModal = () => {
-    setIsPreviewModalOpen({ json: false, xml: false });
-    setPreviewData(null);
-    setPreviewType(null);
-  };
 
   const undo = () => {
     const commandStack = modeler?.get("commandStack") as { undo: () => void };
@@ -188,21 +164,17 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({ filename, designer, t }) => {
           label={t("Export")}
         />
 
-        {/* ✅ Preview as XML */}
         <ActionButton
           icon={<CodeBracketIcon className="w-5 h-5" />}
           onClick={() => {
-            isPreviewModalOpen.xml
-              ? closePreviewModal()
-              : (isPreviewModalOpen.json && modeler) || modeler
-              ? openXMLPreview({ modeler, openPreviewModal })
-              : undefined;
+            isPreviewModalOpen
+              ? setIsPreviewModalOpen(false)
+              : setIsPreviewModalOpen(true);
           }}
-          label={t("Preview as XML")}
+          label={t("Preview code")}
         />
 
-        {/* ✅ Preview as JSON */}
-        <ActionButton
+        {/* <ActionButton
           icon={<DocumentTextIcon className="w-5 h-5" />}
           onClick={() => {
             isPreviewModalOpen.json
@@ -213,7 +185,7 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({ filename, designer, t }) => {
               : undefined;
           }}
           label={t("Preview as JSON")}
-        />
+        /> */}
         <ActionButton
           icon={<XCircleIcon className="w-5 h-5" />}
           onClick={handleClose}
@@ -244,12 +216,8 @@ const BpmnViewer: React.FC<BpmnEditorProps> = ({ filename, designer, t }) => {
       </div>
 
       {/* Preview Modal */}
-      {(isPreviewModalOpen.json || isPreviewModalOpen.xml) && (
-        <PreviewContent
-          previewType={previewType}
-          previewData={previewData}
-          closePreviewModal={closePreviewModal}
-        />
+      {isPreviewModalOpen && (
+        <PreviewContent setIsPreviewModalOpen={setIsPreviewModalOpen} />
       )}
       {saveModal && (
         <SaveAndDuplicate

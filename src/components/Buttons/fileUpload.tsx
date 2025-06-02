@@ -1,19 +1,26 @@
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline"; // Correct upload icon
 import { setXml } from "../../store/process/processSlice";
-import { fileUploader } from "../../utils/fileUploader";
+import { bpmnFileUploader, zipFileUploader } from "../../utils/fileUploader";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const FileUploadButton: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     try {
-      await fileUploader(input, dispatch).then(({ xml, id }) => {
-        dispatch(setXml(xml));
-        if (id) navigate(`/editor/${id}`);
-      });
+      location?.pathname?.toLowerCase().includes("/processes")
+        ? await bpmnFileUploader(input, dispatch).then(({ xml, id }) => {
+            dispatch(setXml(xml));
+            if (id) navigate(`/editor/${id}`);
+          })
+        : location?.pathname?.toLowerCase().includes("/apps")
+        ? await zipFileUploader(input, dispatch).then(({ id }) => {
+            if (id) navigate(`/apps/${id}`);
+          })
+        : undefined;
     } catch (error) {
       console.error("Error uploading file:", error);
       if (input) {

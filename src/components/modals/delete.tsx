@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Mirage } from "ldrs/react";
 import { axiosInstance } from "../../config/axiosInstance";
 import { DeleteModalProps } from "../../../types/apis/bpmn-process";
+import { toast } from "react-toastify";
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
   setModalOpen,
@@ -49,6 +50,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
               setModalOpen(false);
               const firstPath = `/${location.pathname.split("/")[1]}`;
               navigate(firstPath);
+              toast.success(modelName + t("BPMNDELETESUCCESS"));
               resolve();
             },
             onError: (error) => {

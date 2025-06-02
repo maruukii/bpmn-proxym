@@ -43,7 +43,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
   const dispatch = useDispatch();
   const [model, setModel] = useState<ProcessMetadata>(() => ({
     id: process?.id || "",
-    name: process?.name || "Untitled",
+    name: process?.name || "",
     key: process?.key || "",
     createdBy: process?.createdBy || "System",
     lastUpdatedBy: process?.lastUpdatedBy || "System",
