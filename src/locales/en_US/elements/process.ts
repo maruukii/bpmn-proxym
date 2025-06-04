@@ -24,6 +24,7 @@ export default{
     DeleteModal_description_conflict:"This model cannot be deleted, because another model is using it:",
     SaveModal_title:"Save {{item}}",
     SaveModal_description:"You can change the name for the new {{item}} and you may want to change the description at the same time. You can also save it as a new version and give it a comment",
+    SavePublishModal_description:"You can change the name for the new {{item}} and you may want to change the description at the same time. You can also publish the {{item}}",
     CreateModal_title:"Create a new {{item}}",
     CreateModal_description:"You need to give a name and a key for the new {{item}} and you may want to add a description at the same time.",
     DuplicateModal_title:"Duplicate the {{item}}",
@@ -31,6 +32,9 @@ export default{
     NewVersionModal_title:"Use as new version",
     NewVersionModal_description:"Are you sure you want to use version {{version}} to create a new version of \"{{name}}\"",
     NewVersionModal_checkbox:"Save this as a new version? This means you can always go back to a previous version.",
+      "PublishModal_checkbox":"Publish? Note that if publish is enabled, this app definition will be versioned and the workflow app will be updated if existing already.",
+        SAVESUCCESS:"{{name}} saved successfully!",
+
     modelName:"{{item}} name",
     modelKey:"{{item}} key",
     Cancel:"Cancel",

@@ -1,6 +1,6 @@
 import { withTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDeleteProcessMutation } from "../../hooks/queries/useProcessesQuery";
+import { useDeleteProcessMutation } from "../../hooks/queries/useProcessesAppDefsQuery";
 import { useEffect, useState } from "react";
 import { Mirage } from "ldrs/react";
 import { axiosInstance } from "../../config/axiosInstance";

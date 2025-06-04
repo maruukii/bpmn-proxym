@@ -38,6 +38,15 @@ export const deleteProcessAndApp= async (id:string):Promise<void> => {
               )
     return data
   };
+   export const saveApp= async (id:string,req:AppDefReq):Promise<any> => {
+    const {data}= await axiosInstance
+              .put(
+                `/configuration/modeler/rest/app-definitions/${id}`,
+                req,
+                
+              )
+    return data
+  };
   export const convertToBpmn= async (model:ProcessMetadata):Promise<string> => {
     const {data}=await axiosInstance.post(`/configuration/modeler/rest/converter/convert-to-bpmn/${model?.id}`,{})
     return data
@@ -62,3 +71,36 @@ export const deleteProcessAndApp= async (id:string):Promise<void> => {
           .put(`/configuration/modeler/rest/models/${id}`,model)
     return data
   };
+
+   export const getAppsDefs = async (
+  lastId: string,
+  oldId?: string
+): Promise<AppDefViewer | undefined> => {
+  if (!lastId) return;
+  const endpoint = oldId
+    ? `/configuration/modeler/rest/app-definitions/${lastId}/history/${oldId}`
+    : `/configuration/modeler/rest/app-definitions/${lastId}`;
+
+  try {
+    const { data } = await axiosInstance.get(endpoint);
+
+    return data;
+  } catch (error) {
+    return undefined;
+  }
+};
+ export const getProcess = async (
+  id: string
+): Promise<ProcessMetadata | undefined> => {
+  if (!id) return;
+
+  const endpoint =`/configuration/modeler/rest/models/${id}`;
+
+  try {
+    const { data } = await axiosInstance.get(endpoint);
+
+    return data;
+  } catch (error) {
+    return undefined;
+  }
+};

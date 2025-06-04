@@ -11,4 +11,5 @@ export default{
     "JSON Preview":"Aperçu JSON",
     "Copy to clipboard":"Copier dans le presse-papiers",
     "Copied!":"Copié!",
+    "No models":"Aucun modèle disponible pour ce type."
 }

@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import FileUploadButton from "../../components/Buttons/fileUpload";
 import NewDiagram from "../../components/Buttons/newDiagram";
 import { SingleProcess } from "../../components/UI/SingleProcess";
-import { useProcessesQuery } from "../../hooks/queries/useProcessesQuery";
+import { useProcessesAndAppsDefsQuery } from "../../hooks/queries/useProcessesAppDefsQuery";
 import { withTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { isActive } from "../../utils/tools";
+import { Types } from "../../CommonData/Enums";
 
 export const Processes = ({ t }: { t: any }) => {
   const location = useLocation();
@@ -13,7 +14,7 @@ export const Processes = ({ t }: { t: any }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  const { data, isLoading, error } = useProcessesQuery({
+  const { data, isLoading, error } = useProcessesAndAppsDefsQuery({
     filter: isActive(location, "/apps")
       ? "apps"
       : isActive(location, "/processes")
@@ -104,7 +105,16 @@ export const Processes = ({ t }: { t: any }) => {
             {filteredProcesses.length ? (
               filteredProcesses.map((process, index) => (
                 <div key={index} className="w-[290px]">
-                  <SingleProcess t={t} process={process} />
+                  <SingleProcess
+                    t={t}
+                    process={process}
+                    doNavigate={true}
+                    type={
+                      location?.pathname?.toLowerCase().includes("/processes")
+                        ? Types.PROCESS
+                        : Types.APPS
+                    }
+                  />
                 </div>
               ))
             ) : (

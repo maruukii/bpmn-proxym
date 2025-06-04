@@ -5,7 +5,7 @@ import modelerReducer from "./modeler/modelerSlice";
 import fileReducer from "./file/fileSlice";
 import userReducer from "./user/userSlice";
 import processReducer from "./process/processSlice";
-
+import appDefsReducer from "./process/appDefsSlice";
 const persistConfig = {
   key: "root",
   storage,
@@ -18,6 +18,7 @@ const rootReducer = {
   user:persistReducer(persistConfig,userReducer) ,
   process:persistReducer(persistConfig,processReducer),
   modeler: modelerReducer, 
+  appDefs:appDefsReducer
 };
 
 export const store = configureStore({

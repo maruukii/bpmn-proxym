@@ -24,7 +24,6 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
   const dispatch = useDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Detect click outside modal
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

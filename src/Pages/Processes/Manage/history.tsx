@@ -64,7 +64,7 @@ const History: React.FC<ProcessHistoryProps> = ({
                         location?.pathname?.includes("/apps")
                       ? navigate(`/apps/${lastVersionId}/history/${item?.id}`)
                       : navigate(
-                          `/processes/${lastVersionId}/history/${oldVersionId}`
+                          `/processes/${lastVersionId}/history/${item?.id}`
                         )
                     : null;
                   setHistoryOpen(false);

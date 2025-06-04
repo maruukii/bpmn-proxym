@@ -1,16 +1,26 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { convertToBpmn, convertToJson, createProcess, deleteProcessAndApp, duplicateProcess, getProcessesAndApps, saveProcess,publishApp, modifyProcess } from '../../api/processesApi';
+import { convertToBpmn, convertToJson, createProcess, deleteProcessAndApp, duplicateProcess, getProcessesAndApps, saveProcess,publishApp, modifyProcess, getAppsDefs, getProcess, saveApp } from '../../api/processesApi';
 import { ProcessMetadata, UseProcessesQueryProps } from '../../../types/apis/bpmn-process';
 
 
   
-  export const useProcessesQuery = ({ filter,modelType,sort,page, limit }: UseProcessesQueryProps) => {
+  export const useProcessesAndAppsDefsQuery = ({ filter,modelType,sort }: UseProcessesQueryProps) => {
     return useQuery({
-      queryKey: ["processes",filter,modelType,sort, page, limit], // this key identifies the cache for this combination
-      queryFn: () => getProcessesAndApps({filter,modelType,sort, page, limit }), // call the API with params
+      queryKey: ["processes",filter,modelType,sort],
+      queryFn: () => getProcessesAndApps({filter,modelType,sort}),
     });
   };
-  
+  export const useAppsDefsQuery = ({ lastId,oldId }: {lastId:string,oldId:string}) => {
+    return useQuery({
+      queryKey: ["apps",lastId,oldId],
+      queryFn: () => getAppsDefs(lastId,oldId ),
+    });
+  };
+  export const useGetProcessMutation = () => {
+  return useMutation({
+    mutationFn: (id:string) => getProcess(id),
+  });
+};
   export const useDeleteProcessMutation = () => {
   return useMutation({
     mutationFn: (id:string) => deleteProcessAndApp(id),
@@ -39,6 +49,11 @@ export const useConvertToJsonMutation = () => {
 export const useSaveProcessMutation = () => {
   return useMutation({
     mutationFn: ({id,req}:{id:string,req:URLSearchParams}) => saveProcess(id,req),
+  });
+};
+export const useSaveAppMutation = () => {
+  return useMutation({
+    mutationFn: ({id,req}:{id:string,req:AppDefReq}) => saveApp(id,req),
   });
 };
 export const usePublishMutation = () => {

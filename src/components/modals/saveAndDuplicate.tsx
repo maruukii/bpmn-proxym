@@ -1,6 +1,6 @@
 import { withTranslation } from "react-i18next";
 import { axiosInstance } from "../../config/axiosInstance";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProcessData, setXml } from "../../store/process/processSlice";
 import {
@@ -18,8 +18,9 @@ import {
   useDuplicateProcessMutation,
   useModifyMutation,
   usePublishMutation,
+  useSaveAppMutation,
   useSaveProcessMutation,
-} from "../../hooks/queries/useProcessesQuery";
+} from "../../hooks/queries/useProcessesAppDefsQuery";
 import { toast } from "react-toastify";
 import { Mirage } from "ldrs/react";
 import { Actions } from "../../CommonData/Enums";
@@ -40,13 +41,15 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
     : "processModels_singular";
   const { lastVersionId, oldVersionId } = useParams();
   const { modeler } = useSelector((state: RootState) => state.modeler);
+  const appDef = useSelector((state: RootState) => state.appDefs);
   const dispatch = useDispatch();
   const [model, setModel] = useState<ProcessMetadata>(() => ({
     id: process?.id || "",
     name: process?.name || "",
     key: process?.key || "",
-    createdBy: process?.createdBy || "System",
-    lastUpdatedBy: process?.lastUpdatedBy || "System",
+    createdBy: process?.createdBy || "",
+    description: process?.description || "",
+    lastUpdatedBy: process?.lastUpdatedBy || "",
     lastUpdated: process?.lastUpdated || Date.now(),
     latestVersion: process?.latestVersion ?? false,
     version: process?.version ?? 1,
@@ -55,21 +58,22 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
       (location?.pathname?.toLowerCase()?.startsWith("/apps") ? 3 : 0),
   }));
   const [newVersion, setNewVersion] = useState<boolean>(false);
+  const [publishApp, setPublishApp] = useState<boolean>(false);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setModel({ ...model, [e.target.name]: e.target.value });
   };
-  const closeEditor = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const duplication = useDuplicateProcessMutation();
   const creation = useCreateProcessMutation();
   const convertToBPMN = useConvertToBpmnMutation();
   const converToJson = useConvertToJsonMutation();
   const saving = useSaveProcessMutation();
+  const savingApp = useSaveAppMutation();
   const publish = usePublishMutation();
   const modify = useModifyMutation();
-  const handleSaveAndDuplicate = async () => {
+  const handleSaveAndDuplicate = async (closeEditor?: boolean) => {
     if (!model.name || !model.key) {
       alert("Model Name and Model Key are required!");
       return;
@@ -207,35 +211,50 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
           await new Promise<void>((resolve, reject) => {
             converToJson.mutate(xml as string, {
               onSuccess: (json) => {
-                const req = new URLSearchParams();
-                req.append("modeltype", "model");
-                req.append("json_xml", json.toString());
-                req.append("name", model?.name || "");
-                req.append("key", model?.key || "");
-                req.append("description", model?.description || "");
-                req.append("newversion", String(newVersion));
-                req.append("comment", model?.comment || "");
-                req.append("lastUpdated", String(Date.now()));
+                try {
+                  // Parse JSON
+                  const parsed =
+                    typeof json === "string" ? JSON.parse(json) : json;
 
-                saving.mutate(
-                  { id: model?.id, req },
-                  {
-                    onSuccess: () => {
-                      dispatch(setModelSaved());
-                      setModalOpen(false);
-                      setIsSaved && setIsSaved(true);
-                      if (closeEditor.current) {
-                        navigate(`/processes/${model?.id}`);
-                      }
-                      resolve();
-                    },
-                    onError: (error) => {
-                      console.error("Error saving model:", error);
-                      toast.error("Error saving model");
-                      reject(error);
-                    },
-                  }
-                );
+                  // Add modelId
+                  parsed.modelId = model?.id || "";
+
+                  const updatedJson = JSON.stringify(parsed);
+
+                  const req = new URLSearchParams();
+                  req.append("modeltype", "model");
+                  req.append("json_xml", updatedJson);
+                  req.append("name", model?.name || "");
+                  req.append("key", model?.key || "");
+                  req.append("description", model?.description || "");
+                  req.append("newversion", String(newVersion));
+                  req.append("comment", model?.comment || "");
+                  req.append("lastUpdated", String(Date.now()));
+
+                  saving.mutate(
+                    { id: model?.id, req },
+                    {
+                      onSuccess: () => {
+                        dispatch(setModelSaved());
+                        setModalOpen(false);
+                        setIsSaved && setIsSaved(true);
+                        if (closeEditor) {
+                          navigate(`/processes/${model?.id}`);
+                        }
+                        resolve();
+                      },
+                      onError: (error) => {
+                        console.error("Error saving model:", error);
+                        toast.error("Error saving model");
+                        reject(error);
+                      },
+                    }
+                  );
+                } catch (error) {
+                  console.error("Error modifying JSON:", error);
+                  toast.error("Invalid JSON format");
+                  reject(error);
+                }
               },
               onError: (error) => {
                 console.error("Error converting to JSON:", error);
@@ -244,8 +263,52 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
               },
             });
           });
-          break;
 
+          break;
+        case Actions.SAVE_PUBLISH:
+          await new Promise<void>((resolve, reject) => {
+            const req: AppDefReq = {
+              appDefinition: {
+                name: model?.name,
+                key: model?.key,
+                definition: appDef,
+                created: Date.now(),
+                version: model?.version,
+                description: model?.description ?? "",
+                id: model?.id,
+              },
+              publish: publishApp,
+            };
+            savingApp.mutate(
+              { id: model?.id, req },
+              {
+                onSuccess: () => {
+                  dispatch(setModelSaved());
+                  setModalOpen(false);
+                  publishApp
+                    ? toast.success(t("Published", { item: t(ModalTitle) }))
+                    : toast.success(t("SAVESUCCESS", { name: t(ModalTitle) }));
+
+                  if (closeEditor) {
+                    navigate(
+                      `/${
+                        location?.pathname?.toLowerCase()?.includes("apps")
+                          ? "apps"
+                          : "processes"
+                      }/${model?.id}`
+                    );
+                  }
+                  resolve();
+                },
+                onError: (error) => {
+                  console.error("Error saving model:", error);
+                  toast.error("Error saving model");
+                  reject(error);
+                },
+              }
+            );
+          });
+          break;
         default:
           console.warn("Unhandled action type:", action);
           break;
@@ -259,7 +322,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-100 bg-opacity-50 overflow-auto backdrop-blur-md">
-      <div className="bg-white p-6 rounded shadow-lg w-150 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white p-6 rounded shadow-lg w-170 max-h-[90vh] overflow-y-auto">
         <h2 className="text-3xl font-semibold mb-4 bg-gray-200">
           {action === Actions.NEW_VERSION
             ? t("NewVersionModal_title")
@@ -269,7 +332,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
             ? t("DuplicateModal_title", { item: t(ModalTitle) })
             : action === Actions.MODIFY
             ? t("ModifyModal_title", { item: t(ModalTitle) })
-            : action === Actions.SAVE
+            : action === Actions.SAVE || action === Actions.SAVE_PUBLISH
             ? t("SaveModal_title", { item: t(ModalTitle) })
             : action === Actions.PUBLISH
             ? t("PublishModal_title", { item: t(ModalTitle) })
@@ -289,6 +352,8 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
             ? t("ModifyModal_description", { item: t(ModalTitle) })
             : action === Actions.SAVE
             ? t("SaveModal_description", { item: t(ModalTitle) })
+            : action === Actions.SAVE_PUBLISH
+            ? t("SavePublishModal_description", { item: t(ModalTitle) })
             : action === Actions.PUBLISH
             ? t("PublishModal_description", { item: process?.name })
             : ""}
@@ -353,7 +418,17 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
               <p className="text-sm">{t("NewVersionModal_checkbox")}</p>
             </div>
           )}
-
+          {action === Actions.SAVE_PUBLISH && (
+            <div className="flex flex-row gap-1">
+              <input
+                type="checkbox"
+                name="newVersion"
+                onChange={(e) => setPublishApp(e.target.checked)}
+                className="border p-2 rounded"
+              />
+              <p className="text-sm">{t("PublishModal_checkbox")}</p>
+            </div>
+          )}
           {((newVersion && action === Actions.SAVE) ||
             action === "Use As New Version") && (
             <div className="flex flex-col">
@@ -380,10 +455,11 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
           >
             {t("Cancel")}
           </button>
-          {action === Actions.SAVE && (
+          {(action === Actions.SAVE || action === Actions.SAVE_PUBLISH) && (
             <button
-              ref={closeEditor}
-              onClick={handleSaveAndDuplicate}
+              onClick={() => {
+                handleSaveAndDuplicate(true);
+              }}
               className={`px-4 py-2 ${
                 !model?.name || !model?.key
                   ? "bg-green-200 cursor-not-allowed"
@@ -399,7 +475,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
             </button>
           )}
           <button
-            onClick={handleSaveAndDuplicate}
+            onClick={() => handleSaveAndDuplicate(false)}
             className={`px-4 py-2 ${
               !model?.name || !model?.key
                 ? "bg-blue-200 cursor-not-allowed"
@@ -417,7 +493,7 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
               t("DuplicateModal_title", { item: t(ModalTitle) })
             ) : action === Actions.MODIFY ? (
               t("ModifyModal_title", { item: t(ModalTitle) })
-            ) : action === Actions.SAVE ? (
+            ) : action === Actions.SAVE || action === Actions.SAVE_PUBLISH ? (
               t("SaveModal_title", { item: t(ModalTitle) })
             ) : action === Actions.PUBLISH ? (
               t("PublishModal_title", { item: t(ModalTitle) })

@@ -34,6 +34,7 @@ import {
   exportBar,
 } from "../../../utils/fileExporter";
 import { Actions } from "../../../CommonData/Enums";
+import AppDetails from "./appDefViewer";
 
 const Manage: FC<any> = ({ t }) => {
   // const {
@@ -60,13 +61,6 @@ const Manage: FC<any> = ({ t }) => {
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [process, setProcess] = useState<ProcessMetadata>();
 
-  // const [duplicate, setDuplicate] = useState<DuplicateModel>({
-  //   id: process?.id,
-  //   name: process?.name,
-  //   key: process?.key,
-  //   description: process?.description,
-  //   modelType: process?.modelType,
-  // });
   const [loading, setLoading] = useState<boolean>(false);
   const { xml } = useSelector((state: RootState) => state.process);
   // const [xml, setXml] = useState<string | null>(null);
@@ -123,6 +117,7 @@ const Manage: FC<any> = ({ t }) => {
     };
     loadProcess();
     loadHistory();
+
     // loadThumbnail();
 
     // return () => {
@@ -230,59 +225,12 @@ const Manage: FC<any> = ({ t }) => {
 
         {/* Action Buttons */}
         <div className="flex gap-2">
-          {!oldVersionId ? (
-            <ActionButton
-              icon={<EyeIcon className="w-5 h-5" />}
-              label={
-                location?.pathname?.includes("/apps")
-                  ? t("App Editor")
-                  : t("Visual Editor")
-              }
-              onClick={() => {
-                dispatch(setProcessData(process as ProcessMetadata));
-                navigate(`/editor/${process?.id}`);
-              }}
-            />
-          ) : (
-            <ActionButton
-              icon={<TagIcon className="w-5 h-5" />}
-              label={t("Use as new version")}
-              onClick={() => {
-                setModalOpen(true);
-                setAction(Actions.NEW_VERSION);
-              }}
-            />
-          )}
           <ActionButton
-            icon={<ArrowDownTrayIcon className="w-5 h-5" />}
-            label={t("Download")}
-            onClick={handleDownload}
-          />
-          {location?.pathname?.includes("/apps") && (
-            <ActionButton
-              icon={<ShareIcon className="w-5 h-5" />}
-              label={t("Publish")}
-              onClick={() => {
-                setModalOpen(true);
-                setAction(Actions.PUBLISH);
-              }}
-              disabled={oldVersionId ? true : false}
-            />
-          )}
-          {location?.pathname?.includes("/apps") && (
-            <ActionButton
-              icon={<ArrowLongUpIcon className="w-5 h-5" />}
-              label={t("Export bar")}
-              onClick={handleExportBar}
-              disabled={oldVersionId ? true : false}
-            />
-          )}
-          <ActionButton
-            icon={<TrashIcon className="w-5 h-5" />}
-            label={t("Delete")}
+            icon={<PencilIcon className="w-5 h-5" />}
+            label={t("Modify")}
             onClick={() => {
               setModalOpen(true);
-              setAction(Actions.DELETE);
+              setAction(Actions.MODIFY);
             }}
             disabled={oldVersionId ? true : false}
           />
@@ -296,20 +244,67 @@ const Manage: FC<any> = ({ t }) => {
             disabled={oldVersionId ? true : false}
           />
           <ActionButton
-            icon={<PencilIcon className="w-5 h-5" />}
-            label={t("Modify")}
+            icon={<TrashIcon className="w-5 h-5" />}
+            label={t("Delete")}
             onClick={() => {
               setModalOpen(true);
-              setAction(Actions.MODIFY);
+              setAction(Actions.DELETE);
             }}
             disabled={oldVersionId ? true : false}
           />
+          <ActionButton
+            icon={<ArrowDownTrayIcon className="w-5 h-5" />}
+            label={t("Download")}
+            onClick={handleDownload}
+          />
+          {location?.pathname?.includes("/apps") && !oldVersionId ? (
+            <ActionButton
+              icon={<ArrowLongUpIcon className="w-5 h-5" />}
+              label={t("Export bar")}
+              onClick={handleExportBar}
+              disabled={oldVersionId ? true : false}
+            />
+          ) : undefined}
+          {location?.pathname?.includes("/apps") && !oldVersionId ? (
+            <ActionButton
+              icon={<ShareIcon className="w-5 h-5" />}
+              label={t("Publish")}
+              onClick={() => {
+                setModalOpen(true);
+                setAction(Actions.PUBLISH);
+              }}
+            />
+          ) : undefined}
+          {!oldVersionId ? (
+            <ActionButton
+              icon={<EyeIcon className="w-5 h-5" />}
+              label={
+                location?.pathname?.includes("/apps")
+                  ? t("App Editor")
+                  : t("Visual Editor")
+              }
+              onClick={() => {
+                dispatch(setProcessData(process as ProcessMetadata));
+                location?.pathname?.includes("/apps")
+                  ? navigate(`/apps-editor/${process?.id}`)
+                  : navigate(`/editor/${process?.id}`);
+              }}
+            />
+          ) : (
+            <ActionButton
+              icon={<TagIcon className="w-5 h-5" />}
+              label={t("Use as new version")}
+              onClick={() => {
+                setModalOpen(true);
+                setAction(Actions.NEW_VERSION);
+              }}
+            />
+          )}
         </div>
       </div>
 
       {/* Bottom Section */}
       <div className="flex justify-between items-center">
-        {/* ✅ Description with ellipsis and hover title */}
         <div
           className="text-sm text-gray-700 max-w-[500px] overflow-hidden text-ellipsis whitespace-nowrap"
           title={process?.description}
@@ -318,7 +313,6 @@ const Manage: FC<any> = ({ t }) => {
           <span className="font-medium">{process?.description}</span>
         </div>
 
-        {/* ✅ Comment (only if exists) */}
         {process?.comment && (
           <div
             className="text-sm text-gray-700 max-w-[500px] overflow-hidden text-ellipsis whitespace-nowrap"
@@ -329,7 +323,6 @@ const Manage: FC<any> = ({ t }) => {
           </div>
         )}
 
-        {/* ✅ History Tag */}
         <div className="flex items-center gap-2 text-sm text-blue-600 relative">
           <Tag
             className="bg-blue-100 text-blue-700 cursor-pointer"
@@ -349,13 +342,13 @@ const Manage: FC<any> = ({ t }) => {
           )}
         </div>
       </div>
-      <div className="flex-grow w-full h-full flex items-center justify-center overflow-auto">
+      <div className="flex-grow w-full h-full flex items-start justify-start overflow-auto">
         {xml && loading ? (
           <div className="w-full h-full max-w-[90vw] ">
             <BpmnReadOnly xml={xml} />
           </div>
-        ) : location?.pathname?.includes("/apps") ? (
-          <p>No data</p>
+        ) : location?.pathname?.includes("/apps") && process ? (
+          <AppDetails process={process} t={t} />
         ) : (
           <span className="absolute inset-0 flex items-center justify-center">
             <Mirage size="60" speed="2.5" color="black" />
@@ -377,7 +370,7 @@ const Manage: FC<any> = ({ t }) => {
           <Delete
             setModalOpen={setModalOpen}
             id={lastVersionId}
-            modelName={process?.name || "Unnamed Process"}
+            modelName={process?.name || ""}
           />
         )}
     </div>

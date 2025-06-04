@@ -11,4 +11,5 @@ export default{
     "JSON Preview":"JSON Preview",
     "Copy to clipboard":"Copy to clipboard",
     "Copied!":"Copied!",
+    "No models": "No models available for this type."
 }

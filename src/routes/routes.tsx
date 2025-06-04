@@ -6,6 +6,7 @@ import Manage from "../Pages/Processes/Manage";
 // Lazy load the components
 const Editor = lazy(() => import("../Pages/BPMNhome/bpmnHome"));
 const Processes = lazy(() => import("../Pages/Processes"));
+const AppEditor = lazy(() => import("../Pages/BPMNviewer/appEditor"));
 const Error404 = lazy(() => import("../Pages/Utility/Error404"));
 const Login = lazy(() => import("../Pages/Login"));
 
@@ -47,6 +48,11 @@ const routes = [
   {
     path: "/apps/:lastVersionId/history/:oldVersionId",
     element: <Manage />,
+    type: "protected",
+  },
+  {
+    path: "/apps-editor/:lastVersionId",
+    element: <AppEditor />,
     type: "protected",
   },
   {
