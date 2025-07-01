@@ -10,7 +10,7 @@ import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
 // import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { SingleProcessMetadata } from "../../../../types/apis/bpmn-process";
-import { ThemeOptions, Types } from "../../../CommonData/Enums";
+import { GlyphiconIcons, ThemeOptions, Types } from "../../../CommonData/Enums";
 import "../../../Styles/glyphicons.css";
 import { useAppsDefsQuery } from "../../../hooks/queries/useProcessesAppDefsQuery";
 import { RootState } from "../../../store/store";
@@ -29,10 +29,9 @@ export const SingleProcess: React.FC<SingleProcessMetadata> = ({
     oldId: "",
   });
   const iconTheme = {
-    icon: apps?.data?.definition?.icon || "",
-    theme: apps?.data?.definition?.theme || "",
+    icon: apps?.data?.definition?.icon || GlyphiconIcons[0],
+    theme: apps?.data?.definition?.theme || ThemeOptions[0].id,
   };
-
   useEffect(() => {
     let isMounted = true;
 

@@ -62,7 +62,7 @@ const App: React.FC<WithTranslation> = ({ t }) => {
       client={queryClient}
       persistOptions={{ persister }}
     >
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      {/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" /> */}
       <ToastContainer position="top-center" autoClose={2000} />
 
       <Routes />

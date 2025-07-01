@@ -24,6 +24,7 @@ import {
 import { toast } from "react-toastify";
 import { Mirage } from "ldrs/react";
 import { Actions } from "../../CommonData/Enums";
+import { useFormsQuery } from "../../hooks/queries/useFormsQuery";
 
 const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
   process,
@@ -73,6 +74,38 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
   const savingApp = useSaveAppMutation();
   const publish = usePublishMutation();
   const modify = useModifyMutation();
+  const { data } = useFormsQuery({
+    filter: "",
+    includeHistoryModels: "true",
+    modelType: 2,
+    page: 1,
+    limit: 10,
+  });
+
+  function addNewKey(obj: any) {
+    if (typeof obj !== "object" || obj === null) return obj;
+
+    if (obj.hasOwnProperty("formkeydefinition")) {
+      const [key, version] = obj.formkeydefinition.split("::"); // Extract key and version
+      const matchingForm = data?.find((form) => form.key === key); // Find form with the same key
+
+      obj.formreference = {
+        id: matchingForm?.id || "",
+        key: key,
+        name: matchingForm?.name || "",
+        version: version || "",
+      };
+    }
+
+    for (let key in obj) {
+      if (typeof obj[key] === "object") {
+        obj[key] = addNewKey(obj[key]);
+      }
+    }
+
+    return obj;
+  }
+
   const handleSaveAndDuplicate = async (closeEditor?: boolean) => {
     if (!model.name || !model.key) {
       alert("Model Name and Model Key are required!");
@@ -155,12 +188,13 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
             creation.mutate(model, {
               onSuccess: (data) => {
                 dispatch(setProcessData(data));
-                setModalOpen(false);
-
-                if (location?.pathname?.includes("/apps")) {
+                if (location?.pathname?.toLowerCase()?.includes("/apps")) {
                   navigate(`/apps/${data?.id}`);
+                  setModalOpen(false);
                   resolve();
-                } else if (location?.pathname?.includes("/processes")) {
+                } else if (
+                  location?.pathname?.toLowerCase()?.includes("/processes")
+                ) {
                   convertToBPMN.mutate(data, {
                     onSuccess: (xml) => {
                       dispatch(setXml(xml || ""));
@@ -170,6 +204,8 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
                           fileContent: xml,
                         })
                       );
+                      setModalOpen(false);
+
                       navigate(`/editor/${data?.id}`);
                       resolve();
                     },
@@ -212,15 +248,12 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
             converToJson.mutate(xml as string, {
               onSuccess: (json) => {
                 try {
-                  // Parse JSON
                   const parsed =
                     typeof json === "string" ? JSON.parse(json) : json;
 
-                  // Add modelId
-                  parsed.modelId = model?.id || "";
-
-                  const updatedJson = JSON.stringify(parsed);
-
+                  let updatedJson = addNewKey(parsed);
+                  updatedJson = JSON.stringify(updatedJson);
+                  console.log(updatedJson);
                   const req = new URLSearchParams();
                   req.append("modeltype", "model");
                   req.append("json_xml", updatedJson);
@@ -234,10 +267,12 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
                   saving.mutate(
                     { id: model?.id, req },
                     {
-                      onSuccess: () => {
+                      onSuccess: (data) => {
                         dispatch(setModelSaved());
                         setModalOpen(false);
                         setIsSaved && setIsSaved(true);
+                        dispatch(setProcessData(data));
+                        toast.success(t("SAVE", { name: t(ModalTitle) }));
                         if (closeEditor) {
                           navigate(`/processes/${model?.id}`);
                         }
@@ -283,12 +318,12 @@ const SaveAndDuplicate: React.FC<SaveAndDuplicateModalProps> = ({
               { id: model?.id, req },
               {
                 onSuccess: () => {
+                  setIsSaved && setIsSaved(true);
                   dispatch(setModelSaved());
                   setModalOpen(false);
                   publishApp
                     ? toast.success(t("Published", { item: t(ModalTitle) }))
-                    : toast.success(t("SAVESUCCESS", { name: t(ModalTitle) }));
-
+                    : toast.success(t("SAVE", { name: t(ModalTitle) }));
                   if (closeEditor) {
                     navigate(
                       `/${

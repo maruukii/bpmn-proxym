@@ -8,7 +8,6 @@ export const axiosInstance = axios.create({
   withCredentials: true
 });
 
-// Interceptor to handle 401 Unauthorized responses
 axiosInstance.interceptors.response.use(
   response => response,
   error => {
@@ -27,6 +26,18 @@ export const axiosImage = axios.create({
   headers: {
 Accept: "image/png"  },
 });
+axiosImage.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      if(window.location.pathname!=="/landingpage"){      
+        console.error('Unauthorized! Redirecting to login...');
+        window.location.href="/landingpage";  
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 export const axiosFormData =axios.create({
   baseURL:"",
 
@@ -35,3 +46,31 @@ export const axiosFormData =axios.create({
                   },
 
 })
+axiosFormData.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      if(window.location.pathname!=="/landingpage"){      
+        console.error('Unauthorized! Redirecting to login...');
+        window.location.href="/landingpage";  
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+export const axiosElements =axios.create({
+  baseURL:import.meta.env.VITE_BACKEND_URL,}
+
+   )
+axiosFormData.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      if(window.location.pathname!=="/landingpage"){      
+        console.error('Unauthorized! Redirecting to login...');
+        window.location.href="/landingpage";  
+      }
+    }
+    return Promise.reject(error);
+  }
+);

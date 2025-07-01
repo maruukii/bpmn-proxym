@@ -4,13 +4,33 @@ import { useEffect, useState } from "react";
 import { updateDynamicProperty } from "../../utils/dynamicPropertyUtil";
 import { generateFlowableId } from "../../utils/tools";
 import { ChevronDoubleLeftIcon } from "@heroicons/react/24/solid";
+import { axiosElements } from "../../config/axiosInstance";
 
 function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const groupedStencils = stencilConfig.stencils
-    .filter((stencil) => stencil.type === "node")
+  const [elements, setElements] = useState<ElementMetadata[]>(
+    stencilConfig.stencils || []
+  );
+  const [elementsReady, setElementsReady] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosElements.get("/elements");
+        setElements([...response.data, ...elements] as ElementMetadata[]);
+        setElementsReady(true);
+      } catch (error) {
+        console.error("Error fetching elements:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const groupedStencils = elements
+    .filter((stencil) => stencil.type === "node" && stencil.id !== "Process")
     .reduce((acc: Record<string, any[]>, stencil) => {
       const category = stencil.groups;
       if (typeof category !== "string") return acc;
@@ -30,7 +50,6 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
 
   useEffect(() => {
     if (!modeler) return;
-
     const elementRegistry = modeler.get("elementRegistry");
     const canvas = modeler.get("canvas");
     const elementFactory = modeler.get("elementFactory");
@@ -43,12 +62,8 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
 
       const elementId = event.dataTransfer?.getData("elementId");
       if (!elementId) return;
-
-      const stencilElement = stencilConfig.stencils.find(
-        (el: any) => el.id === elementId
-      );
+      const stencilElement = elements.find((el: any) => el.id === elementId);
       if (!stencilElement) return;
-
       const container = canvas.getContainer();
       const rect = container.getBoundingClientRect();
       const viewbox = canvas.viewbox();
@@ -79,11 +94,16 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
         width: stencilElement.width,
         height: stencilElement.height,
         ...(isStructural && {
-          isExpanded: Boolean(stencilElement?.isExpanded),
-          triggeredByEvent: Boolean(stencilElement?.triggeredByEvent),
+          isExpanded:
+            "isExpanded" in stencilElement
+              ? Boolean(stencilElement?.isExpanded)
+              : false,
+          triggeredByEvent:
+            "triggeredByEvent" in stencilElement
+              ? Boolean(stencilElement?.triggeredByEvent)
+              : true,
         }),
       });
-
       const element = modeling.createShape(
         shape,
         { x: diagramX, y: diagramY },
@@ -91,8 +111,14 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
       );
 
       if (isStructural && element.di) {
-        element.businessObject.isExpanded = Boolean(stencilElement.isExpanded);
-        element.di.isExpanded = Boolean(stencilElement.isExpanded);
+        element.businessObject.isExpanded =
+          "isExpanded" in stencilElement
+            ? Boolean(stencilElement?.isExpanded)
+            : false;
+        element.di.isExpanded =
+          "isExpanded" in stencilElement
+            ? Boolean(stencilElement?.isExpanded)
+            : false;
         canvas.resized();
       }
 
@@ -109,22 +135,19 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
           });
         }
       }
-
-      if (stencilElement.flowableType) {
+      if (typeof stencilElement?.flowableType !== undefined) {
         setTimeout(() => {
           updateDynamicProperty(
             modeling,
             element,
             "type",
-            stencilElement.flowableType
+            stencilElement.flowableType as string | boolean
           );
         }, 0);
       }
-
       const customId = generateFlowableId();
       modeling.updateProperties(element, { id: customId });
     };
-
     const handleDragOver = (event: DragEvent) => {
       event.preventDefault();
       event.stopPropagation();
@@ -138,11 +161,10 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
       container.removeEventListener("drop", handleDrop);
       container.removeEventListener("dragover", handleDragOver);
     };
-  }, [modeler]);
+  }, [modeler, elementsReady]);
 
   return (
     <>
-      {/* Slide-in Palette Panel */}
       {isOpen && (
         <div className="fixed z-[120] overflow-auto">
           <div
@@ -191,11 +213,20 @@ function CustomPalette({ modeler, t }: { modeler: any; t: any }) {
                             onDragStart={(e) => handleDragStart(e, stencil.id)}
                             className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-move border border-gray-200"
                           >
-                            <img
-                              src={`/icons/${stencil.icon}`}
-                              alt={t(stencil.title)}
-                              className="w-6 h-6 object-contain"
-                            />
+                            {typeof stencil.icon === "object" &&
+                            stencil.icon?.ImageLink ? (
+                              <img
+                                src={stencil.icon.ImageLink}
+                                alt="Thumbnail"
+                                className={`w-6 h-6 object-contain`}
+                              />
+                            ) : typeof stencil.icon === "string" ? (
+                              <img
+                                src={"/icons/" + stencil.icon}
+                                alt="Thumbnail"
+                                className="w-6 h-6 object-contain"
+                              />
+                            ) : null}
                             <span
                               className="text-sm"
                               title={t(stencil.description)}

@@ -3,5 +3,6 @@ export default{
     DecisionsNav:"Decisions",
     AppsNav: "Applications",
     Dashboard:"Dashboard",
+    ElementsNav:"Elements",
     Logout:"Logout"
 }

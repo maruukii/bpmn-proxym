@@ -3,6 +3,7 @@ export default{
     "Visual Editor":"Visual Editor",
     "App Editor":"App Editor",
     "Export bar":"Export (.bar)",
+     "Create":"Create",
     "Modify":"Modify",
     "Duplicate":"Duplicate",
     "Delete":"Delete",
@@ -32,9 +33,8 @@ export default{
     NewVersionModal_title:"Use as new version",
     NewVersionModal_description:"Are you sure you want to use version {{version}} to create a new version of \"{{name}}\"",
     NewVersionModal_checkbox:"Save this as a new version? This means you can always go back to a previous version.",
-      "PublishModal_checkbox":"Publish? Note that if publish is enabled, this app definition will be versioned and the workflow app will be updated if existing already.",
-        SAVESUCCESS:"{{name}} saved successfully!",
-
+    "PublishModal_checkbox":"Publish? Note that if publish is enabled, this app definition will be versioned and the workflow app will be updated if existing already.",
+    SAVE:"{{name}} saved successfully!",
     modelName:"{{item}} name",
     modelKey:"{{item}} key",
     Cancel:"Cancel",
@@ -44,4 +44,5 @@ export default{
     PublishModal_title:"Publish {{item}}",
     Published:"{{item}} published succesfully",
     Modified:"{{item}} modified succesfully",
+   "no form selected": "no form selected",
 }

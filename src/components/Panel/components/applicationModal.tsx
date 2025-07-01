@@ -91,7 +91,7 @@ const ApplicationModal: React.FC<ApplicationModalProps> = ({
             <input
               type="text"
               className="border px-2 py-1 mb-2 text-xl rounded"
-              placeholder={t("Search")}
+              placeholder={t("Search", { item: "application" })}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

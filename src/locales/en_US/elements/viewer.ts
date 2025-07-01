@@ -1,4 +1,5 @@
 export default{
+    Save:"Save",
     Redo:"Redo",
     Undo:"Undo",
     Export:"Export",

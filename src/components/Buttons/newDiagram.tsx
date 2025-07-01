@@ -4,13 +4,13 @@ import SaveAndDuplicate from "../modals/saveAndDuplicate";
 import { Actions } from "../../CommonData/Enums";
 
 const NewDiagram: React.FC = () => {
-  const [modelOpen, setModelOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   return (
     <>
       <div className="fixed bottom-24 right-8 z-110">
         <button
-          onClick={() => setModelOpen(true)}
+          onClick={() => setModalOpen(true)}
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-4 rounded-full shadow-lg cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
         >
           <span className="text-xl">
@@ -19,8 +19,8 @@ const NewDiagram: React.FC = () => {
         </button>
       </div>
 
-      {modelOpen && (
-        <SaveAndDuplicate setModalOpen={setModelOpen} action={Actions.CREATE} />
+      {modalOpen && (
+        <SaveAndDuplicate setModalOpen={setModalOpen} action={Actions.CREATE} />
       )}
     </>
   );

@@ -1,21 +1,35 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import LanguageDropdown from "../TopbarDropdown/LanguageDropdown";
 import useLogout from "../../../hooks/useLogout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
 import { Link, useLocation } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import { isActive } from "../../../utils/tools";
 import { ThemeOptions } from "../../../CommonData/Enums";
+import { toast } from "react-toastify";
+import { clearIsLoggedIn } from "../../../store/user/userSlice";
 
 const Navbar = ({ t }: { t: any }) => {
   const logout = useLogout();
+  const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { userName } = useSelector((state: RootState) => state.user);
+  const { userName, isLoggedIn } = useSelector(
+    (state: RootState) => state.user
+  );
   const { icon, theme } = useSelector((state: RootState) => state.appDefs);
   const { name } = useSelector((state: RootState) => state.process);
   const location = useLocation();
+  const hasShownToast = useRef(false);
+
+  useEffect(() => {
+    if (isLoggedIn && !hasShownToast.current) {
+      toast.info(t("CONNECTSUCCESS", { user: userName }));
+      dispatch(clearIsLoggedIn());
+      hasShownToast.current = true;
+    }
+  }, [isLoggedIn, dispatch, userName]);
 
   const handleLogout = async () => {
     try {
@@ -26,6 +40,7 @@ const Navbar = ({ t }: { t: any }) => {
       console.error(error);
     }
   };
+
   return (
     <nav
       className={`fixed top-0 h-24 w-full text-white px-6 py-3 ${
@@ -59,7 +74,6 @@ const Navbar = ({ t }: { t: any }) => {
           />
         </Link>
       </div>
-
       {/* Navigation Buttons */}
       <div className="flex items-center space-x-6">
         <Link
@@ -78,15 +92,15 @@ const Navbar = ({ t }: { t: any }) => {
         <span className="text-gray-300 text-2xl">|</span>
 
         <Link
-          to="/decisions"
+          to="/elements"
           className="flex flex-col items-center px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
         >
           <span
             className={`md:text-lg lg:text-xl xl:text-2xl pb-2 ${
-              isActive(location, "/decisions") ? "border-b-2" : ""
+              isActive(location, "/elements") ? "border-b-2" : ""
             }`}
           >
-            {t("DecisionsNav")}
+            {t("ElementsNav")}
           </span>
         </Link>
 
@@ -105,7 +119,6 @@ const Navbar = ({ t }: { t: any }) => {
           </span>
         </Link>
       </div>
-
       {/* User Profile & Logout */}
       <div className="flex items-center space-x-6 relative">
         {/* App Icon and Name */}

@@ -5,6 +5,7 @@ export default{
     "BPMNDELETESUCCESS":" supprimé avec succès!",
     BPMNCOPYSUCCESS:" contenu copié avec succès!",
     BPMNCREATESUCCESS:" créé avec succès!",
-    CONNECTSUCCESS:"est connecté",
+    CONNECTSUCCESS:"{{user}} est connecté",
     BPMNSAVESUCCESS:" sauvegardé avec succès!",
+    Search:"Rechercher {{item}}...",
 }

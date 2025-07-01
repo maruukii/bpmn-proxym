@@ -9,6 +9,8 @@ import { useParams } from "react-router-dom";
 import { ProcessMetadata } from "../../../../types/apis/bpmn-process";
 import { Types } from "../../../CommonData/Enums";
 import "../../../Styles/glyphicons.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 
 interface Props {
   process: ProcessMetadata;
@@ -22,7 +24,7 @@ const AppDetails: React.FC<Props> = ({ appDefs, setAppDef, process, t }) => {
   const [activeTab, setActiveTab] = useState<"bpmn" | "cmmn">("bpmn");
   const [showImported, setShowImported] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const { icon, theme } = useSelector((state: RootState) => state.appDefs);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -52,12 +54,14 @@ const AppDetails: React.FC<Props> = ({ appDefs, setAppDef, process, t }) => {
     }
   };
   const handleModelSelection = (process: ProcessMetadata) => {
-    const isSelected = appDefs?.models.some(
+    const isSelected = appDefs?.models?.some(
       (model) => model.id === process?.id
     );
 
     const updatedModels = isSelected
       ? appDefs?.models.filter((model) => model.id !== process?.id)
+      : !appDefs!.models
+      ? [process]
       : [...appDefs!.models, process];
     setAppDef &&
       setAppDef((prev) => ({
@@ -65,7 +69,6 @@ const AppDetails: React.FC<Props> = ({ appDefs, setAppDef, process, t }) => {
         models: updatedModels ?? [],
       }));
   };
-
   return (
     <div className="p-6 h-full flex flex-col">
       {/* Full Width Header */}
@@ -92,18 +95,18 @@ const AppDetails: React.FC<Props> = ({ appDefs, setAppDef, process, t }) => {
               <div className="flex flex-col">
                 <label className="text-gray-700 mb-2">{t("Icon")}</label>
                 <div className="grid grid-cols-6 gap-3 max-h-40 overflow-y-auto p-2 border border-gray-300 rounded-md">
-                  {GlyphiconIcons.map((icon) => (
+                  {GlyphiconIcons.map((item) => (
                     <button
-                      key={icon}
-                      onClick={() => handleChange("icon", icon)}
+                      key={item}
+                      onClick={() => handleChange("icon", item)}
                       className={`flex items-center justify-center p-2 border rounded hover:bg-blue-100 cursor-pointer ${
-                        appDefs?.icon === icon
+                        appDefs?.icon === item || icon === item
                           ? "border-blue-500 bg-blue-50"
                           : "border-gray-200"
                       }`}
-                      title={icon}
+                      title={item}
                     >
-                      <i className={`glyphicon ${icon} text-2xl`} />
+                      <i className={`glyphicon ${item} text-2xl`} />
                     </button>
                   ))}
                 </div>
@@ -113,17 +116,19 @@ const AppDetails: React.FC<Props> = ({ appDefs, setAppDef, process, t }) => {
               <div className="flex flex-col">
                 <label className="text-gray-700 mb-2">{t("Theme")}</label>
                 <div className="flex space-x-2">
-                  {ThemeOptions.map((theme) => (
+                  {ThemeOptions.map((item) => (
                     <div
-                      key={theme.id}
+                      key={item.id}
                       className="w-10 h-10 rounded cursor-pointer border-4"
-                      title={theme.id}
+                      title={item.id}
                       style={{
-                        backgroundColor: theme.color,
+                        backgroundColor: item.color,
                         borderColor:
-                          appDefs?.theme === theme.id ? "#00e" : "#fff",
+                          appDefs?.theme === item.id || theme === item.id
+                            ? "#00e"
+                            : "#fff",
                       }}
-                      onClick={() => handleChange("theme", theme.id)}
+                      onClick={() => handleChange("theme", item.id)}
                     />
                   ))}
                 </div>
@@ -232,7 +237,7 @@ const AppDetails: React.FC<Props> = ({ appDefs, setAppDef, process, t }) => {
                           <DynamicView
                             process={proc}
                             type={Types.PROCESS}
-                            isSelected={appDefs?.models.some(
+                            isSelected={appDefs?.models?.some(
                               (model) => model.id === proc.id
                             )}
                           />

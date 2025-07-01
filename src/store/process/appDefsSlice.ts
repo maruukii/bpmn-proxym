@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { GlyphiconIcons, ThemeOptions } from "../../CommonData/Enums";
 
 
 
 const initialState: AppDefinition = {
-    icon: "",
+    icon: GlyphiconIcons[0],
     models:[],
-    theme:"",
+    theme:ThemeOptions[0]?.id,
     groupsAccess:"",
     usersAccess:""
 };
@@ -15,8 +16,8 @@ const appDefsSlice = createSlice({
   initialState,
   reducers: {
     setAppDefsData: (state, action: PayloadAction<AppDefinition>) => {
-      state.icon = action.payload?.icon;
-      state.theme = action.payload?.theme;
+      action.payload?.icon?state.icon = action.payload?.icon:undefined;
+      action.payload?.theme?state.theme = action.payload?.theme:undefined;
       state.models=action.payload?.models
       state.usersAccess=action.payload?.usersAccess
       state.groupsAccess=action.payload?.groupsAccess

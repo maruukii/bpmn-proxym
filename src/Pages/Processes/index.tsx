@@ -14,7 +14,7 @@ export const Processes = ({ t }: { t: any }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  const { data, isLoading, error } = useProcessesAndAppsDefsQuery({
+  const { data } = useProcessesAndAppsDefsQuery({
     filter: isActive(location, "/apps")
       ? "apps"
       : isActive(location, "/processes")
@@ -29,7 +29,11 @@ export const Processes = ({ t }: { t: any }) => {
     page: 1,
     limit: 10,
   });
-
+  const ModalTitle: string = location?.pathname
+    ?.toLowerCase()
+    ?.startsWith("/apps")
+    ? "apps_singular"
+    : "processModels_singular";
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedQuery(searchQuery);
@@ -60,12 +64,12 @@ export const Processes = ({ t }: { t: any }) => {
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-8 flex-1 overflow-hidden">
+      <div className="grid grid-cols-12 flex-1 overflow-hidden">
         {/* Left Sidebar */}
-        <div className="col-span-1 flex flex-col items-start space-y-4 p-4 bg-gray-50 border-r">
+        <div className="col-span-2 flex flex-col items-start space-y-4 p-4 bg-gray-50 border-r truncate">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder={t("Search", { item: t(ModalTitle) })}
             className="px-2 py-1 text-black rounded border w-full"
             onChange={(e) => setSearchQuery(e.target.value)}
             value={searchQuery}
@@ -73,7 +77,7 @@ export const Processes = ({ t }: { t: any }) => {
         </div>
 
         {/* Right Content */}
-        <div className="col-span-7 flex flex-col overflow-y-auto p-4 h-full">
+        <div className="col-span-10 flex flex-col overflow-y-auto p-4 h-full">
           <div className="flex justify-between items-center mb-4">
             <span className="text-gray-600">
               {filteredProcesses?.length > 1
@@ -118,14 +122,7 @@ export const Processes = ({ t }: { t: any }) => {
                 </div>
               ))
             ) : (
-              <p>
-                #
-                {isLoading
-                  ? "Loading processes..."
-                  : error
-                  ? "Error loading processes"
-                  : t("NoProcessesFound")}
-              </p>
+              <p className="h-[75vh]"></p>
             )}
           </div>
         </div>

@@ -9,6 +9,7 @@ export default defineConfig({
  
   assetsInclude: ["**/*.xml","**/*.bpmn"],
   server:{
+    port:8070,
     host: '0.0.0.0',
     allowedHosts: ["bpmn-proxym.onrender.com","bpmn-proxym.vercel.app","bankerise-studio.netlify.app"],
     proxy: {

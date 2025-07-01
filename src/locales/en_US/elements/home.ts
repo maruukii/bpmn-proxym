@@ -5,6 +5,7 @@ export default {
   BPMNEXPORTSUCCESS: " exported successfully!",
   BPMNCOPYSUCCESS: "'s content copied successfully!",
   BPMNCREATESUCCESS:" created successfully!",
-  CONNECTSUCCESS:"is connected",
+  CONNECTSUCCESS:"{{user}} is connected",
   BPMNSAVESUCCESS:" saved successfully!",
+Search:"Search {{item}}...",
 };

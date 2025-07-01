@@ -4,6 +4,19 @@
   "description": "BPMN.DESCRIPTION",
   "propertyPackages": [
     {
+      "name": "emailpackage",
+      "properties": [
+        {
+          "id": "email",
+          "type": "String",
+          "title": "Email",
+          "value": "",
+          "description": "Message center task email",
+          "popular": true
+        }
+      ]
+    },
+    {
       "name": "process_idpackage",
       "properties": [
         {
