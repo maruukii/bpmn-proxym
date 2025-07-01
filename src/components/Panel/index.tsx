@@ -14,6 +14,7 @@ import { withTranslation } from "react-i18next";
 import { getDynamicProperty } from "../../utils/dynamicPropertyUtil";
 import { getBusinessObject } from "bpmn-js/lib/util/ModelUtil";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
+import { axiosElements } from "../../config/axiosInstance";
 export function PropertiesPanel({ t }: { t: any }) {
   const dispatch = useDispatch();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -21,7 +22,7 @@ export function PropertiesPanel({ t }: { t: any }) {
   const { elementRegistry, modeler, activeElement, modeling } = useSelector(
     (state: RootState) => state.modeler
   );
-  const [icon, setIcon] = useState<string | null>(null);
+  const [icon, setIcon] = useState<any>(null);
   const [elementState, setElementState] = useState({
     currentElementId: "",
     currentElementType: "",
@@ -31,100 +32,68 @@ export function PropertiesPanel({ t }: { t: any }) {
     bpmnElementName: "",
   });
   const [isOpen, setIsOpen] = useState(false);
+  const [backendProperties, setBackendProperties] = useState<
+    PropertiesMetadata[]
+  >((properties.propertyPackages as [PropertiesMetadata]) || []);
+  const [elements, setElements] = useState<ElementMetadata[]>(
+    stencils.stencils || []
+  );
+  const [elementReady, setElementReady] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosElements.get("/properties");
+        setBackendProperties([...response.data, ...backendProperties]);
 
-  // const tagNames = useMemo(() => {
-  //   const extractTagsWithProperties = (types: any[]) => {
-  //     const result: Record<string, any[]> = {};
-  //     const generalType = types.find((type) => type.name === "General");
-  //     const generalProps = generalType?.properties || [];
-
-  //     types.forEach((type) => {
-  //       if (
-  //         (type?.extends && type.properties) ||
-  //         (type?.meta?.allowedIn && type.properties)
-  //       ) {
-  //         type?.extends?.forEach((extendType: string) => {
-  //           const tagName = extendType.split(":")[1];
-  //           result[tagName] = result[tagName] || [];
-  //           type.properties.forEach((prop: any) => {
-  //             if (
-  //               !result[tagName].some((existing) => existing.name === prop.name)
-  //             ) {
-  //               result[tagName].push(prop);
-  //             }
-  //           });
-  //         });
-
-  //         type?.meta?.allowedIn?.forEach((allowedInType: string) => {
-  //           const tagName = allowedInType
-  //             ? allowedInType.split(":")[1]
-  //             : type.name;
-  //           result[tagName] = result[tagName] || [];
-  //           type.properties.forEach((prop: any) => {
-  //             if (
-  //               !result[tagName].some((existing) => existing.name === prop.name)
-  //             ) {
-  //               result[tagName].push(prop);
-  //             }
-  //           });
-  //         });
-  //       }
-  //     });
-
-  //     Object.keys(result).forEach((tagName) => {
-  //       result[tagName] = [...generalProps, ...result[tagName]];
-  //     });
-
-  //     return result;
-  //   };
-
-  //   return extractTagsWithProperties(flowable.types);
-  // }, []);
-
-  const tagNames = useMemo(() => {
-    const extractTagsWithProperties = (stencils: any[]) => {
-      const result: Record<string, any> = {};
-
-      stencils.forEach((stencil) => {
-        const tagName = stencil.id;
-
-        // Init result with shallow copy
-        result[tagName] = { ...stencil };
-
-        // Get full property objects
-        const populatedPackages = (stencil.propertyPackages || [])
-          .map((pkgName: string) =>
-            properties.propertyPackages.find((p: any) => p.name === pkgName)
-          )
-          .filter(Boolean); // remove any that weren't found
-
-        // Sort logic
-        const sortPriority = [
-          "overrideidpackage",
-          "namepackage",
-          "documentationpackage",
-        ];
-        const sortedPackages = [
-          ...sortPriority
-            .map((priority) =>
-              populatedPackages.find((p: any) => p.name === priority)
-            )
-            .filter(Boolean),
-          ...populatedPackages
-            .filter((p: any) => !sortPriority.includes(p.name))
-            .sort((a: any, b: any) => a.name.localeCompare(b.name)),
-        ];
-
-        // Assign sorted property packages
-        result[tagName].propertyPackages = sortedPackages;
-      });
-
-      return result;
+        const res = await axiosElements.get("/elements");
+        setElements([...res.data, ...elements] as ElementMetadata[]);
+      } catch (error) {
+        console.error("Error fetching elements:", error);
+      } finally {
+        setElementReady(true);
+      }
     };
+    fetchData();
+  }, []);
+  const tagNames = useMemo(() => {
+    if (elementReady) {
+      const extractTagsWithProperties = (stencils: any[]) => {
+        const result: Record<string, any> = {};
+        stencils.forEach((stencil) => {
+          const tagName = stencil.id;
 
-    return extractTagsWithProperties(stencils.stencils);
-  }, [stencils, properties]);
+          result[tagName] = { ...stencil };
+          const populatedPackages = (stencil.propertyPackages || [])
+            .map((pkgName: string) =>
+              backendProperties.find((p: any) => p.name === pkgName)
+            )
+            .filter(Boolean);
+          // Sort logic
+          const sortPriority = [
+            "overrideidpackage",
+            "namepackage",
+            "documentationpackage",
+          ];
+          const sortedPackages = [
+            ...sortPriority
+              .map((priority) =>
+                populatedPackages.find((p: any) => p.name === priority)
+              )
+              .filter(Boolean),
+            ...populatedPackages
+              .filter((p: any) => !sortPriority.includes(p.name))
+              .sort((a: any, b: any) => a.name.localeCompare(b.name)),
+          ];
 
+          result[tagName].propertyPackages = sortedPackages;
+        });
+        return result;
+      };
+
+      return extractTagsWithProperties(elements);
+    }
+    return {};
+  }, [stencils, properties, elementReady]);
   const setCurrentElement = throttle(
     (element: Shape | Element | Connection | Label | null) => {
       let activatedElement: BpmnElement | undefined = element;
@@ -175,10 +144,8 @@ export function PropertiesPanel({ t }: { t: any }) {
   }, [modeler, elementRegistry, elementState.currentElementId]);
   const tag = useMemo(() => {
     if (!activeElement) return null;
-
     const bo = getBusinessObject(activeElement);
     if (!bo || !modeler) return null;
-
     let computedTag = tagNames[activeElement.type.split(":")[1]];
 
     if (activeElement.type.split(":")[1] === "Collaboration") {
@@ -214,7 +181,6 @@ export function PropertiesPanel({ t }: { t: any }) {
       setIcon(tag?.icon);
     }
   }, [tag]);
-
   const renderProperties = () => {
     return (
       <DynamicProperty
@@ -249,11 +215,22 @@ export function PropertiesPanel({ t }: { t: any }) {
             {/* Panel Content */}
             <div className="panel-header flex items-center mb-4">
               {icon ? (
-                <img src={`/icons/${icon}`} alt="" className="w-8 h-8 mr-2" />
+                typeof icon === "object" && icon?.ImageLink ? (
+                  <div className="w-50 h-20 flex-shrink-0 mr-2">
+                    <img
+                      src={icon.ImageLink}
+                      alt="Thumbnail"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <img src={`/icons/${icon}`} alt="" className="w-8 h-8 mr-2" />
+                )
               ) : (
                 <BpmnIcon name={elementState?.bpmnIconName} />
               )}
-              <div className="flex items-start flex-col">
+
+              <div className="flex flex-col items-start">
                 <h2 className="text-lg font-semibold">
                   {tag?.title ? t(tag.title) : elementState?.bpmnElement}
                 </h2>

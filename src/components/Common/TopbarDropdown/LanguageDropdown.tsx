@@ -36,9 +36,8 @@ const LanguageDropdown: React.FC = () => {
   return (
     <div
       className="relative"
-      onBlur={() => setTimeout(() => setIsOpen(false), 100)}
+      onBlur={() => setTimeout(() => setIsOpen(false), 200)}
     >
-      {/* Button */}
       <button
         ref={buttonRef}
         className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none w-full cursor-pointer"
@@ -52,7 +51,6 @@ const LanguageDropdown: React.FC = () => {
         <FiChevronDown className="ml-2" size={16} />
       </button>
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div
           className="absolute mt-2 bg-gray-800 text-white border border-gray-300 rounded-md shadow-lg left-0 right-auto z-10"

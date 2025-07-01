@@ -25,7 +25,7 @@ export const exportBPMN = (modeler: any, filename: string, dispatch: AppDispatch
 
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `${filename?.split(".")[0]}_exported_copy.bpmn`;
+      link.download = `${filename?.split(".")[0]}.bpmn20.xml`;
 
       document.body.appendChild(link);
 

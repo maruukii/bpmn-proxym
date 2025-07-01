@@ -1,4 +1,5 @@
 import { NavigateFunction } from "react-router-dom";
+import { Types } from "../../src/CommonData/Enums";
 
 declare interface ProcessMetadata {
     id: string;
@@ -16,8 +17,13 @@ xml?:string
 comment?:string
   }
  declare interface SingleProcessMetadata {
+  theme?:string
+  icon?:string
     process: ProcessMetadata;
+    doNavigate?:boolean
+    type:Types
     t: any;
+    isSelected?:boolean
   }
   declare interface ProcessHistoryProps {
     history: ProcessMetadata[];

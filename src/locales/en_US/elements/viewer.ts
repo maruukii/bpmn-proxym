@@ -1,8 +1,10 @@
 export default{
+    Save:"Save",
     Redo:"Redo",
     Undo:"Undo",
     Export:"Export",
     Close:"Close",
+    "Preview code":"Preview code XML/JSON",
     "Preview as XML":"Preview as XML",
     "Preview as JSON":"Preview as JSON",
     "Properties Panel":"Properties Panel",
@@ -10,4 +12,5 @@ export default{
     "JSON Preview":"JSON Preview",
     "Copy to clipboard":"Copy to clipboard",
     "Copied!":"Copied!",
+    "No models": "No models available for this type."
 }

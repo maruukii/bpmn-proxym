@@ -7,6 +7,8 @@ declare interface AppDefinition{
         icon:string,
         models:ProcessMetadata[]|[]
         theme:string
+        groupsAccess?:string;
+        usersAccess?:string;
 }
 declare interface AppDefViewer{
 created:number
@@ -17,3 +19,7 @@ key:string
 name:string
 version:number 
 }
+declare interface AppDefReq{
+appDefinition:AppDefViewer
+publish:boolean
+} 
